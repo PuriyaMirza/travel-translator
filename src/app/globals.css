@@ -1,0 +1,119 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+ * Design system — "Voyage" (SPEC.md §5)
+ *
+ * `:root` below holds the tokens exactly as the spec names them. That is the
+ * contract; treat it as the source of truth.
+ *
+ * `@theme inline` then maps those tokens into Tailwind's utility namespaces.
+ * The utility names differ deliberately: the spec's colour tokens live in a
+ * `--text-*` / `--bg-*` / `--border-*` vocabulary that collides with
+ * Tailwind v4's own namespaces (`--text-*` is font-size there), so each colour
+ * gets a short semantic name instead — `bg-canvas`, `text-ink`, `border-blush`.
+ * ------------------------------------------------------------------------- */
+
+:root {
+  --bg-main:        #FAF8F5;  /* warm cream — page background */
+  --bg-card:        #FFFFFF;
+  --bg-card-subtle: #F4EBD0;  /* warm sand — pills, skeletons */
+  --bg-dark:        #1C1917;  /* charcoal — overlays, banners */
+
+  --brand:          #B91C1C;  /* deep crimson — the accent, used with restraint */
+  --brand-hover:    #991B1B;
+  --accent-gold:    #EAB308;
+  --accent-sea:     #A3D9C9;
+
+  --text-main:      #1C1917;
+  --text-muted:     #8C7C6B;  /* warm sepia */
+  --text-inverse:   #FFFFFF;
+
+  --border-light:   #E7E5E4;
+  --border-brand:   #FCA5A5;
+
+  --shadow-soft: 0 10px 25px -5px rgba(0, 0, 0, 0.04), 0 8px 10px -6px rgba(0, 0, 0, 0.02);
+}
+
+@theme inline {
+  /* Colours */
+  --color-canvas:      var(--bg-main);
+  --color-card:        var(--bg-card);
+  --color-sand:        var(--bg-card-subtle);
+  --color-charcoal:    var(--bg-dark);
+
+  --color-brand:       var(--brand);
+  --color-brand-hover: var(--brand-hover);
+  --color-gold:        var(--accent-gold);
+  --color-sea:         var(--accent-sea);
+
+  --color-ink:         var(--text-main);
+  --color-muted:       var(--text-muted);
+  --color-inverse:     var(--text-inverse);
+
+  --color-hairline:    var(--border-light);
+  --color-blush:       var(--border-brand);
+
+  /* Typography — display is the wordmark/title face, sans is everything else */
+  --font-display: var(--font-eb-garamond), ui-serif, Georgia, serif;
+  --font-sans:    var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  /* Type scale (SPEC.md §5). Each token carries size, line-height and weight. */
+  --text-display: 2rem; /* 32px */
+  --text-display--line-height: 1.15;
+  --text-display--font-weight: 700;
+
+  --text-h1: 1.5rem; /* 24px */
+  --text-h1--line-height: 1.2;
+  --text-h1--font-weight: 700;
+
+  --text-h2: 1.25rem; /* 20px */
+  --text-h2--line-height: 1.3;
+  --text-h2--font-weight: 600;
+
+  /* The big airy intro paragraph on category pages — the editorial signature.
+     Keep it light-weight and roomy. */
+  --text-lead: 1.25rem; /* 20px */
+  --text-lead--line-height: 1.5;
+  --text-lead--font-weight: 300;
+
+  --text-body: 1rem; /* 16px */
+  --text-body--line-height: 1.5;
+  --text-body--font-weight: 400;
+
+  --text-body-bold: 1rem; /* 16px */
+  --text-body-bold--line-height: 1.5;
+  --text-body-bold--font-weight: 600;
+
+  --text-small: 0.875rem; /* 14px */
+  --text-small--line-height: 1.4;
+  --text-small--font-weight: 400;
+
+  --text-eyebrow: 0.75rem; /* 12px */
+  --text-eyebrow--line-height: 1.3;
+  --text-eyebrow--font-weight: 500;
+  --text-eyebrow--letter-spacing: 0.1em;
+
+  /* Shape. Named rather than reusing Tailwind's `rounded-3xl`, which is 24px
+     in v4 — the spec calls for 32px on cards. */
+  --radius-card:  2rem;   /* 32px */
+  --radius-image: 1.5rem; /* 24px */
+
+  /* The wordmark's wide letter-spacing (SPEC.md §5). */
+  --tracking-wordmark: 0.08em;
+}
+
+/* Declared as a utility rather than a `--shadow-*` theme token: the token
+   would collide with the `:root` name above and emit a circular
+   `--shadow-soft: var(--shadow-soft)` into the theme block. */
+@utility shadow-soft {
+  box-shadow: var(--shadow-soft);
+}
+
+body {
+  background: var(--bg-main);
+  color: var(--text-main);
+}
+
+/* Note: eyebrow labels are always uppercase (e.g. "PHRASEBOOK: TRANSIT"), but
+   that belongs to the Eyebrow component rather than here — an unlayered
+   `text-transform` rule would silently override `normal-case` at the callsite. */
