@@ -1,0 +1,710 @@
+===============================================================================
+TRAVEL-TRANSLATOR ("DIALOG") - SESSION HANDOFF
+Everything reported during the build session of 2026-08-20.
+Written so another Claude session with none of this context can pick up cleanly.
+===============================================================================
+
+CONTENTS
+  1.  Project snapshot
+  2.  The reference repo - what it actually is
+  3.  What was kept from it, and what was discarded
+  4.  Six places SPEC.md describes a build that does not exist
+  5.  Security findings in the old build
+  6.  M0 - what shipped
+  7.  The Vercel deploy failure and its fix
+  8.  M1 - what shipped
+  9.  The tailwind-merge bug that shipped and was fixed
+  10. Merge to main, and CLAUDE.md
+  11. Build log status
+  12. "Can I use Google Translate instead?" - the answer
+  13. M2 plan as approved
+  14. Two SPEC conflicts with the current Anthropic API
+  15. Decisions the user has made
+  16. Open items and what is still needed
+
+
+===============================================================================
+1. PROJECT SNAPSHOT
+===============================================================================
+
+Repo            github.com/PuriyaMirza/travel-translator
+Production      https://travel-translator-phi.vercel.app
+Vercel project  travel-translator (team "Puriya's projects")
+Work branch     claude/translation-app-rebuild-plan-gtstds
+Source of truth SPEC.md at repo root. CLAUDE.md holds the working rules.
+
+The product: a travel phrasebook and contextual translator for English speakers
+in Spanish-speaking countries. v1 targets neutral Latin American Spanish
+(es-419). Explicitly NOT a general-purpose translator - it produces what you
+would actually say at a counter, with pronunciation you can read aloud.
+
+Stack as built: Next.js 16.3.1 (App Router), React 19.2.8, TypeScript strict,
+Tailwind v4, ESLint. Deployed on Vercel. No auth, no database, no AI yet.
+
+Brand values live in exactly one file, src/lib/brand.ts:
+  name          "Dialog"   (a working name)
+  tagline       "What you'd actually say."
+  defaultLocale "es-419"
+The name appears as a literal nowhere else, including the README.
+
+Commit history on main:
+  5c95d9a  M0 + M1: pipeline, design tokens, and the static phrasebook (#1)
+  311aa77  Add CLAUDE.md with project ground rules
+  efba5ed  Teach tailwind-merge about the type scale
+  44b605a  M1: static phrasebook
+  c055488  Pin the Vercel framework preset to Next.js
+  b4dd6ff  M0: scaffold, brand module, design tokens, header
+  11e1ef0  Create SPEC.md
+  2deb7a0  Initial commit
+
+
+===============================================================================
+2. THE REFERENCE REPO - WHAT IT ACTUALLY IS
+===============================================================================
+
+github.com/PuriyaMirza/Puriya-translation-project-march-2026
+
+Reviewed in full: 782 lines across 13 files, 2 commits, complete history
+(the clone was un-shallowed to confirm nothing was hidden in earlier commits).
+
+It is an AI Studio-generated Vite SPA. The entire product surface is ONE screen:
+two from/to <select> dropdowns, a textarea, a Translate button, a result card,
+and a slide-over "Phrase Vault" backed by Firestore with Google popup auth.
+
+  src/App.tsx              472 lines, one component, all state co-located
+  src/services/geminiService.ts   49 lines - Google Gemini, not Anthropic
+  src/firebase.ts          14 lines
+  src/index.css            19 lines - Tailwind v4 @theme tokens
+  src/lib/utils.ts         6 lines - cn() helper
+  src/main.tsx             10 lines
+  firestore.rules          96 lines
+  plus vite.config.ts, tsconfig.json, index.html, metadata.json,
+  firebase-blueprint.json, firebase-applet-config.json
+
+There is NO phrasebook, NO categories, NO preset phrases, NO text-to-speech,
+NO routing, and NO offline story anywhere in that repo or its history.
+
+
+===============================================================================
+3. WHAT WAS KEPT FROM IT, AND WHAT WAS DISCARDED
+===============================================================================
+
+KEPT (this is the complete list):
+
+  src/lib/utils.ts   The cn() helper - clsx + tailwind-merge. Six lines, the
+                     one file reused essentially verbatim. It later needed
+                     adapting; see section 9.
+
+  The Tailwind v4 @theme PATTERN from index.css. Tailwind v4's @theme is
+  literally "tokens as CSS custom properties" per SPEC.md section 3, so the
+  technique carried over even though every value changed.
+
+  Two token VALUES: #A3D9C9 (old "seafoam") and #F4EBD0 (old "sand"). SPEC.md
+  section 5 had already absorbed both as --accent-sea and --bg-card-subtle.
+
+  The font pairing idea: EB Garamond for display, Inter for body.
+
+  lucide-react as the icon library (SPEC.md section 3 mandates it anyway).
+
+  The SKELETON of firestore.rules - the helper-function structure (isOwner,
+  hasRequiredFields, hasOnlyAllowedFields) and the default-deny posture. Good
+  structure, wrong content. Reuse the shape in M3, not the rules themselves.
+
+DISCARDED:
+
+  The whole scaffold - vite.config.ts, index.html, metadata.json,
+  firebase-blueprint.json, .env.example, README, and its tsconfig.json (which
+  has no "strict"; the string appears nowhere in the repo except
+  React.StrictMode).
+
+  geminiService.ts - wrong provider, Puerto Rico hardcoded into the prompt,
+  and a response shape (translatedText / localNuance / isFormal) with zero
+  field overlap with what SPEC.md section 8 requires.
+
+  The client-side API key. vite.config.ts does
+    define: { 'process.env.GEMINI_API_KEY': ... }
+  which bakes the key into the browser bundle. See section 5.
+
+  App.tsx as code. One component holding all state, no router, nothing liftable.
+
+  handleFirestoreError. See section 5.
+
+  The test/connection mount probe - a server read on every page load that also
+  fails under default-deny rules.
+
+  Google popup auth (SPEC.md section 3 wants email/password) and the
+  saved_phrases collection.
+
+  Dependencies: motion (Framer Motion), react-markdown, express, dotenv, tsx,
+  autoprefixer, @google/genai. SPEC.md section 5's entire motion spec is two
+  CSS transforms, so Framer Motion is not worth the bytes for an audience on
+  bad signal.
+
+
+===============================================================================
+4. SIX PLACES SPEC.md DESCRIBES A BUILD THAT DOES NOT EXIST
+===============================================================================
+
+Each of these was checked against the reference repo AND its full git history.
+They matter because they suggest SPEC.md was written against a version of the
+app that is not in that repository.
+
+(1) THE AI PROVIDER WAS NEVER ANTHROPIC.
+    SPEC.md section 3 says "Ported from the previous Firebase build" and lists
+    Anthropic. The old build is Google Gemini (@google/genai,
+    "gemini-3-flash-preview"). This is a rewrite, not a port.
+    Related: SPEC.md section 8 says "the old config said 65,536" for max output
+    tokens. That number is nowhere in the repo. geminiService.ts sets NO
+    maxOutputTokens and NO temperature at all. The advice (~1024, ~0.3) is still
+    sensible; the premise is false.
+
+(2) WRONG FIREBASE PROJECT.
+    SPEC.md section 3 pins project ID "sentido-cec08". That string appears
+    nowhere in the repo or its history. The real project is
+    "gen-lang-client-0429489711", and it uses a NON-DEFAULT Firestore database
+    ("ai-studio-adfdc44d-eeca-4923-811a-cae48cd8274b") provisioned by AI Studio.
+    Recommendation given and accepted: create a clean Firebase project rather
+    than inherit an AI Studio-managed instance.
+
+(3) "DO NOT MIGRATE FIRESTORE OR AUTH" IS AMBIGUOUS.
+    If it means "stay on Firebase rather than switching to Postgres" - fine.
+    If it means "reuse the existing data" - impossible. The schemas share ZERO
+    fields:
+      old: originalText, translatedText, localNuance, isFormal, from, to, uid,
+           timestamp   (in a top-level snake_case collection /saved_phrases)
+      new: sourceText, literal, natural, culturalNote, pronunciation, locale,
+           category, savedAt, syncedFromLocal
+           (in users/{uid}/savedPhrases/{id})
+    The live rules use hasOnlyAllowedFields, so they would hard-reject every
+    SPEC-shaped write. Same for Auth: Google popup -> email/password is a
+    provider change, not a port.
+
+(4) THE CATEGORY BUG IS NOT IN THAT CODE.
+    SPEC.md section 2 rule 3 calls Spanish-vs-English category keys "the
+    specific bug that broke the previous build", and section 11 says to ignore
+    "its category taxonomy (broken)". There IS no category taxonomy. Greps for
+    "categor", "dining", "greetings", "preset", "phrasebook" return zero hits
+    across the repo and both commits. The RULE is good and was followed; it is
+    just not evidence-backed by this repository.
+
+(5) "TAKE THE COLOR AND TYPE TOKENS" MOSTLY DOES NOT APPLY.
+    Old palette: seafoam #A3D9C9, slate #2D3436, sand #F4EBD0.
+    SPEC.md section 5's palette is different: cream #FAF8F5, crimson #B91C1C,
+    charcoal #1C1917. Only two values carry over, and SPEC.md already contains
+    both. There was nothing left to take.
+
+(6) TWO MORE CLAIMS ABOUT AN UNSEEN BUILD.
+    SPEC.md section 5 says "no floating bottom dock - the previous build had
+    one". It does not; it has a top header with the wordmark on the left and
+    Vault/Login buttons on the right.
+    SPEC.md section 11 says to ignore "its design section". There is no design
+    doc - the README is the stock AI Studio template.
+
+
+===============================================================================
+5. SECURITY FINDINGS IN THE OLD BUILD
+===============================================================================
+
+These concern the OLD repo, not the new one. Reported for awareness.
+
+  GEMINI KEY IN THE CLIENT BUNDLE. vite.config.ts injects GEMINI_API_KEY via
+  `define`, so it is compiled into the browser bundle of any deployment. The
+  key is NOT in git (.env.example holds only a placeholder), so nothing leaked
+  through the repository - but it is readable by anyone who loaded the deployed
+  app. Recommendation: rotate/revoke that key when decommissioning that app.
+  This is exactly what SPEC.md section 2 rule 6 forbids.
+
+  PII INTO LOGS AND ONTO THE SCREEN. handleFirestoreError serializes uid,
+  email, emailVerified, isAnonymous, tenantId and full provider data into a
+  thrown Error message. The ErrorBoundary then renders that raw JSON on screen
+  in a <pre>. Discarded entirely; the concept of a boundary was kept, the
+  implementation was not.
+
+  HARDCODED ADMIN EMAIL. firestore.rules grants admin on a literal email
+  address match. Not carried over.
+
+  The committed firebase-applet-config.json contains a Firebase web API key.
+  That kind of key is public by design, so this is not a leak - noted only so
+  nobody mistakes it for one.
+
+
+===============================================================================
+6. M0 - WHAT SHIPPED
+===============================================================================
+
+Scope per SPEC.md section 10: scaffold, brand.ts, tokens, header with wordmark,
+deploy. Nothing else.
+
+  - Next.js 16 App Router, TypeScript strict, Tailwind v4, ESLint.
+  - src/lib/brand.ts as the single source for name, tagline, default locale.
+    <title>, meta description and the wordmark all read from it.
+  - Design tokens for "Voyage" (SPEC.md section 5) in src/app/globals.css.
+  - EB Garamond (display) + Inter (body), self-hosted via next/font.
+  - Header renders the wordmark only.
+  - viewport-fit=cover plus env(safe-area-inset-top) on the header, landed
+    early (SPEC.md section 9 is nominally M4) because retrofitting after the
+    iOS Dynamic Island bites is more work than adding it up front.
+
+THREE JUDGEMENT CALLS, all of which deviate from a literal reading of SPEC:
+
+  RADIUS. SPEC.md section 5 says 'Cards: 32px radius (rounded-3xl)'. Those
+  disagree: rounded-3xl is 24px in Tailwind v4, confirmed against the emitted
+  CSS (--radius-3xl:1.5rem). The NUMBER was honoured, not the utility name:
+  rounded-card = 32px, rounded-image = 24px.
+
+  TOKEN NAMING. :root holds the tokens under the exact names SPEC.md section 5
+  gives them - that is the contract. @theme inline then maps them into
+  Tailwind's utility namespaces under short semantic names:
+    bg-canvas, bg-card, bg-sand, bg-charcoal
+    text-brand, text-ink, text-muted, text-inverse
+    border-hairline, border-blush
+  This rename is forced, not preference: SPEC's --text-* colour vocabulary
+  collides head-on with Tailwind v4's --text-* font-size namespace.
+  --border-brand became "border-blush" deliberately, because a "border-brand"
+  utility would resolve to crimson (#B91C1C) rather than SPEC's #FCA5A5 - a
+  genuine footgun.
+
+  SHADOW. shadow-soft is declared with @utility rather than as a --shadow-*
+  theme token. As a token it collides with the :root name and emits a circular
+  "--shadow-soft: var(--shadow-soft)" into the theme block, which only resolved
+  correctly by accident of source order.
+
+DELIBERATELY OMITTED IN M0:
+  The header's hamburger and avatar slots were held open by the grid but
+  rendered empty - a hamburger with no menu and an avatar with no account are
+  buttons that do nothing. (Hamburger arrived in M1; avatar is still pending.)
+  src/lib/categories.ts was also omitted, because M0 is specified as "nothing
+  else". The user chose to follow SPEC literally on this.
+
+VERIFICATION PERFORMED:
+  typecheck clean (note: the script runs "next typegen && tsc --noEmit", because
+  LayoutProps/PageProps are generated types that do not exist on a cold
+  checkout); lint clean; build clean, both routes prerendered static. The
+  emitted CSS was inspected directly to confirm each token resolves. Rendered
+  and screenshotted at 390x844 and 1280x800.
+
+
+===============================================================================
+7. THE VERCEL DEPLOY FAILURE AND ITS FIX
+===============================================================================
+
+The first preview build FAILED:
+
+  Error: No Output Directory named "public" found after the Build completed.
+
+ROOT CAUSE: the Vercel project was created while main held only README.md and
+SPEC.md. With no package.json to detect, framework auto-detection found nothing
+and fell back to the "Other" preset, which serves a static public/ directory.
+Confirmed via the project API that "framework" was null.
+
+FIX: pinned the preset in vercel.json rather than in project settings, so it
+lives in version control and survives the project being recreated:
+
+  { "$schema": "https://openapi.vercel.sh/vercel.json",
+    "framework": "nextjs" }
+
+Verified against the Vercel docs that "framework" is the documented override
+and "nextjs" is a valid slug before pushing, rather than guessing.
+
+This is exactly the class of problem M0 exists to surface - which is the point
+of shipping an empty pipeline first.
+
+NOTE FOR FUTURE SESSIONS: the sandbox cannot reach *.vercel.app directly (curl
+returns 000). Verify deployments through the Vercel MCP tool's fetch instead.
+
+
+===============================================================================
+8. M1 - WHAT SHIPPED
+===============================================================================
+
+Scope per SPEC.md section 10: categories, preset phrases from a local file,
+editorial category pages, phrase cards, text-to-speech. No auth, no database,
+no AI.
+
+DATA LAYER
+  src/lib/categories.ts - the canonical slugs, lowercase English and permanent
+  per SPEC.md section 2 rule 3:
+    greetings, dining, transit, shopping, lodging, emergency, general
+  Display labels are localised separately in src/lib/labels.ts, so nothing is
+  ever keyed off a translated string. VISIBLE_CATEGORIES drives the grid, so
+  "general" cannot grow a tile by accident and /phrasebook/general returns 404
+  (it is the fallback bucket for freeform translations, not a section).
+
+  src/lib/types.ts - the Phrase interface. Every phrase carries "locale" from
+  the very first write (rule 4), sourced from brand.defaultLocale rather than a
+  literal.
+
+  src/lib/phrases.ts - 42 preset phrases, exactly 7 in each of the six visible
+  categories. Evenly spread, as SPEC asks (the old set was reportedly lopsided).
+  House rules enforced in that file:
+    - No vosotros anywhere. Formal usted with strangers.
+    - Seseo throughout: c/z = "s", never "th". Written as e.g.
+      "GRAH-see-ahs", never "grah-THEE-ahs".
+    - ll and y as a soft "y": "YEH-vah", "TAH-yah".
+    - Stressed syllable in CAPS.
+    - culturalNote filled ONLY where a traveller would genuinely get it wrong.
+      Most phrases have none, and that is correct - it is not padded.
+  Audited programmatically: 42 total, 7 per category, unique ids, no lisped
+  pronunciations, locale never hardcoded.
+
+SCREENS
+  Home: tagline, phrase of the day, 2-column category grid.
+  /phrasebook/[category]: full-bleed banner, eyebrow, title, airy lead, then a
+    dense scannable list. Editorial look, fast interaction - per SPEC.md
+    section 5's explicit instruction NOT to build the one-card carousel.
+  not-found for unknown slugs.
+  Header gained the hamburger and a nav drawer now that destinations exist.
+
+FOUR JUDGEMENT CALLS:
+
+  PHRASE OF THE DAY is picked deterministically by UTC day number from the
+  local presets - no AI, no network, no storage, and the page stays prerendered
+  (revalidate 3600). The /api/daily-phrase route in SPEC.md section 6 can
+  replace it later without touching the component.
+
+  SPEECH uses useSyncExternalStore rather than effects. Voices are external
+  browser state that loads asynchronously, and the distinct server snapshot
+  keeps the button out of the prerendered HTML instead of mismatching on
+  hydration. (The first implementation used effects and was caught by lint -
+  see below.)
+
+  THE SPEAK BUTTON IS GATED ON A VOICE EXISTING, not on the API existing.
+  Devices expose speechSynthesis with an empty voice list - headless Chromium
+  is one, confirmed by probe: hasSynth true, voices 0, speak() fires
+  "error: synthesis-failed". On such a device a button that flashes and does
+  nothing is worse than no button.
+  Voice preference order: es-419, es-US, es-MX, es-CO, es-AR, then any es-*.
+  European Spanish is last resort - better than silence, but it lisps, which is
+  exactly what the pronunciation guides tell the reader not to do. Verified it
+  picks es-MX over es-ES. Utterance rate 0.9 (slower than natural, because it
+  is being repeated aloud by someone who does not speak the language).
+
+  CATEGORY BANNERS are palette washes standing in for the photography SPEC.md
+  section 5 calls for. Crimson is deliberately absent from them - it stays with
+  the wordmark, primary actions and eyebrows, per "if a screen has more than two
+  crimson elements, one of them is wrong". THIS IS AN OUTSTANDING PLACEHOLDER.
+
+TWO LINT ERRORS WERE FIXED PROPERLY RATHER THAN SUPPRESSED:
+  - setState called synchronously inside an effect in useSpeech - rewritten
+    around useSyncExternalStore, which also fixed a hydration mismatch that
+    would otherwise have shipped.
+  - Same rule in NavDrawer (closing the drawer on pathname change). Rewritten
+    to derive open state from the pathname it was opened on, which also handles
+    the browser back button for free.
+
+VERIFICATION PERFORMED:
+  typecheck/lint/build clean. All six category pages prerender. Routes checked:
+  six categories 200, "general" and unknown slugs 404. Driven in a real browser
+  at 390x844: drawer opens, closes on Escape, 7 cards and 7 speak buttons per
+  category, no horizontal overflow. The speech state machine was exercised
+  against a STUBBED engine (because headless Chromium has no voices): idle ->
+  speaking -> tap-again-stops -> auto-reset on end, one card speaking at a time,
+  correct utterance text, rate 0.9, es-MX chosen over es-ES.
+
+
+===============================================================================
+9. THE TAILWIND-MERGE BUG THAT SHIPPED AND WAS FIXED
+===============================================================================
+
+Found by reading the DEPLOYED HTML, not the local source. Every eyebrow label
+rendered as:
+
+  <p class="uppercase text-brand">Phrasebook: Food &amp; Drink</p>
+
+"text-eyebrow" was MISSING - so the label silently lost its 12px size, 0.1em
+tracking and 500 weight, and fell back to inherited body type.
+
+ROOT CAUSE: the type scale lives in Tailwind's font-size namespace (text-lead,
+text-h2, text-eyebrow), which overlaps the text-COLOUR namespace. Left
+unconfigured, tailwind-merge read "text-eyebrow" as a colour, decided
+"text-brand" superseded it, and dropped it.
+
+The blast radius was wider than the one visible symptom. Every custom type
+token paired with a colour collapsed the same way:
+  text-eyebrow uppercase text-brand  ->  uppercase text-brand
+  text-lead text-muted               ->  text-muted
+  text-h2 text-ink                   ->  text-ink
+  text-body-bold text-inverse        ->  text-inverse
+Only the Eyebrow component routes through cn() today, which is why just that
+one broke visibly. It would have spread through M2 and M3.
+
+FIX: registered the scale in the font-size class group via extendTailwindMerge
+in src/lib/utils.ts. One place, fixes all of it.
+
+VERIFIED IN BOTH DIRECTIONS - this matters, because a merge that keeps
+everything is as broken as one that drops everything:
+  type + colour now coexist (all five cases above pass)
+  genuine conflicts still collapse: text-lead text-h2 -> text-h2
+                                    text-ink text-brand -> text-brand
+  computed style on the rendered page back to 12px / 1.2px / 500 / uppercase
+  confirmed live on the deployed preview, including the not-found page
+
+
+===============================================================================
+10. MERGE TO MAIN, AND CLAUDE.md
+===============================================================================
+
+PR #1 ("M0 + M1: pipeline, design tokens, and the static phrasebook") was
+marked ready, merged, and closed. main went from two files to the full app
+(34 files) and production deployed from it for the first time - before this,
+Vercel's production target was an empty repo.
+
+Note: an early commit was rejected by GitHub's email privacy setting; commits
+use 99041679+PuriyaMirza@users.noreply.github.com. The merge commit itself
+shows as Verified because GitHub signs its own merge commits.
+
+CLAUDE.md was added at the repo root with the project ground rules. Relevant
+standing constraints for any future session:
+  - Build one milestone at a time; do not start the next until told.
+  - Present a plan and get approval before writing code for a new milestone.
+  - Ask before adding any dependency not listed in SPEC.md.
+  - Never hardcode the app name - import from src/lib/brand.ts.
+  - Never hardcode a locale, region or country. Locale is always a parameter.
+  - Category slugs are lowercase English and permanent.
+  - No API keys in client-side code. All model calls go through server routes.
+  - lucide-react for icons. Never emoji as UI icons.
+  - Append to BUILDLOG.md after each completed unit of work; never rewrite or
+    delete entries. Be blunt in Deviations and Incomplete.
+
+
+===============================================================================
+11. BUILD LOG STATUS
+===============================================================================
+
+BUILDLOG.md DOES NOT EXIST. M0 and M1 predate the rule - CLAUDE.md only landed
+on main in the final commit before the merge, so no session ever operated under
+it. Nothing was lost or skipped.
+
+The user has asked for backfilled entries covering M0 and M1, to be written
+before/alongside M2. They must be blunt about what is actually true: the two
+bugs that shipped and were fixed, the placeholder category banners, the
+sentido-cec08 project ID that does not exist, and the open questions.
+
+
+===============================================================================
+12. "CAN I USE GOOGLE TRANSLATE INSTEAD?" - THE ANSWER
+===============================================================================
+
+No - and this is a capability fact, not a preference.
+
+Google Translate API returns ONE string. SPEC.md section 8 requires six things
+per translation:
+  literal        a correct, neutral, formal-safe rendering
+  natural        what a native speaker would actually say
+  culturalNote   politeness conventions, false friends, local meaning shifts
+  pronunciation  a guide an English speaker can read aloud and be understood
+  direction      detect whether the input is English or Spanish
+  category       one of the seven permanent slugs
+Translate API supplies exactly one of those.
+
+SPEC.md section 1 makes the same point as a product claim: "It is not a
+general-purpose translator. Google Translate already does word-for-word; this
+does what you would actually say at the counter." Building on Translate API
+would leave a worse Google Translate in a nicer typeface.
+
+IMPORTANT CLARIFICATION: the old build NEVER used Google Translate. It used
+GEMINI - a generative model - which is why it could produce its "Local Nuance"
+field at all. If staying in Google's ecosystem matters, Gemini is the real
+alternative and would change exactly one file (src/lib/translate.ts) plus the
+dependency; the rest of the M2 plan is provider-independent.
+
+The user chose ANTHROPIC, per SPEC.md section 3.
+
+
+===============================================================================
+13. M2 PLAN AS APPROVED
+===============================================================================
+
+Scope per SPEC.md section 10 was: /translate, the route handler, the result
+card, all three states - with no auth until M3.
+
+THE USER CHANGED THIS. They chose to gate the route behind auth so it is never
+a public endpoint. That reshapes the milestone; see the consequences below.
+
+WHAT GATING ACTUALLY COSTS (this was raised before any code):
+  Client-side gating is NOT protection. Hiding the form behind a login check
+  still leaves /api/translate callable with curl. Real protection means the
+  route verifies a Firebase ID token server-side on every request, which pulls
+  in Firebase Auth (M3 work, now in M2), firebase-admin, and a service-account
+  secret in addition to the public web config.
+
+A PRODUCT CONCERN WAS RAISED ONCE AND THE USER'S DECISION STANDS:
+  SPEC.md section 7 designs for logged-out use - "Logged out: phrases go to
+  localStorage... on login, upload local phrases" - which assumes the app is
+  useful before you have an account. A login wall on the core feature cuts
+  against that, and account creation is a poor first experience for someone at
+  a counter on bad signal. If cost is the real worry, an input cap plus a
+  coarse per-IP throttle addresses it far more cheaply. Recorded, not
+  re-litigated.
+
+BUILD ORDER:
+
+  1. AUTH FOUNDATION
+     src/lib/firebase.ts        client init, Auth only (Firestore is M3; when
+                                it lands use persistentLocalCache via
+                                initializeFirestore - enableIndexedDbPersistence
+                                is deprecated, per SPEC.md section 7)
+     src/lib/firebaseAdmin.ts   server-only Admin init for token verification
+     src/components/AuthProvider.tsx   context exposing user + loading
+     src/app/(auth)/sign-in/page.tsx   email/password sign in and sign up
+     Header's right slot finally gets its avatar - the placeholder held open
+     since M0.
+
+  2. SERVER: src/lib/translate.ts
+     Owns the prompt, schema, call and normalisation. Never imported by a
+     client component - the key stays server-side (rule 6).
+     - SPEC.md section 8's template with {{LOCALE_NAME}} as a PARAMETER, never
+       a literal (rule 2).
+     - Few-shot examples neutral Latin American: "Me da el menu?",
+       "Donde tomo el autobus?" - never the old build's guagua/bregando.
+     - User text goes in a USER message, never interpolated into the system
+       prompt.
+     - Structured outputs via client.messages.parse() + zodOutputFormat() in
+       output_config.format. This REPLACES SPEC.md section 8's "output strictly
+       valid JSON, no markdown fences" instruction, which is a request the
+       model can simply fail. parsed_output is nullable - guard it.
+     - NORMALISE BEFORE RETURNING: validate the returned category with the
+       existing isCategory() from src/lib/categories.ts, falling back to
+       "general". This is precisely the bug class rule 3 exists to prevent.
+       Attach locale from brand.defaultLocale so results are savable in M3 with
+       no migration (rule 4).
+
+  3. ROUTE: src/app/api/translate/route.ts
+     POST. Verifies the Firebase ID token BEFORE doing any work - no token, no
+     model call, no spend.
+     - Reject empty input; cap length at 500 chars (a phrase, not a document).
+     - Typed error chain, most specific first: AuthenticationError,
+       RateLimitError, APIError - mapped to codes the client turns into copy.
+     - NEVER echo the provider's name or raw message to the client (SPEC.md
+       section 6). Log server-side.
+
+  4. SCREEN: /translate
+     The result card is the EXISTING PhraseCard. The API returns a
+     Phrase-compatible object, so results render through the M1 component,
+     text-to-speech included. No parallel card implementation.
+     One change makes that work: translation is bidirectional, so an es->en
+     result is English while PhraseCard hardcodes lang="es" and useSpeech
+     always picks a Spanish voice. Add optional targetLanguage?: "en" | "es"
+     to Phrase, defaulting to "es" so all 42 presets are untouched, and thread
+     it through the lang attribute and voice selection.
+
+  5. THE THREE STATES (SPEC.md section 6)
+     Loading - PhraseCardSkeleton: bg-sand blocks, animate-pulse, geometry
+       matching PhraseCard so the layout does not jump.
+     Empty   - dashed border, an invitation to type, NEVER an apology.
+     Error   - crimson-tinted card, plain statement of what failed and what to
+       do, retry button. Names problem and fix; no apology; no provider name.
+       Distinct copy per case: signed-out, offline (navigator.onLine),
+       rate-limited, too long, generic fallback.
+     ErrorCard and the skeleton go in src/components/ as reusable pieces - M3's
+     vault and M4's offline states need exactly these.
+
+  6. WIRING
+     src/app/page.tsx      freeform entry point, closing a gap left in M1
+                           (SPEC.md section 6 calls for it on home; it was
+                           omitted because /translate did not exist yet)
+     NavDrawer             Translate above the Phrasebook section
+     .env.example          document every var, never a real value
+
+DEPENDENCIES TO CONFIRM (CLAUDE.md requires asking):
+  @anthropic-ai/sdk   implied by SPEC.md section 3, not literally listed
+  zod                 for zodOutputFormat; also gives runtime validation
+  firebase            SPEC.md section 3 lists Firebase Auth, so in scope
+  firebase-admin      NOT in SPEC.md; required only by the gating decision
+
+VERIFICATION PLANNED:
+  1. typecheck / lint / build clean.
+  2. Key containment (rule 6): grep the built client bundle for the Anthropic
+     key and the service-account private key - neither may appear in
+     .next/static/**. The Firebase WEB config appearing there is expected.
+  3. The gate actually gates: curl POST /api/translate with no token and with a
+     forged token - both rejected BEFORE any model call. This is the whole point
+     of the reorder, so it is tested directly rather than assumed.
+  4. Pure functions: bogus category falls back to general; locale always
+     attached; null parsed_output surfaces as a handled error, not a crash.
+  5. Route, authenticated: en->es, es->en, 501-char input rejected, empty
+     rejected, no provider name in any error body.
+  6. Browser at 390x844: signed-out -> sign-in -> empty -> loading skeleton ->
+     result. Force the error state, confirm retry recovers. Confirm the speak
+     button reads an es->en result in ENGLISH, not Spanish.
+  7. Deploy preview, verify live end-to-end.
+
+
+===============================================================================
+14. TWO SPEC CONFLICTS WITH THE CURRENT ANTHROPIC API
+===============================================================================
+
+Both were verified against current API documentation, not recalled from memory.
+
+(1) "temperature" IS REJECTED.
+    SPEC.md section 8 says "Set temperature around 0.3." Sampling parameters
+    (temperature / top_p / top_k) are REMOVED on claude-opus-5 and return a 400.
+    The request would fail outright.
+    Instead: structured outputs plus a tight prompt, with
+    output_config: { effort: "low" } - appropriate for a short, well-specified
+    transformation task.
+
+(2) max_tokens: 1024 RISKS TRUNCATION.
+    Reasonable arithmetic for a few-hundred-token JSON response, but THINKING
+    TOKENS COUNT TOWARD max_tokens, and thinking is on by default on
+    claude-opus-5. Use 2048 for headroom.
+    Disabling thinking is the other lever but has known failure modes on
+    Opus 5 - it can write a tool call into visible text, and can leak tags - so
+    lowering effort is the better control.
+
+MODEL: claude-opus-5. SPEC.md section 3 says to check the docs for the current
+model string rather than assume one. Do not append date suffixes to model IDs.
+
+
+===============================================================================
+15. DECISIONS THE USER HAS MADE
+===============================================================================
+
+  Display font          EB Garamond (continuity with the old build; the
+                        alternatives offered were Playfair Display or a
+                        geometric sans in caps)
+  M0 header             Build the three-slot layout but render only the
+                        wordmark; add hamburger and avatar when they have
+                        destinations
+  M0 scope              Follow SPEC literally - no categories.ts in M0
+  Category taxonomy     Write it fresh; no earlier version was produced
+  Firebase              Create a FRESH project rather than inherit the AI
+                        Studio-managed one
+  M2 provider           Anthropic
+  /api/translate        Gate behind auth so it is never public (rather than a
+                        cheap per-IP throttle, or leaving it open)
+  Build log             Backfill M0 and M1, then log M2 onward
+  PR #1                 Merged to main
+
+
+===============================================================================
+16. OPEN ITEMS AND WHAT IS STILL NEEDED
+===============================================================================
+
+NEEDS PROVISIONING BY THE USER (M2 is blocked on these for live calls):
+  ANTHROPIC_API_KEY                in progress
+  A fresh Firebase project         not started
+  Firebase web config              not started (public by design, safe in client)
+  Firebase service-account key     not started (SECRET, server-only, needed for
+                                   ID token verification)
+
+Everything except the live calls can be built and verified without credentials,
+including the tests proving the gate rejects unauthenticated requests.
+
+OUTSTANDING / UNRESOLVED:
+  - Category banners are palette-wash placeholders. SPEC.md section 5 calls for
+    photography ("photography that carries the page"). Real images still needed.
+  - The old Gemini API key should be rotated/revoked when that app is
+    decommissioned - it is readable in any deployed bundle of the old build.
+  - SPEC.md still contains the six inaccuracies in section 4 above. They have
+    been reported but SPEC.md has NOT been edited - it remains the source of
+    truth as written, and the deviations are documented instead.
+  - SPEC.md section 6 lists /api/daily-phrase (GET, cached per day). M1 solves
+    the daily phrase locally and deterministically, so this route is not yet
+    built and may not be needed.
+  - /vault and the local-first sync described in SPEC.md section 7 are M3.
+  - Service worker, manifest, iOS install and offline states are M4.
+
+===============================================================================
+END OF HANDOFF
+===============================================================================
