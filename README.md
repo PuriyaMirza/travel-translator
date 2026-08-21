@@ -9,11 +9,20 @@ they are deliberately not repeated anywhere else, including here.
 
 ## Status
 
-**Milestone 0 — pipeline.** Scaffold, brand module, design tokens, header with
-wordmark, deployed. Nothing else yet: no auth, no database, no AI, no offline.
+**Milestones 0 and 1 are shipped and live in production.** Pipeline, design
+tokens, header — plus a fully static phrasebook: 6 categories, 42 preset
+phrases, editorial category pages, and text-to-speech. Still no auth, no
+database, no AI.
 
-Milestones still to come: M1 static phrasebook · M2 live translation ·
-M3 accounts and vault · M4 offline and PWA.
+**M2 (live translation) is next.** `/translate`, a server-side Anthropic route
+handler, and the result card's three states. The route ships public in M2 —
+protected only by an input-length cap and a coarse per-IP throttle — with full
+auth arriving in M3, per SPEC.md §10's ordering.
+
+Remaining after that: M3 accounts and vault · M4 offline and PWA.
+
+See [BUILDLOG.md](./BUILDLOG.md) for the detailed build history, including
+deviations and open items.
 
 ## Getting started
 
@@ -22,7 +31,7 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-No environment variables are required at M0.
+No environment variables are required yet — M2 will need `ANTHROPIC_API_KEY`.
 
 ## Scripts
 
@@ -39,13 +48,25 @@ No environment variables are required at M0.
 ```
 src/
 ├── app/
-│   ├── globals.css     Design tokens — see "Voyage" in SPEC.md §5
-│   ├── layout.tsx      Fonts, metadata, header
-│   └── page.tsx        Home
+│   ├── globals.css                     Design tokens — "Voyage", SPEC.md §5
+│   ├── layout.tsx                      Fonts, metadata, header
+│   ├── page.tsx                        Home — daily phrase, category grid
+│   ├── not-found.tsx
+│   └── phrasebook/[category]/page.tsx  Editorial category page
 ├── components/
-│   └── Header.tsx
+│   ├── Header.tsx / NavDrawer.tsx      Header bar + slide-out nav
+│   ├── CategoryGrid.tsx / CategoryBanner.tsx
+│   ├── PhraseCard.tsx / SpeakButton.tsx / Eyebrow.tsx
+│   └── DailyPhraseCard.tsx
 └── lib/
     ├── brand.ts        Name, tagline, default locale — the only place these live
+    ├── categories.ts   Canonical category slugs — lowercase English, permanent
+    ├── labels.ts       Localized display labels for category slugs
+    ├── types.ts        The Phrase interface
+    ├── phrases.ts      42 preset phrases, 7 per category
+    ├── categoryMeta.ts Icon + banner wash + lead copy per category
+    ├── dailyPhrase.ts  Deterministic phrase-of-the-day picker
+    ├── useSpeech.ts    Web Speech API hook
     └── utils.ts        cn() class-name helper
 ```
 
