@@ -22,7 +22,7 @@ These exist because v1 is one language and one region, and v2 is many. Every one
 
 1. **The brand name lives in exactly one file.** `src/lib/brand.ts` exports name, tagline, default locale. Wordmark, `<title>`, PWA manifest, meta tags, and all copy read from it. Zero string literals of the app name anywhere else.
 2. **Locale is a parameter, never a hardcoded assumption.** No file contains the string "Puerto Rico" or region-specific logic in v1. The AI prompt takes locale and region as variables.
-3. **Category slugs are lowercase English and permanent.** Display labels are localized separately. `dining` is the slug forever; "Comida y Bebida" is a label in a translations file. This is the specific bug that broke the previous build — presets used Spanish keys while the API returned English ones.
+3. **Category slugs are lowercase English and permanent.** Display labels are localized separately. `dining` is the slug forever; "Comida y Bebida" is a label in a translations file. Keying data, routes, or API payloads off a translated string is the specific failure mode this rule exists to prevent.
 4. **Every stored phrase carries a `locale` field.** From the very first write. Without it there is no way to tell `es-419` phrases from `es-PR` phrases later, and no clean migration.
 5. **camelCase everywhere** — TypeScript, JSON API responses, Firestore fields. One convention, no mapping layer, no snake/camel bugs.
 6. **No API keys client-side.** All model calls go through Next.js route handlers.
@@ -42,7 +42,7 @@ These exist because v1 is one language and one region, and v2 is many. Every one
 | Hosting | Vercel |
 | Icons | `lucide-react` — no emoji as UI icons |
 
-Ported from the previous Firebase build. Do not migrate Firestore or Auth; they work fine from Vercel. Firebase project ID stays `sentido-cec08` — invisible to users, not worth changing.
+Firebase Auth and Firestore are new in this build, not a port — the previous app used Google Gemini for translation, not Anthropic, so there is no AI code to carry over. Provision a fresh Firebase project rather than reusing the previous one: that project is AI-Studio-managed on a non-default Firestore database, and its schema and security rules don't match this app's data model (section 7).
 
 **Model:** use a current Claude model. Check the Anthropic docs for the model string rather than assuming one.
 
@@ -125,11 +125,23 @@ Two faces, deliberately contrasted:
 
 ### Shape
 
-- Cards: 32px radius (`rounded-3xl`)
-- Inset images: 24px radius
+- Cards: 32px radius — implemented as the `rounded-card` utility. (Tailwind v4's built-in `rounded-3xl` is 24px, not 32px — don't use it here.)
+- Inset images: 24px radius — implemented as `rounded-image`.
 - Buttons and pills: fully rounded
 - Card press state: `scale(0.98)`, 100ms
-- Card hover: `translateY(-2px)`, deeper shadow, border shifts to `--border-brand`
+- Card hover: `translateY(-2px)`, deeper shadow, border shifts to `--border-brand` (implemented as the `border-blush` utility — see the implementation note below)
+
+### Implementation note: token naming
+
+`:root` holds the tokens above under these exact names — that is the contract. Tailwind's `@theme inline` then maps them to shorter utility names, because these `--text-*` colour names collide with Tailwind v4's own `--text-*` font-size namespace:
+
+```
+bg-canvas, bg-card, bg-sand, bg-charcoal
+text-brand, text-ink, text-muted, text-inverse
+border-hairline, border-blush
+```
+
+`--border-brand` maps to `border-blush` specifically, not `border-brand` — a literal `border-brand` utility would resolve to crimson (`#B91C1C`), not this token's pale pink (`#FCA5A5`).
 
 ### The layout decision that matters
 
@@ -139,7 +151,7 @@ Instead: **editorial header, dense body.** Each category page opens with a full-
 
 ### Navigation
 
-Header bar: hamburger left, wordmark centered, account avatar right. No floating bottom dock — the previous build had one, it's out.
+Header bar: hamburger left, wordmark centered, account avatar right. No floating bottom dock.
 
 ---
 
@@ -241,7 +253,7 @@ Response shape (camelCase, matching `SavedPhrase`):
 
 Include two or three few-shot examples in the prompt. Use neutral Latin American ones — *¿Me da el menú?*, *¿Dónde tomo el autobús?* — not the Puerto Rican *guagua*/*bregando* examples from the old build.
 
-Set temperature around 0.3. Max output tokens ~1024 — the old config said 65,536, which was a copied default for a response that's a few hundred tokens.
+Set temperature around 0.3. Max output tokens ~1024 — this is a response that's a few hundred tokens, not a document; don't default to something enormous.
 
 ---
 
@@ -264,7 +276,7 @@ Ship each milestone to Vercel before starting the next.
 
 **M1 — Static phrasebook.** Categories, preset phrases from a local file, editorial category pages, phrase cards, text-to-speech. No auth, no database, no AI. This is already a useful app.
 
-**M2 — Live translation.** `/translate`, the Anthropic route handler, result card, all three states.
+**M2 — Live translation.** `/translate`, the Anthropic route handler, result card, all three states. No auth yet — the route is public, protected only by an input-length cap and a coarse per-IP throttle. Auth arrives in M3.
 
 **M3 — Accounts and vault.** Firebase Auth, Firestore, local-first sync per section 7.
 
@@ -276,4 +288,8 @@ Write ~40 preset phrases across the six visible categories before M1 — evenly 
 
 ## 11. Reference material
 
-The old repo is a reference, not a template. Take from it: the color and type tokens, the general component shapes. Ignore: its category taxonomy (broken), its design section (written against mockups for a different Spain-based concept), its model config (stale), and its app name (invented — this project is not called Sentido).
+The old repo (`Puriya-translation-project-march-2026`) is a reference, not a template — and a limited one. It is a single-screen Vite SPA (one 472-line `App.tsx`, no routing, no phrasebook, no categories, no text-to-speech) built against Google Gemini, not Anthropic.
+
+Take from it: the `cn()` class-name helper (`clsx` + `tailwind-merge`), the Tailwind `@theme` token pattern, two of its colour values (`#A3D9C9` and `#F4EBD0`, both already folded into section 5), the EB Garamond / Inter font pairing, and the general shape of its `firestore.rules` (default-deny, ownership helper functions) — not its actual rules, which target a different schema.
+
+Ignore everything else: its translation service (Gemini, a different response shape, a hardcoded region in the prompt), its Firestore schema and Auth provider (Google popup, not email/password), its app name (invented — this project is not called Sentido), and its Firebase project (AI-Studio-managed — provision a fresh one instead; see section 3).
