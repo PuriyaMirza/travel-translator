@@ -232,9 +232,15 @@ Rules:
    genuinely get wrong — a politeness convention, a false friend, a word
    that means something different here. Otherwise leave it empty.
    Do not pad it.
-6. Output strictly valid JSON matching the schema. No markdown fences,
-   no commentary.
+6. category must be exactly one of the seven canonical slugs (section 4).
+   Use general when nothing else fits.
 ```
+
+Rule 6 above replaces "output strictly valid JSON matching the schema, no
+markdown fences" — that instruction is a request the model can simply fail.
+Use structured outputs (`output_config.format` on the Messages API) to
+enforce the response shape instead; the prompt only needs to state the
+content rules, not the wire format.
 
 Response shape (camelCase, matching `SavedPhrase`):
 
@@ -253,7 +259,13 @@ Response shape (camelCase, matching `SavedPhrase`):
 
 Include two or three few-shot examples in the prompt. Use neutral Latin American ones — *¿Me da el menú?*, *¿Dónde tomo el autobús?* — not the Puerto Rican *guagua*/*bregando* examples from the old build.
 
-Set temperature around 0.3. Max output tokens ~1024 — this is a response that's a few hundred tokens, not a document; don't default to something enormous.
+Sampling parameters (temperature/top_p/top_k) are removed on `claude-opus-5`
+and return a 400 — "temperature around 0.3" doesn't apply to the current API.
+Use structured outputs (`output_config.format`) plus `output_config.effort:
+"low"` instead: a tight prompt and a fixed schema get the same consistency a
+low temperature was meant to buy. Max output tokens 2048, not ~1024 — this is
+still a response that's a few hundred tokens, not a document, but thinking
+tokens count toward the limit and thinking is on by default on this model.
 
 ---
 
