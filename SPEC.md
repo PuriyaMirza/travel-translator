@@ -232,9 +232,11 @@ Rules:
    genuinely get wrong — a politeness convention, a false friend, a word
    that means something different here. Otherwise leave it empty.
    Do not pad it.
-6. Output strictly valid JSON matching the schema. No markdown fences,
-   no commentary.
+6. Fill every field of the schema. Leave culturalNote as an empty
+   string rather than omitting it.
 ```
+
+Rule 6 does not need to police formatting. The response shape is enforced by the API through structured outputs (below), not by asking the model nicely — so no "output strictly valid JSON," no "no markdown fences," no "no commentary." Those instructions are cruft against a constrained decode and were removed.
 
 Response shape (camelCase, matching `SavedPhrase`):
 
@@ -253,7 +255,17 @@ Response shape (camelCase, matching `SavedPhrase`):
 
 Include two or three few-shot examples in the prompt. Use neutral Latin American ones — *¿Me da el menú?*, *¿Dónde tomo el autobús?* — not the Puerto Rican *guagua*/*bregando* examples from the old build.
 
-Set temperature around 0.3. Max output tokens ~1024 — this is a response that's a few hundred tokens, not a document; don't default to something enormous.
+### Request parameters
+
+Declare the response shape as a JSON schema and pass it as `output_config.format`, so the eight fields above — `literal`, `natural`, `culturalNote`, `pronunciation`, and the rest — are structurally guaranteed rather than parsed hopefully out of prose. Mark every field required, `culturalNote` included; an empty string is the "nothing to say" value, not an absent key. The route handler still validates `category` against the `CATEGORIES` tuple before trusting it.
+
+Set `output_config.effort` to `"low"`. This is a short, tightly-specified transformation with the output shape already pinned by the schema — it does not need deep reasoning, and the default (`high`) would spend tokens and latency on a task that resolves in one step. Effort is the cost/depth dial, and `low` is the bottom of the five-step range (`low`, `medium`, `high`, `xhigh`, `max`).
+
+**Do not pass `temperature`, `top_p`, or `top_k`.** Current Claude models reject sampling parameters outright — the request fails with a 400, it does not degrade gracefully. An earlier version of this spec said "temperature around 0.3"; that instruction is void and predates the current API.
+
+Note what did and did not replace it. Structured outputs guarantees the *shape* of the response. `effort` controls *how much thinking* the model spends getting there. Neither one is a determinism knob, and the API no longer exposes one — so do not read `effort: "low"` as "the old temperature setting, renamed." Two identical requests may still return differently-worded translations. If the product ever needs a stable answer for a given input, that comes from caching the result, not from a request parameter.
+
+Max output tokens ~1024 — this is a response that's a few hundred tokens, not a document; don't default to something enormous.
 
 ---
 

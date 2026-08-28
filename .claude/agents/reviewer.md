@@ -62,15 +62,27 @@ to.
 
 ## The translation call
 
-Check the Anthropic call in the route handler specifically:
+SPEC.md §8 specifies this call exactly. Review against it as written —
+it is current, and its "Request parameters" subsection is the contract.
 
-- It must use `output_config.format` for the structured response shape
-  and `output_config.effort` (`"low"`).
-- It must NOT pass `temperature`, `top_p`, or `top_k`. Current Claude
-  models reject sampling parameters and the request fails with a 400.
-  Grep for all three. SPEC.md §8 still says "temperature around 0.3" —
-  that line is known to be stale; do not report code as wrong for
-  disagreeing with it, and say so if it comes up.
+- The response shape is declared as a JSON schema and passed as
+  `output_config.format`. Both `format` and `effort` live *inside*
+  `output_config` — flag either one passed at the top level.
+- `output_format` at the top level is the deprecated spelling of this
+  parameter. If you see it, that is a finding.
+- `output_config.effort` is `"low"`.
+- No `temperature`, `top_p`, or `top_k`. Current Claude models reject
+  sampling parameters with a 400 — this fails the request outright, it
+  does not degrade. Grep for all three; any hit is a bug, not a nit.
+- The schema marks all eight fields required, `culturalNote` included.
+  An absent `culturalNote` key is wrong; an empty string is correct.
+- `category` is validated against the `CATEGORIES` tuple in the route
+  handler before use. A schema `enum` is not sufficient on its own —
+  SPEC.md §8 asks for the check in code.
+- The prompt should not still carry the formatting instructions
+  structured outputs made redundant — "output strictly valid JSON,"
+  "no markdown fences," "no commentary." SPEC.md §8 removed those
+  deliberately. Leftovers are cruft, not a bug; label them as such.
 - The prompt takes locale and region as variables, with no region
   hardcoded into the template.
 - The response shape matches SPEC.md §8 and lines up with
