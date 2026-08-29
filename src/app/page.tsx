@@ -1,3 +1,5 @@
+import Link from "next/link";
+import { Languages } from "lucide-react";
 import { brand } from "@/lib/brand";
 import { dailyPhrase } from "@/lib/dailyPhrase";
 import { CategoryGrid } from "@/components/CategoryGrid";
@@ -19,6 +21,14 @@ export default function Home() {
       <div className="mt-8">
         <DailyPhraseCard phrase={dailyPhrase()} />
       </div>
+
+      <Link
+        href="/translate"
+        className="text-body-bold mt-6 flex items-center justify-center gap-2 rounded-full border border-hairline bg-card px-6 py-3 text-ink shadow-soft transition hover:border-blush hover:text-brand motion-reduce:transition-none"
+      >
+        <Languages className="size-5" />
+        Translate something else
+      </Link>
 
       <section aria-labelledby="phrasebook" className="mt-10">
         <Eyebrow>Phrasebook</Eyebrow>
