@@ -178,3 +178,20 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - PRs #4 and #7 are still open and still superseded; they should be closed rather than merged.
 
 **Verification performed:** reproduced the shape of the original failure and confirmed the fix against a local HTTP stub standing in for the API via `ANTHROPIC_BASE_URL`, asserting on the headers actually received. With `ANTHROPIC_WORKSPACE_ID` unset the request carries no `anthropic-workspace-id` header (plain-key path unchanged); with it set to `wrkspc_test123` the header arrives on the wire with that exact value. The stub's 500 was mapped to the `upstream` error code and logged server-side without reaching the client, confirming the error path still behaves. `npm run lint`, `npm run typecheck`, `npm run build` all clean; `.next/static/` greps clean for `anthropic-workspace-id` and `ANTHROPIC_WORKSPACE_ID`, so the new variable does not reach the client bundle either.
+
+---
+
+### [2026-08-29 21:30] M2 verified end-to-end against the live API; M2 shipped
+- **Milestone:** M2
+- **Files:** modified — `README.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - **The live model call returned a real translation on the deployed Vercel preview, with all four fields populated.** This is the first 200 this project has ever gotten from the API. Every prior entry in this log carried the same caveat — the request shape was verified against documentation, never against a response — and that caveat is now discharged. `claude-sonnet-5`, `output_config.format` with the JSON schema, `output_config.effort: "low"`, and `max_tokens: 4096` are all confirmed accepted as SPEC.md §8 specifies them. Nothing in §8 needed changing.
+  - `README.md` now says M2 is shipped rather than built, and states the credential requirement, since that is what stood between "built" and "shipped."
+- **Two things blocked it, neither of them in the request parameters:**
+  1. **`ANTHROPIC_API_KEY` was misspelled `ANTHROPOC_API_KEY` in the Vercel environment.** The SDK saw no key at all. Worth recording because the symptom is indistinguishable from a missing key, and the variable is set in a web UI where nothing spell-checks it.
+  2. **The replacement key was identity-scoped.** Those return `400 invalid_request_error` — *"anthropic-workspace-id is required when authenticating with an identity-linked API key"* — before the API evaluates any request parameter. **A workspace-scoped key fixes this with no code change**, and that is what resolved it.
+- **Deviations:** none.
+- **Incomplete:** nothing outstanding for M2's translation path itself.
+- **Open questions:**
+  - **The `ANTHROPIC_WORKSPACE_ID` header support added in the previous entry was not what fixed this, and is now unexercised code.** It was written to make an identity-scoped key work; the actual resolution was swapping to a workspace-scoped key. It is inert by construction — the client is built with no default headers when the variable is unset — so it costs nothing and still makes an identity-linked key viable for anyone who has only that. But it has never run against the real API in the configuration it was written for, and honesty requires saying so rather than letting the previous entry's verification note imply otherwise. A reasonable future call is to delete it as speculative; it was kept because the failure it addresses is one a next deployer can plausibly hit.
+  - Category banners are still palette placeholders, carried over unresolved from M1 — now the oldest open item in this log.

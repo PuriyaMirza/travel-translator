@@ -9,18 +9,22 @@ they are deliberately not repeated anywhere else, including here.
 
 ## Status
 
-**Milestones 0 and 1 are shipped. M2 is built but not yet deployed.**
-Pipeline and design tokens; a fully static phrasebook (6 categories, 42 preset
-phrases, editorial category pages, text-to-speech); and live translation at
-`/translate`, backed by a server-side Anthropic route handler with all three
-states (loading, empty, error). The route is public — protected only by a
-500-character input cap and a coarse per-IP throttle — per SPEC.md §10's
-ordering. Still no auth, no database.
+**Milestones 0, 1 and 2 are shipped.** Pipeline and design tokens; a fully
+static phrasebook (6 categories, 42 preset phrases, editorial category pages,
+text-to-speech); and live translation at `/translate`, backed by a
+server-side Anthropic route handler with all three states (loading, empty,
+error). The route is public — protected only by a 500-character input cap and
+a coarse per-IP throttle — per SPEC.md §10's ordering. Still no auth, no
+database.
 
-M2 needs `ANTHROPIC_API_KEY` set in Vercel and one real translation run
-against the preview before it counts as shipped: no key exists in the build
-environment, so the model call has never returned a 200 anywhere. See
-BUILDLOG.md for exactly what was and was not verified.
+The translation call is verified end-to-end against the live API on the
+deployed preview — a real request returned all four fields populated,
+confirming the model string, structured-output schema, `effort` and
+`max_tokens` in SPEC.md §8 are accepted as written.
+
+`ANTHROPIC_API_KEY` must be set in the deployment environment. Use a
+**workspace-scoped** key: an identity-scoped one is rejected with a 400
+asking for an `anthropic-workspace-id`. See `.env.example`.
 
 Remaining: M3 accounts and vault · M4 offline and PWA.
 
