@@ -245,9 +245,13 @@ Rules:
    Do not pad it.
 6. Fill every field of the schema. Leave culturalNote as an empty
    string rather than omitting it.
+7. category must be exactly one of the seven canonical slugs (section 4).
+   Use general when nothing else fits.
 ```
 
 Rule 6 does not need to police formatting. The response shape is enforced by the API through structured outputs (below), not by asking the model nicely — so no "output strictly valid JSON," no "no markdown fences," no "no commentary." Those instructions are cruft against a constrained decode and were removed.
+
+Rule 7 earns its place even though the schema also carries the field: `category` is deliberately typed as a plain string rather than an enum (see the route handler note below), so the prompt is the only place the seven slugs are stated to the model. The runtime `isCategory()` check is the backstop, not the primary instruction.
 
 Response shape (camelCase, matching `SavedPhrase`):
 

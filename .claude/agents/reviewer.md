@@ -65,6 +65,13 @@ to.
 SPEC.md §8 specifies this call exactly. Review against it as written —
 it is current, and its "Request parameters" subsection is the contract.
 
+- The model is `claude-sonnet-5`, the runtime pin in SPEC.md §3. A route
+  handler calling Opus is a finding, not a judgement call — §3 pins the
+  product's per-request path deliberately and says not to "upgrade" it
+  because a coding session runs on a bigger model. A date suffix on the
+  ID is also a finding; IDs in this family carry none.
+- `max_tokens` is `4096` (SPEC.md §8). Lower is a finding: thinking
+  tokens count against the cap, so it budgets thinking plus answer.
 - The response shape is declared as a JSON schema and passed as
   `output_config.format`. Both `format` and `effort` live *inside*
   `output_config` — flag either one passed at the top level.

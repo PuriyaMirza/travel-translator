@@ -9,17 +9,20 @@ they are deliberately not repeated anywhere else, including here.
 
 ## Status
 
-**Milestones 0 and 1 are shipped and live in production.** Pipeline, design
-tokens, header — plus a fully static phrasebook: 6 categories, 42 preset
-phrases, editorial category pages, and text-to-speech. Still no auth, no
-database, no AI.
+**Milestones 0 and 1 are shipped. M2 is built but not yet deployed.**
+Pipeline and design tokens; a fully static phrasebook (6 categories, 42 preset
+phrases, editorial category pages, text-to-speech); and live translation at
+`/translate`, backed by a server-side Anthropic route handler with all three
+states (loading, empty, error). The route is public — protected only by a
+500-character input cap and a coarse per-IP throttle — per SPEC.md §10's
+ordering. Still no auth, no database.
 
-**M2 (live translation) is next.** `/translate`, a server-side Anthropic route
-handler, and the result card's three states. The route ships public in M2 —
-protected only by an input-length cap and a coarse per-IP throttle — with full
-auth arriving in M3, per SPEC.md §10's ordering.
+M2 needs `ANTHROPIC_API_KEY` set in Vercel and one real translation run
+against the preview before it counts as shipped: no key exists in the build
+environment, so the model call has never returned a 200 anywhere. See
+BUILDLOG.md for exactly what was and was not verified.
 
-Remaining after that: M3 accounts and vault · M4 offline and PWA.
+Remaining: M3 accounts and vault · M4 offline and PWA.
 
 See [BUILDLOG.md](./BUILDLOG.md) for the detailed build history, including
 deviations and open items.
@@ -31,7 +34,8 @@ npm install
 npm run dev          # http://localhost:3000
 ```
 
-No environment variables are required yet — M2 will need `ANTHROPIC_API_KEY`.
+Set `ANTHROPIC_API_KEY` to use `/translate` locally (see `.env.example`). The
+rest of the app works without it.
 
 ## Scripts
 
@@ -52,20 +56,27 @@ src/
 │   ├── layout.tsx                      Fonts, metadata, header
 │   ├── page.tsx                        Home — daily phrase, category grid
 │   ├── not-found.tsx
+│   ├── translate/page.tsx              Freeform translation
+│   ├── api/translate/route.ts          POST — server-side Anthropic call
 │   └── phrasebook/[category]/page.tsx  Editorial category page
 ├── components/
 │   ├── Header.tsx / NavDrawer.tsx      Header bar + slide-out nav
 │   ├── CategoryGrid.tsx / CategoryBanner.tsx
 │   ├── PhraseCard.tsx / SpeakButton.tsx / Eyebrow.tsx
+│   ├── PhraseCardSkeleton.tsx / ErrorCard.tsx
+│   ├── TranslateForm.tsx
 │   └── DailyPhraseCard.tsx
 └── lib/
     ├── brand.ts        Name, tagline, default locale — the only place these live
     ├── categories.ts   Canonical category slugs — lowercase English, permanent
     ├── labels.ts       Localized display labels for category slugs
+    ├── locale.ts       BCP 47 tag -> human-readable name, for the prompt
     ├── types.ts        The Phrase interface
     ├── phrases.ts      42 preset phrases, 7 per category
     ├── categoryMeta.ts Icon + banner wash + lead copy per category
     ├── dailyPhrase.ts  Deterministic phrase-of-the-day picker
+    ├── translate.ts    The Anthropic call, prompt, schema, normalisation
+    ├── rateLimit.ts    Coarse in-memory per-IP throttle for /api/translate
     ├── useSpeech.ts    Web Speech API hook
     └── utils.ts        cn() class-name helper
 ```

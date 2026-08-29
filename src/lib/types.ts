@@ -21,4 +21,10 @@ export interface Phrase {
   /** Written so an English speaker reading aloud will be understood. */
   pronunciation: string;
   category: Category;
+  /**
+   * The language `natural`/`literal` are written in. Absent on all 42 preset
+   * phrases (always Spanish); present on translation results, which are
+   * bidirectional — an es->en result is English, not Spanish.
+   */
+  targetLanguage?: "en" | "es";
 }

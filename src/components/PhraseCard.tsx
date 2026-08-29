@@ -14,20 +14,23 @@ import { SpeakButton } from "./SpeakButton";
 export function PhraseCard({ phrase }: { phrase: Phrase }) {
   const { speak, speakingId, supported } = useSpeech();
   const showLiteral = phrase.literal !== phrase.natural;
+  // Absent on all 42 presets (always Spanish); translation results are
+  // bidirectional, so an es->en result must not be read or marked as Spanish.
+  const language = phrase.targetLanguage ?? "es";
 
   return (
     <article className="rounded-card border border-hairline bg-card p-5 shadow-soft">
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <p className="text-small text-muted">{phrase.sourceText}</p>
-          <p lang="es" className="text-h2 mt-1 text-ink">
+          <p lang={language} className="text-h2 mt-1 text-ink">
             {phrase.natural}
           </p>
           <p className="text-small mt-1 text-muted italic">{phrase.pronunciation}</p>
         </div>
 
         <SpeakButton
-          onSpeak={() => speak(phrase.id, phrase.natural)}
+          onSpeak={() => speak(phrase.id, phrase.natural, language)}
           isSpeaking={speakingId === phrase.id}
           supported={supported}
           label={phrase.natural}
@@ -39,7 +42,7 @@ export function PhraseCard({ phrase }: { phrase: Phrase }) {
           {showLiteral && (
             <p className="text-small text-muted">
               <span className="text-ink">More formal:</span>{" "}
-              <span lang="es">{phrase.literal}</span>
+              <span lang={language}>{phrase.literal}</span>
             </p>
           )}
           {phrase.culturalNote && (

@@ -84,6 +84,16 @@ export function NavDrawer() {
                 Home
               </Link>
 
+              <Link
+                href="/translate"
+                className={cn(
+                  "text-body-bold block py-2 text-ink transition hover:text-brand motion-reduce:transition-none",
+                  pathname === "/translate" && "text-brand",
+                )}
+              >
+                Translate
+              </Link>
+
               <Eyebrow tone="muted" className="mt-6 mb-1">
                 Phrasebook
               </Eyebrow>
