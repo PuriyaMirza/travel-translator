@@ -14,7 +14,17 @@ import type { Phrase } from "./types";
  * BUILDLOG.md), rather than adding the `server-only` package for one file.
  */
 
-const client = new Anthropic();
+// An identity-linked API key must name the workspace each request acts in,
+// or the API rejects it with a 400 before it looks at anything else. A plain
+// API key needs no such header, so this is conditional rather than required:
+// set ANTHROPIC_WORKSPACE_ID alongside the key when the key is
+// identity-linked, leave it unset otherwise. Spelled as a default header
+// because the SDK exposes no dedicated option for it.
+const workspaceId = process.env.ANTHROPIC_WORKSPACE_ID;
+
+const client = new Anthropic(
+  workspaceId ? { defaultHeaders: { "anthropic-workspace-id": workspaceId } } : {},
+);
 
 // SPEC.md §3 pins this for the app's runtime translation calls. It is not a
 // cost default: §3 draws the line deliberately between the product's
