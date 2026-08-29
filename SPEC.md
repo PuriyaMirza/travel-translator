@@ -35,7 +35,7 @@ These exist because v1 is one language and one region, and v2 is many. Every one
 |---|---|
 | Framework | Next.js 14+, App Router, TypeScript |
 | Styling | Tailwind CSS, tokens as CSS custom properties |
-| AI | Anthropic API, called from server route handlers only |
+| AI | Anthropic API (`claude-sonnet-5`), called from server route handlers only |
 | Database | Cloud Firestore (offline persistence enabled) |
 | Auth | Firebase Auth, email/password |
 | Audio | Web Speech API (`window.speechSynthesis`) |
@@ -44,7 +44,18 @@ These exist because v1 is one language and one region, and v2 is many. Every one
 
 Firebase Auth and Firestore are new in this build, not a port — the previous app used Google Gemini for translation, not Anthropic, so there is no AI code to carry over. Provision a fresh Firebase project rather than reusing the previous one: that project is AI-Studio-managed on a non-default Firestore database, and its schema and security rules don't match this app's data model (section 7).
 
-**Model:** use a current Claude model. Check the Anthropic docs for the model string rather than assuming one.
+### Model
+
+**The deployed app's runtime translation calls use `claude-sonnet-5`.** Use that exact string — model IDs in this family carry no date suffix, and appending one produces an ID that doesn't exist.
+
+This is a deliberate choice, not a cost default, and the distinction it draws matters more than the model name:
+
+- **Sonnet for the product's runtime.** Translation quality and cultural-note nuance is what `/api/translate` is judged on — a traveller reading *literal*, *natural*, and a pronunciation guide aloud at a counter. Sonnet 5 handles that well at a fraction of Opus's per-token cost, on a call the app makes on every user request.
+- **Opus for the coding agents in this repo.** The subagents under `.claude/agents/` and the sessions that build this project are a separate concern with separate economics — a handful of long, hard reasoning tasks, not a per-request hot path. Nothing about which model writes the code implies anything about which model the shipped app calls.
+
+Do not "upgrade" the runtime call to Opus because a coding session happens to run on it. If translation quality turns out to be the binding constraint, raise `output_config.effort` first (see section 8) and measure before changing the model — the two are different dials and effort is the cheaper one to turn.
+
+Reconfirm the model string against the Anthropic docs before M2 code lands rather than trusting this line indefinitely; the pin is a decision, not a guarantee that the ID outlives the spec.
 
 ---
 
@@ -265,7 +276,11 @@ Set `output_config.effort` to `"low"`. This is a short, tightly-specified transf
 
 Note what did and did not replace it. Structured outputs guarantees the *shape* of the response. `effort` controls *how much thinking* the model spends getting there. Neither one is a determinism knob, and the API no longer exposes one — so do not read `effort: "low"` as "the old temperature setting, renamed." Two identical requests may still return differently-worded translations. If the product ever needs a stable answer for a given input, that comes from caching the result, not from a request parameter.
 
-Max output tokens ~1024 — this is a response that's a few hundred tokens, not a document; don't default to something enormous.
+Set `max_tokens` to **4096**.
+
+The response itself is a few hundred tokens, so 4096 looks generous — it isn't, and the reason is worth stating. On current models adaptive thinking is on unless explicitly disabled, and **thinking tokens count against `max_tokens`**. The cap is not a budget for the visible answer; it is a budget for thinking plus answer. An earlier version of this spec said ~1024, sized as if the JSON were the only thing being generated. At `effort: "low"` thinking is short, but 1024 leaves no margin, and the failure is ugly: the response truncates mid-generation and the structured output arrives incomplete.
+
+4096 is headroom, not a target — normal responses will use a fraction of it, and unused capacity costs nothing, since output is billed on tokens actually generated. This also stays well clear of the threshold where the SDKs want streaming to dodge HTTP timeouts, so `/api/translate` can stay a plain non-streaming request.
 
 ---
 

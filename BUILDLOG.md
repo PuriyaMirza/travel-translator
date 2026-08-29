@@ -88,3 +88,23 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - **`max_tokens` ~1024 is now suspect and was deliberately left alone.** §8 still says ~1024. That number predates adaptive thinking, which is on by default on current models and whose tokens count against `max_tokens`. A translation response is a few hundred tokens, but thinking plus output could exceed 1024 and truncate mid-response. Not changed because it wasn't part of the decision handed down, and the fix depends on the model chosen in §3. Needs a human call before M2 code lands.
   - `session-handoff.txt` line 158 still calls the old "~1024, ~0.3" advice "sensible." It is a dated handoff document, and line 639 of the same file already flags temperature as rejected, so it was left as history rather than edited.
   - Category banners are still palette placeholders, carried over unresolved from M1.
+
+---
+
+### [2026-08-29 12:44] SPEC.md §3/§8: pin claude-sonnet-5 for runtime, max_tokens 4096
+- **Milestone:** M2
+- **Files:** modified — `SPEC.md` (§3, §8).
+- **Decisions:**
+  - Closes both open questions from the previous entry, which were always one decision: §3 now pins **`claude-sonnet-5`** for the deployed app's runtime translation calls, and §8 sets **`max_tokens: 4096`**.
+  - §3 states the reasoning rather than just the string, because the interesting part is the boundary it draws: Sonnet serves the product's per-request hot path, where translation quality and cultural-note nuance are what `/api/translate` is judged on; Opus stays on the coding agents in this repo, which are a handful of long reasoning tasks with entirely different economics. The spec says explicitly not to "upgrade" the runtime call to Opus because a coding session happens to run on it — that inference is the thing most likely to erode this decision later.
+  - §3 also says to raise `effort` and measure before reaching for a bigger model if translation quality turns out to be the binding constraint. Effort is the cheaper dial and the two are independent.
+  - 4096 is justified in the spec on the thinking-token point, not on response size. Adaptive thinking is on by default on current models and its tokens count against `max_tokens`, so the cap budgets thinking *plus* answer. The old ~1024 was sized as though the JSON were the only output. At `effort: "low"` thinking is short, but 1024 leaves no margin and truncation would arrive as an incomplete structured output. 4096 is headroom; unused capacity is free, since output bills on tokens generated.
+  - 4096 also stays well below the point where the SDKs want streaming to avoid HTTP timeouts, so `/api/translate` remains a plain non-streaming request. Worth recording, because it means the route handler stays simple by choice rather than by accident.
+  - Model ID written without a date suffix, deliberately — IDs in this family carry none and appending one yields a nonexistent model.
+- **Deviations:** none. This is the decision the previous entry asked for.
+- **Incomplete:** Still no M2 feature code. §3 and §8 are now internally consistent and fully specified, but nothing here has been executed against the live API — the model string, parameter shape, and token budget are verified against documentation, never against a 200 response. First real call may still surprise us.
+- **Open questions:**
+  - `.claude/agents/reviewer.md` was **not** updated. Its translation-call checks point at §8, so `max_tokens: 4096` is covered automatically, but nothing tells it to check the §3 model pin — it would not flag a route handler calling Opus. A two-line addition would close that gap; left out because this task was scoped to SPEC.md.
+  - §3's model pin is a decision, not a permanent guarantee. The spec says to reconfirm the string against the Anthropic docs before M2 code lands.
+  - `session-handoff.txt` line 158 still calls the old "~1024, ~0.3" advice "sensible" — now wrong on both numbers. Still left as dated history rather than edited; line 639 of the same file already flags the temperature half.
+  - Category banners are still palette placeholders, carried over unresolved from M1.
