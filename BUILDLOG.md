@@ -56,3 +56,35 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Open questions:**
   - Category banners are still palette placeholders, carried over unresolved from M1.
   - SPEC.md §8 still recommends `temperature: 0.3`. The current Anthropic API rejects sampling parameters (`temperature`/`top_p`/`top_k`) on `claude-opus-5` — the request would return a 400. This wasn't one of the six items flagged for correction, so SPEC.md hasn't been edited to reflect it; it needs a decision before M2 code lands, and structured outputs + a low `output_config.effort` are the recommended substitute for consistency.
+
+---
+
+### [2026-08-28 22:30] Add implementer and reviewer subagents
+- **Milestone:** M2 (tooling, no feature code)
+- **Files:** created — `.claude/agents/implementer.md`, `.claude/agents/reviewer.md`.
+- **Decisions:**
+  - Two project subagents, both on Sonnet. `implementer` gets Read/Write/Edit/Bash; `reviewer` gets Read/Grep/Glob only, so it structurally cannot "fix" what it reviews.
+  - Both prompts carry the CLAUDE.md conventions and the token footguns from the M0/M1 entries above (`border-blush`, `rounded-card`/`rounded-image`, `cn()` for type-plus-colour strings) rather than assuming an agent will read the whole build log.
+  - `implementer` is told not to write BUILDLOG.md. The main session owns this append-only file and writes entries from the agent's report — two writers appending independently seemed like the wrong shape for a file whose whole contract is "never rewrite."
+  - `reviewer` is told it cannot run lint/typecheck/build (no Bash) and must not claim those checks passed. Left unsaid, a review agent tends to assert green checks it never ran.
+- **Deviations:** none. Tooling config, no application code touched.
+- **Incomplete:** Neither agent has been exercised on a real task yet. Their prompts are written against the spec, not against observed behaviour.
+- **Open questions:** none — superseded by the entry below.
+
+---
+
+### [2026-08-28 22:53] SPEC.md §8: structured outputs and effort, replacing temperature
+- **Milestone:** M2
+- **Files:** modified — `SPEC.md` (§8), `.claude/agents/reviewer.md`.
+- **Decisions:**
+  - Resolved the open question carried since the 2026-08-20 entry. SPEC.md §8 now specifies the response shape as a JSON schema passed via `output_config.format`, and `output_config.effort: "low"`. The old "temperature around 0.3" line is gone, replaced with an explicit **do not pass `temperature`/`top_p`/`top_k`** and the reason: current models reject sampling parameters with a 400, which fails the request outright rather than degrading.
+  - Verified against the current Anthropic API reference before writing, not from memory. Three things confirmed: sampling params are removed (not merely discouraged) on current models; `format` and `effort` both live *inside* `output_config`; and top-level `output_format` is the deprecated spelling. The reviewer now checks for that deprecated spelling specifically.
+  - §8 states plainly that this is **not** a rename of the temperature knob. Structured outputs fixes the response *shape*; `effort` controls *thinking depth and spend*. Neither is a determinism control and the API no longer exposes one, so two identical requests may still return differently-worded translations. Written into the spec because "effort: low is the new temperature: 0.3" is the obvious wrong inference for a future reader to draw.
+  - Prompt rule 6 rewritten. It used to say "output strictly valid JSON matching the schema. No markdown fences, no commentary" — instructions that only make sense when the shape is unenforced. Against a constrained decode they are cruft, so rule 6 now just requires every field to be filled, with `culturalNote` as an empty string rather than an absent key. The reviewer flags leftovers of the old wording as cruft rather than as a bug.
+  - Kept the requirement that the route handler validate `category` against the `CATEGORIES` tuple in code. A schema `enum` constrains the model, but the handler shouldn't trust a model-supplied slug to index anything without checking.
+- **Deviations:** none. This is the decision the previous entry asked for.
+- **Incomplete:** No M2 feature code yet. §8 is now internally consistent but has never been executed against the real API — the parameter shape is verified against documentation, not against a 200 response.
+- **Open questions:**
+  - **`max_tokens` ~1024 is now suspect and was deliberately left alone.** §8 still says ~1024. That number predates adaptive thinking, which is on by default on current models and whose tokens count against `max_tokens`. A translation response is a few hundred tokens, but thinking plus output could exceed 1024 and truncate mid-response. Not changed because it wasn't part of the decision handed down, and the fix depends on the model chosen in §3. Needs a human call before M2 code lands.
+  - `session-handoff.txt` line 158 still calls the old "~1024, ~0.3" advice "sensible." It is a dated handoff document, and line 639 of the same file already flags temperature as rejected, so it was left as history rather than edited.
+  - Category banners are still palette placeholders, carried over unresolved from M1.
