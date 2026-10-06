@@ -41,7 +41,7 @@ entries; only append.
 Entry format:
 
 ### [YYYY-MM-DD HH:MM] <short description of the task>
-- **Milestone:** M0 / M1 / M2 / M3 / M4
+- **Milestone:** M0 / M1 / M2 / M3 / M4 / M5 / M6
 - **Files:** created / modified / deleted
 - **Decisions:** anything I chose that SPEC.md did not
   specify, and why
