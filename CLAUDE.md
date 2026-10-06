@@ -71,8 +71,9 @@ describes.
   globals that layout.tsx and the `[category]` page
   rely on.
 
-No test runner is configured. No env vars yet — M2
-adds `ANTHROPIC_API_KEY`.
+No test runner is configured. Env vars: see
+`.env.example` — `ANTHROPIC_API_KEY` (server, M2) and
+four public `NEXT_PUBLIC_FIREBASE_*` values (M3).
 
 Stack: Next.js 16 (App Router, React 19), Tailwind CSS
 v4 (CSS-first, no `tailwind.config`), TypeScript.
@@ -81,8 +82,31 @@ Deploys to Vercel; `vercel.json` pins
 
 ## Architecture
 
-Static phrasebook today (M0+M1 shipped). No auth, DB,
-AI, or service worker yet — those are M2–M4.
+M0–M3 shipped: phrasebook, live translation,
+accounts and vault. No service worker yet — that's M4.
+
+### Accounts and vault (M3)
+
+- `src/lib/firebase.ts` — every getter returns null on
+  the server or with no Firebase config; the app then
+  keeps saved phrases on the device only.
+- `authStore.ts` (`useAuth`) and `vault.ts`
+  (`useVault`) are external stores via
+  `useSyncExternalStore`, like `useSpeech`. The vault
+  follows auth: localStorage logged out, an
+  `onSnapshot` on `users/{uid}/savedPhrases` signed in.
+- `localFirst.ts` is the collection-generic sync from
+  SPEC.md §7 — reuse it for M5 show cards.
+- `userDoc.ts` is the only writer of `users/{uid}`,
+  run on every signed-in session start; timestamps
+  come from Firebase Auth metadata so a lost write
+  self-heals. Don't add fire-and-forget Firestore
+  writes right before a navigation — they're lost on
+  unload (see BUILDLOG.md M3).
+- Timestamps are epoch ms in app code, Firestore
+  `Timestamp` only at the storage boundary.
+- `firestore.rules` is deployed by pasting into the
+  console; the file is the source of truth.
 
 ### The one-file rules, and where they resolve
 

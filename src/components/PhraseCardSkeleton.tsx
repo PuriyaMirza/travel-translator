@@ -3,11 +3,11 @@
  * `PhraseCard` exactly so the layout doesn't jump when the real card replaces
  * it — same padding, same two-line-plus-caption shape.
  */
-export function PhraseCardSkeleton() {
+export function PhraseCardSkeleton({ label = "Translating" }: { label?: string }) {
   return (
     <div
       role="status"
-      aria-label="Translating"
+      aria-label={label}
       className="animate-pulse rounded-card border border-hairline bg-card p-5 shadow-soft"
     >
       <div className="flex items-start justify-between gap-4">

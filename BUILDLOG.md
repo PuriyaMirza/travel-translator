@@ -240,3 +240,48 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Open questions:**
   - **Speaker gender changes the shipped M2 route and prompt (§8) in M5.** It's additive (an optional field defaulting to today's behaviour), but it is the first edit to a shipped prompt. Worth a regression check against the M2 few-shot examples when M5 lands.
   - **"Super picks" in the user's reply was read as "user picks".** Confirm.
+
+---
+
+### [2026-10-06 02:49] M3: accounts and vault
+- **Milestone:** M3
+- **Files:**
+  - created: `src/lib/firebase.ts`, `authStore.ts`, `auth.ts`, `userDoc.ts`, `localFirst.ts`, `vault.ts`; `src/components/SaveButton.tsx`, `VaultList.tsx`, `AccountButton.tsx`, `AccountPanel.tsx`; `src/app/vault/page.tsx`, `src/app/account/page.tsx`; `firestore.rules`, `firebase.json`.
+  - modified: `src/lib/types.ts` (all §7 shapes), `PhraseCard.tsx` (save button), `PhraseCardSkeleton.tsx` (label prop), `Header.tsx` (account slot), `NavDrawer.tsx` (Vault link), `package.json`/lock (`firebase` ^12.19), `.env.example`, `README.md`, `CLAUDE.md`, `BUILDLOG.md`.
+- **Decisions** (the plan's five, approved by "start" as the recommended defaults; "Super picks" = "user picks" confirmed by the user, closing that open question from the previous entry):
+  - **`SavedPhrase.targetLanguage?` added**, which SPEC.md §7 doesn't list. Without it, a saved es→en translation would be read aloud as Spanish.
+  - **Rules are deployed by pasting `firestore.rules` into the console.** No `firebase-tools` dependency. `firebase.json` was added only so the emulators load the same rules file; it isn't a deploy pipeline.
+  - **Sign-out deletes the on-device Firestore cache** (`terminate` + `clearIndexedDbPersistence`). Cost: the vault re-downloads on the next sign-in.
+  - **The Firebase web config ships to the client** as `NEXT_PUBLIC_*`. These are public identifiers; the rules protect the data. CLAUDE.md's "no API keys client-side" is read as applying to the model key.
+  - **Not built:** email verification and account deletion.
+  - **Timestamps are epoch ms in app code and localStorage**, and become Firestore `Timestamp`s only at the storage boundary (`localFirst.ts`). SPEC.md §7 types them as `Timestamp`, and that's what's stored.
+  - **Saved-phrase document id = SHA-256 of `locale + sourceText`**, the §7 dedupe key. The same phrase from two devices lands on one doc, so dedupe and last-write-wins come from the id itself. It's hashed because a raw `sourceText` can contain "/" and exceed Firestore's 1,500-byte id limit.
+  - **One security rule:** a recursive `users/{uid}/{document=**}` match, per the M3 note in SPEC.md §10. No field validation in the rules; the spec asks only for ownership.
+  - **`users/{uid}` has exactly one writer, `userDoc.ts`,** which runs on every signed-in session start. `createdAt` and `lastLoginAt` come from Firebase Auth's account metadata, so a lost write is redone with the same values on the next load. It reads the cached copy first, so most loads cost no server read. Only on a miss does it run a transaction, which reads from the server.
+  - **A no-config fallback:** with no Firebase env vars, the app runs as before M3. Saves stay on the device and `/account` says accounts aren't switched on. This is what production does until the four vars are set.
+  - **An emulator switch, `NEXT_PUBLIC_FIREBASE_EMULATORS=1`**, is a few lines in `firebase.ts` that let the whole flow be verified locally. It is never set in Vercel.
+  - Upload-on-sign-in runs after the vault listener attaches, not before. The vault renders straight from the cache, and uploaded phrases arrive through the listener.
+- **Bugs found by testing against the emulators, all fixed before commit:**
+  1. **`users/{uid}` was never created** if the page unloaded right after sign-up, because the write was fire-and-forget.
+  2. **Every fresh sign-in reset `createdAt`.** The doc check read the local view, where a pending `lastLoginAt` merge looked like an incomplete doc, so the code "re-created" it. Fixed by moving to the metadata-plus-transaction design above. The earlier separate `lastLoginAt` write on sign-in was removed entirely.
+  3. **Sign-out didn't clear the offline cache** when Firestore hadn't been opened on that page load. `clearLocalCache` now opens a handle before clearing.
+- **Verification performed:** `npm run lint`, `npm run typecheck`, and `npm run build` are clean. Against the Firebase Auth and Firestore emulators, with a production build in headless Chromium, 22 of 22 end-to-end checks pass:
+  - Logged-out save, then sign-up uploads it (`syncedFromLocal: true`, `Timestamp` savedAt) and clears local storage.
+  - The user doc is created with `speakerGender: "neutral"` and `preferredLocale: "es-419"`.
+  - Signed-in save and remove reach Firestore.
+  - Rules: another user can't read or write my subtree, anonymous reads are denied, writes outside `/users` are denied, and writes to my own subtree are allowed.
+  - Sign-out removes the Firestore IndexedDB database and empties the vault. Re-sign-in keeps `createdAt` and advances `lastLoginAt`. Re-saving the same phrase logged out and signing in again still yields one doc. A wrong password shows the plain message.
+  - Also checked: removing a phrase on `/vault` while offline updates the UI at once and reaches the server on reconnect. A build with no Firebase config shows the "not switched on" account state, device saves still work, and there are no console errors. `.next/static` greps clean for `ANTHROPIC`.
+- **Deviations:**
+  - `SavedPhrase.targetLanguage?` (see above). It's additive, but it is a field SPEC.md §7 doesn't have.
+  - **The real Firebase project has not been exercised.** Everything above ran against the emulators. Production needs the user's project, env vars and pasted rules, and a sign-in on the Vercel preview to confirm.
+- **Incomplete:**
+  - **Navigating to a page offline fails**, even signed in: Next needs the route's payload from the server, and nothing caches it yet. Data is offline-ready, but pages aren't until M4's service worker. Verified, and expected per SPEC.md §10.
+  - **Clearing the cache fails if another tab is open.** `clearIndexedDbPersistence` only works when no other tab holds the cache. That case is logged as a warning and the cache stays until a later single-tab sign-out. Not tested with two tabs.
+  - **Save failures are only logged to the console.** A refused write or full device storage gets no visible message on the save button.
+  - **Device saves are invisible after an offline sign-in.** If the upload fails, they stay in localStorage, but the signed-in vault doesn't show them until a later sign-in retries the upload.
+  - **The phrase of the day gets the save button too** (it renders `PhraseCard`). Intended, but it wasn't in the plan.
+  - **No speaker-gender UI.** M3 only writes the `neutral` default, and the "a device choice replaces the default on sign-in" rule is left for M5, per SPEC.md §12.
+- **Open questions:**
+  - **Rules don't validate data shape.** A user can write anything into their own subtree: no required `locale`, no size cap. SPEC.md asks only for ownership. Worth tightening before M5/M6 add collections?
+  - **Remove has no undo**, on the vault or on the cards.
