@@ -195,3 +195,29 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Open questions:**
   - **The `ANTHROPIC_WORKSPACE_ID` header support added in the previous entry was not what fixed this, and is now unexercised code.** It was written to make an identity-scoped key work; the actual resolution was swapping to a workspace-scoped key. It is inert by construction — the client is built with no default headers when the variable is unset — so it costs nothing and still makes an identity-linked key viable for anyone who has only that. But it has never run against the real API in the configuration it was written for, and honesty requires saying so rather than letting the previous entry's verification note imply otherwise. A reasonable future call is to delete it as speculative; it was kept because the failure it addresses is one a next deployer can plausibly hit.
   - Category banners are still palette placeholders, carried over unresolved from M1 — now the oldest open item in this log.
+
+---
+
+### [2026-10-06 01:50] SPEC.md: add M5 (show cards) and M6 (trip pack); schema and caching hooks for M3/M4
+- **Milestone:** none. This is a spec change ahead of M3, no code.
+- **Files:** modified: `SPEC.md` (§6 screens, §7 data model and sync, §9 offline, §10 build order, new §12 and §13), `CLAUDE.md` (build-log milestone list now runs to M6), `BUILDLOG.md`.
+- **Decisions:**
+  - **Sequencing: M3 → M4 → M5 → M6.** Show cards are only worth having offline, and that needs M4's service worker. The trip pack saves to the vault, so it needs M3. Building either earlier means writing storage twice.
+  - **The schema and rules land in M3, not later.** `ShowCard`, `TripPack`, and `SavedPhrase.tripPackId` are in §7 now, so M3 ships the final shape instead of a migration in M5/M6. The ownership rule is specified as a recursive `users/{uid}/{document=**}` match, and the sync helper as collection-generic, for the same reason.
+  - **M4 caches app routes by pattern, not a list**, so `/cards` and `/trip` work offline without reopening the service worker.
+  - **New sections were appended as §12 and §13 rather than inserted.** That avoids renumbering §8–§11, which code comments and this log cite by number.
+  - **Show cards reuse `/api/translate` unchanged.** No new route, prompt, or schema for M5. Address cards make no model call at all, because addresses must not be translated.
+  - **Show mode displays `literal`, not `natural`.** §8 defines `literal` as the formal-safe register, which is right for a pharmacist or kitchen. Flagged below because it's a judgement call.
+  - **Show mode uses the existing `display` token (32px)** instead of a new, larger type token, to keep §5's scale closed.
+  - **Trip pack:** 20 phrases, `max_tokens` 16000, non-streaming, the same model and effort as §8, and a separate 3-per-hour IP bucket. 16000 follows the SDK guidance for non-streaming ceilings. The phrase count and throttle numbers are guesses to be measured, not derived.
+  - **The recent-translations cache sits in M6**, not M4, to keep M4's scope as written.
+- **Deviations:** none from the existing spec. Every edit adds to §6/§7/§9/§10 without contradicting them.
+- **Incomplete:**
+  - **Trip-pack latency is unmeasured.** Twenty phrases in one non-streaming call could take tens of seconds. The spec says to switch to streaming if that hurts, but nobody has timed it.
+  - **No starter text exists for UI locales other than English.** §12 says it's keyed by UI locale, but only English is drafted.
+- **Open questions:**
+  - **Gendered Spanish on show cards.** "Soy alérgico" vs "alérgica". The translation prompt doesn't know the user's gender. Options: phrase the starters so the Spanish comes out gender-neutral ("Tengo alergia a…"), or add an optional setting. Not decided.
+  - **`literal` vs `natural` in show mode.** See the decision above. Confirm.
+  - **Should `/api/trip-pack` require sign-in?** Enforcing it server-side means verifying a Firebase ID token, which most likely means adding `firebase-admin`, a dependency not listed in SPEC.md. As drafted, the route uses M2's public-plus-IP-throttle posture.
+  - **Trip pack size: is 20 right?**
+  - **Should the recent-translations cache move into M4?** It's small and it's offline behaviour.

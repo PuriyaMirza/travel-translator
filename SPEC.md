@@ -176,6 +176,10 @@ Header bar: hamburger left, wordmark centered, account avatar right. No floating
 | `/vault` | Saved phrases. Filter by category. |
 | `/api/translate` | POST. Server route → Anthropic. |
 | `/api/daily-phrase` | GET. Cached per day. |
+| `/cards` | Show cards: list, create, edit. M5 — see section 12. |
+| `/cards/[id]` | Full-screen show mode for one card. M5. |
+| `/trip` | Trip prep: describe the trip, preview generated phrases, save them to the vault. M6 — see section 13. |
+| `/api/trip-pack` | POST. Server route → Anthropic. Generates a batch of phrases for one trip. M6. |
 
 Every list screen needs three states beyond default: loading (skeleton cards, `--bg-card-subtle` blocks, `animate-pulse`), empty (dashed border, a clear invitation to act, never an apology), and error (crimson-tinted card, plain statement of what failed, retry button). Error copy names the problem and the fix — it does not apologize and does not mention the AI provider by name.
 
@@ -205,16 +209,49 @@ interface SavedPhrase {
   category: Category;
   savedAt: Timestamp;
   syncedFromLocal: boolean;
+  tripPackId?: string;       // set when saved from a trip pack (section 13); absent otherwise
+}
+
+// users/{uid}/showCards/{id}    — written from M5 (section 12)
+interface ShowCard {
+  id: string;
+  locale: string;            // REQUIRED, same rule as SavedPhrase
+  kind: ShowCardKind;        // 'allergy' | 'diet' | 'medical' | 'address' | 'custom'
+  title: string;             // the user's own English label, e.g. "Peanut allergy"
+  sourceText: string;        // English the user wrote; for 'address', the address verbatim
+  literal: string;           // the Spanish shown in show mode (see section 12)
+  natural: string;
+  culturalNote?: string;
+  pronunciation: string;
+  createdAt: Timestamp;
+  updatedAt: Timestamp;
+  syncedFromLocal: boolean;
+}
+
+// users/{uid}/tripPacks/{id}    — written from M6 (section 13)
+interface TripPack {
+  id: string;
+  locale: string;            // REQUIRED
+  title: string;             // user-entered, ≤ 60 chars, e.g. "Mexico City, 2 weeks"
+  description: string;       // the trip description sent to the model
+  phraseCount: number;
+  createdAt: Timestamp;
+  syncedFromLocal: boolean;
 }
 ```
 
-Security rules: a user reads and writes only their own subtree, default deny everything else.
+`ShowCardKind` slugs follow the same rule as category slugs (section 2, rule 3): lowercase English, permanent, display labels in `src/lib/labels.ts`.
+
+**M3 ships all three shapes.** `showCards` and `tripPacks` have no writer until M5 and M6, but their types and security rules land in M3 so neither milestone has to reopen the schema or the rules.
+
+Security rules: a user reads and writes only their own subtree, default deny everything else. Write the ownership rule as a recursive match on `users/{uid}/{document=**}`, not one block per collection, so collections added later are covered without a rules change.
 
 ### Local-first sync (the part the old build never specified)
 
 - Logged out: phrases go to `localStorage`, `syncedFromLocal: false`
 - On login: upload local phrases, dedupe on `sourceText + locale`, mark `syncedFromLocal: true`, then clear local
 - Conflicts: last write wins, keyed on `savedAt`
+- Build the sync as one helper parameterised by collection, dedupe key, and timestamp field — not code specific to saved phrases. M3 uses it for `savedPhrases`. M5 reuses it for `showCards` (dedupe on `kind + sourceText + locale`, last write wins on `updatedAt`). M6 reuses it for `tripPacks` (dedupe on `id`).
 - Use the current Firestore persistence API (`persistentLocalCache` via `initializeFirestore`) — `enableIndexedDbPersistence` is deprecated
 
 ---
@@ -292,8 +329,10 @@ The response itself is a few hundred tokens, so 4096 looks generous — it isn't
 
 - Manifest: standalone, portrait, `#FAF8F5` background, `#B91C1C` theme, 192 and 512 icons
 - Service worker: cache-first for the app shell, fonts, and category images
+- Cache the shell for every app route by pattern, not from a hand-maintained route list. Routes added after M4 (`/cards`, `/cards/[id]`, `/trip`) must work offline without editing the service worker.
 - Firestore handles offline data natively — don't hand-roll it
-- `/api/translate` is network-only; offline shows the error state with an offline-specific message
+- `/api/translate` and `/api/trip-pack` are network-only; offline shows the error state with an offline-specific message. Exception from M6: `/translate` first checks the recent-translations cache (section 13).
+- `/cards` and `/cards/[id]` render entirely from local data (Firestore's offline cache, or `localStorage` when logged out). No server fetch on that path. A show card that needs signal to open is useless.
 - The phrasebook and vault must be fully usable with zero signal. That's the whole point of the product.
 - iOS: `viewport-fit=cover` plus `env(safe-area-inset-top)` on the header, or it bleeds into the Dynamic Island
 
@@ -309,9 +348,13 @@ Ship each milestone to Vercel before starting the next.
 
 **M2 — Live translation.** `/translate`, the Anthropic route handler, result card, all three states. No auth yet — the route is public, protected only by an input-length cap and a coarse per-IP throttle. Auth arrives in M3.
 
-**M3 — Accounts and vault.** Firebase Auth, Firestore, local-first sync per section 7.
+**M3 — Accounts and vault.** Firebase Auth, Firestore, local-first sync per section 7. Includes the `ShowCard` and `TripPack` types, the optional `tripPackId` on `SavedPhrase`, the recursive ownership rule, and the collection-generic sync helper, even though nothing writes the new collections yet.
 
-**M4 — Offline.** Service worker, manifest, iOS install, offline states.
+**M4 — Offline.** Service worker, manifest, iOS install, offline states. Shell caching is route-pattern based per section 9.
+
+**M5 — Show cards.** `/cards`, `/cards/[id]`, show mode, the five kinds, all three list states. Reuses `/api/translate` unchanged. See section 12.
+
+**M6 — Trip pack.** `/trip`, `/api/trip-pack`, save-to-vault with `tripPackId`, vault filter by trip, and the recent-translations cache on `/translate`. See section 13.
 
 Write ~40 preset phrases across the six visible categories before M1 — evenly spread, not 5 dining and 1 shopping like the old set.
 
@@ -324,3 +367,81 @@ The old repo (`Puriya-translation-project-march-2026`) is a reference, not a tem
 Take from it: the `cn()` class-name helper (`clsx` + `tailwind-merge`), the Tailwind `@theme` token pattern, two of its colour values (`#A3D9C9` and `#F4EBD0`, both already folded into section 5), the EB Garamond / Inter font pairing, and the general shape of its `firestore.rules` (default-deny, ownership helper functions) — not its actual rules, which target a different schema.
 
 Ignore everything else: its translation service (Gemini, a different response shape, a hardcoded region in the prompt), its Firestore schema and Auth provider (Google popup, not email/password), its app name (invented — this project is not called Sentido), and its Firebase project (AI-Studio-managed — provision a fresh one instead; see section 3).
+
+---
+
+## 12. Show cards (M5)
+
+A show card is a phrase you hand over, not one you say. The user turns the phone around and the waiter, pharmacist, or taxi driver reads it. It exists for moments where getting it wrong matters (a food allergy, a medication, where you're staying) and where the user can't fall back on pointing and gesturing.
+
+### Kinds
+
+| Slug | Starter text (English, editable) |
+|---|---|
+| `allergy` | "I have a severe allergy to ___. Even a small amount can make me very sick. Please check with the kitchen." |
+| `diet` | "I don't eat ___. Could you tell me which dishes don't contain it?" |
+| `medical` | "I have ___. I take ___. In an emergency, please call a doctor." |
+| `address` | No sentence: the user enters the address verbatim. |
+| `custom` | Blank. |
+
+Starter text lives in a local file keyed by kind slug and UI locale, like labels. It is a prompt to the user, not a template engine: the user edits the whole sentence freely.
+
+### Creating a card
+
+- `allergy`, `diet`, `medical`, `custom`: the user edits the English and the client POSTs it to `/api/translate`, unchanged from M2. The result is stored on the card, so creating a card needs signal but showing it never does.
+- `address`: **no model call.** The card shows a fixed localized lead line ("Por favor, lléveme a:") from `src/lib/labels.ts`, followed by the address exactly as typed. Street names and building names must not be translated, and the model has no reason to touch them.
+- Editing the English text re-translates the card and needs signal. Offline, the text field is disabled with a plain statement why. Renaming and deleting work offline.
+
+### Show mode (`/cards/[id]`)
+
+- Full screen, `--bg-dark` background, `--text-inverse` text. The header is hidden. A close control sits top-left, inside `env(safe-area-inset-top)`.
+- The Spanish is set in the `display` token (32px/700) at minimum. It shows the card's **`literal`** field, not `natural`: section 8 defines `literal` as "correct, neutral, safe in formal settings", which is the register you want in front of a pharmacist.
+- The user's English `sourceText` sits underneath in `small` and `--text-muted`, so a bilingual reader can check it and the user knows exactly what they're showing.
+- Speak button (existing `useSpeech`) for reading it aloud.
+- The Screen Wake Lock API keeps the screen on while show mode is open. This is progressive: where the API is missing, nothing breaks and nothing is shown.
+- No crimson in show mode. It's a high-contrast reading surface, not a branded one.
+
+### List (`/cards`)
+
+The three list states from section 6 apply. The empty state invites the user to make their first card and offers the five kinds as tiles with a lucide icon for each.
+
+---
+
+## 13. Trip pack (M6)
+
+Before leaving, the user describes their trip in plain English ("vegetarian, two weeks in Mexico City and Oaxaca, staying in hostels, overnight buses") and gets 20 phrases specific to it, ready to save to the vault for offline use. The preset phrasebook covers what every traveler needs. The trip pack covers what *this* traveler needs.
+
+### Flow (`/trip`)
+
+1. The user enters a title (≤ 60 chars) and a description (≤ 500 chars, the same cap as `/api/translate`).
+2. Generate → loading state: skeleton phrase cards plus a line saying this takes a little while. It's one request, not a stream.
+3. Preview: generated phrases render as standard phrase cards, each with a checkbox, all checked by default.
+4. "Save N to vault" writes a `TripPack` plus one `SavedPhrase` per checked phrase, each with `tripPackId` set. Logged out, both go to `localStorage` and sync on login per section 7.
+5. The vault gains a trip filter alongside the category filter.
+
+### `/api/trip-pack`
+
+- POST `{ title, description, locale }` → `{ phrases: Phrase[] }`.
+- Model, effort, and sampling rules are identical to section 8: `claude-sonnet-5`, `output_config.effort: "low"`, no sampling parameters, structured outputs via `output_config.format`. The schema is an object with one `phrases` array whose items are the section 8 response shape.
+- `max_tokens`: **16000.** Twenty phrases at roughly 150 tokens each is about 3,000 tokens of answer, and thinking counts against the cap (section 8). 16000 gives the same kind of headroom 4096 gives a single phrase while staying a plain non-streaming request. If measured latency makes the loading state painful, switch to streaming before reducing the phrase count.
+- Validate every phrase's `category` with `isCategory()`, falling back to `general` exactly as `/api/translate` does. Accept up to 25 phrases and truncate beyond that. Fewer than 10 is an error state, not a short pack.
+- Throttle: a separate, tighter bucket in `rateLimit.ts`. A trip pack costs roughly twenty translations, so 3 per IP per hour, not 10 per minute.
+- Network-only; offline shows the error state with an offline-specific message.
+
+### Trip-pack prompt
+
+A separate template from section 8, with the same variables (`{{LOCALE_NAME}}`, never a hardcoded region). It reuses section 8's rules 2, 3, 4, 5 and 7 verbatim, so they live in one shared constant in code, not two copies that drift. It adds:
+
+- Generate phrases the traveler will **say** or **show**: English source, Spanish target. Every phrase has `sourceLanguage: "en"`.
+- Be specific to the described trip, not a generic phrasebook. A vegetarian gets "Does this have meat broth in it?", not "Where is the bathroom?"
+- Don't repeat the presets: the request includes the preset `sourceText` list.
+- Spread across categories only as far as the trip warrants. Don't pad a category to balance the set.
+
+### Recent translations cache
+
+Part of M6 because it's the other half of "translations you made before you lost signal."
+
+- Every successful `/api/translate` result is stored on the device in `localStorage`: the 50 most recent, keyed on normalized `sourceText + locale` (trimmed, lowercased). Device-local, never synced. It is a cache, not the vault.
+- `/translate` shows these as a "Recent" list under the input.
+- Offline, submitting text that exactly matches a cached key shows the cached result, labelled as saved on this device, not the offline error. Anything else gets the offline error as before.
+- This is also where section 8's "a stable answer for a given input comes from caching the result" lands.
