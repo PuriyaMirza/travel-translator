@@ -221,3 +221,22 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - **Should `/api/trip-pack` require sign-in?** Enforcing it server-side means verifying a Firebase ID token, which most likely means adding `firebase-admin`, a dependency not listed in SPEC.md. As drafted, the route uses M2's public-plus-IP-throttle posture.
   - **Trip pack size: is 20 right?**
   - **Should the recent-translations cache move into M4?** It's small and it's offline behaviour.
+
+---
+
+### [2026-10-06 01:54] SPEC.md: settle the five M5/M6 open questions
+- **Milestone:** none. Spec change ahead of M3, no code.
+- **Files:** modified: `SPEC.md` (§3, §7, §10, §12, §13), `BUILDLOG.md`.
+- **Decisions (the user's, recorded here):**
+  1. **Speaker gender: the user picks.** `UserDoc.speakerGender` (`neutral` | `feminine` | `masculine`, default `neutral`; `localStorage` when logged out) ships in M3. M5 adds the setting, an optional `speakerGender` field on `/api/translate`, and a `{{SPEAKER_GENDER}}` prompt variable. `neutral` tells the model to prefer agreement-free phrasing ("Tengo alergia a…").
+  2. **Show mode displays `literal`.** Already what §12 said; confirmed.
+  3. **`/api/trip-pack` requires sign-in, verified server-side.** `firebase-admin` is now listed in §3 (approved). The throttle is keyed on `uid`, not IP. `/trip` shows a sign-in invitation when logged out. Trip packs are therefore never local-first, so `TripPack.syncedFromLocal` and the `tripPacks` sync path are removed.
+  4. **Trip pack size: 25.** The prompt asks for 25 and the route truncates beyond 25. The `max_tokens` 16000 rationale was re-checked at 25 (about 3,750 answer tokens) and still holds.
+  5. **The recent-translations cache stays in M6.**
+- **Deviations:** none.
+- **Incomplete:**
+  - **The speaker-gender setting doesn't re-translate existing show cards.** A user who changes it after making cards must edit each card to refresh it. Chosen to keep M5 simple; it could surprise someone.
+  - Trip-pack latency at 25 phrases is still unmeasured.
+- **Open questions:**
+  - **Speaker gender changes the shipped M2 route and prompt (§8) in M5.** It's additive (an optional field defaulting to today's behaviour), but it is the first edit to a shipped prompt. Worth a regression check against the M2 few-shot examples when M5 lands.
+  - **"Super picks" in the user's reply was read as "user picks".** Confirm.

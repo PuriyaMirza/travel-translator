@@ -41,6 +41,7 @@ These exist because v1 is one language and one region, and v2 is many. Every one
 | Audio | Web Speech API (`window.speechSynthesis`) |
 | Hosting | Vercel |
 | Icons | `lucide-react` — no emoji as UI icons |
+| Server auth | `firebase-admin`, used only to verify Firebase ID tokens in `/api/trip-pack` (M6). Verifying needs only the Firebase project ID, not a service-account key. |
 
 Firebase Auth and Firestore are new in this build, not a port — the previous app used Google Gemini for translation, not Anthropic, so there is no AI code to carry over. Provision a fresh Firebase project rather than reusing the previous one: that project is AI-Studio-managed on a non-default Firestore database, and its schema and security rules don't match this app's data model (section 7).
 
@@ -195,6 +196,7 @@ interface UserDoc {
   createdAt: Timestamp;
   lastLoginAt: Timestamp;
   preferredLocale: string;   // 'es-419'
+  speakerGender: SpeakerGender;  // 'neutral' | 'feminine' | 'masculine'; default 'neutral'. Read from M5 (section 12)
 }
 
 // users/{uid}/savedPhrases/{id}
@@ -235,12 +237,11 @@ interface TripPack {
   title: string;             // user-entered, ≤ 60 chars, e.g. "Mexico City, 2 weeks"
   description: string;       // the trip description sent to the model
   phraseCount: number;
-  createdAt: Timestamp;
-  syncedFromLocal: boolean;
+  createdAt: Timestamp;      // no syncedFromLocal: trip packs require sign-in, so they are never local-first
 }
 ```
 
-`ShowCardKind` slugs follow the same rule as category slugs (section 2, rule 3): lowercase English, permanent, display labels in `src/lib/labels.ts`.
+`ShowCardKind` and `SpeakerGender` slugs follow the same rule as category slugs (section 2, rule 3): lowercase English, permanent, display labels in `src/lib/labels.ts`.
 
 **M3 ships all three shapes.** `showCards` and `tripPacks` have no writer until M5 and M6, but their types and security rules land in M3 so neither milestone has to reopen the schema or the rules.
 
@@ -251,7 +252,7 @@ Security rules: a user reads and writes only their own subtree, default deny eve
 - Logged out: phrases go to `localStorage`, `syncedFromLocal: false`
 - On login: upload local phrases, dedupe on `sourceText + locale`, mark `syncedFromLocal: true`, then clear local
 - Conflicts: last write wins, keyed on `savedAt`
-- Build the sync as one helper parameterised by collection, dedupe key, and timestamp field — not code specific to saved phrases. M3 uses it for `savedPhrases`. M5 reuses it for `showCards` (dedupe on `kind + sourceText + locale`, last write wins on `updatedAt`). M6 reuses it for `tripPacks` (dedupe on `id`).
+- Build the sync as one helper parameterised by collection, dedupe key, and timestamp field — not code specific to saved phrases. M3 uses it for `savedPhrases`. M5 reuses it for `showCards` (dedupe on `kind + sourceText + locale`, last write wins on `updatedAt`). Trip packs require sign-in and never pass through it. Logged out, `speakerGender` lives in `localStorage` and is written to `UserDoc` on login if the doc still has the default.
 - Use the current Firestore persistence API (`persistentLocalCache` via `initializeFirestore`) — `enableIndexedDbPersistence` is deprecated
 
 ---
@@ -348,13 +349,13 @@ Ship each milestone to Vercel before starting the next.
 
 **M2 — Live translation.** `/translate`, the Anthropic route handler, result card, all three states. No auth yet — the route is public, protected only by an input-length cap and a coarse per-IP throttle. Auth arrives in M3.
 
-**M3 — Accounts and vault.** Firebase Auth, Firestore, local-first sync per section 7. Includes the `ShowCard` and `TripPack` types, the optional `tripPackId` on `SavedPhrase`, the recursive ownership rule, and the collection-generic sync helper, even though nothing writes the new collections yet.
+**M3 — Accounts and vault.** Firebase Auth, Firestore, local-first sync per section 7. Includes the `ShowCard` and `TripPack` types, `UserDoc.speakerGender`, the optional `tripPackId` on `SavedPhrase`, the recursive ownership rule, and the collection-generic sync helper, even though nothing writes the new collections yet.
 
 **M4 — Offline.** Service worker, manifest, iOS install, offline states. Shell caching is route-pattern based per section 9.
 
-**M5 — Show cards.** `/cards`, `/cards/[id]`, show mode, the five kinds, all three list states. Reuses `/api/translate` unchanged. See section 12.
+**M5 — Show cards.** `/cards`, `/cards/[id]`, show mode, the five kinds, all three list states. The speaker-gender setting, and the matching optional field on `/api/translate`. See section 12.
 
-**M6 — Trip pack.** `/trip`, `/api/trip-pack`, save-to-vault with `tripPackId`, vault filter by trip, and the recent-translations cache on `/translate`. See section 13.
+**M6 — Trip pack.** `/trip`, `/api/trip-pack` behind sign-in (adds `firebase-admin`), save-to-vault with `tripPackId`, vault filter by trip, and the recent-translations cache on `/translate`. See section 13.
 
 Write ~40 preset phrases across the six visible categories before M1 — evenly spread, not 5 dining and 1 shopping like the old set.
 
@@ -386,9 +387,18 @@ A show card is a phrase you hand over, not one you say. The user turns the phone
 
 Starter text lives in a local file keyed by kind slug and UI locale, like labels. It is a prompt to the user, not a template engine: the user edits the whole sentence freely.
 
+### Speaker gender
+
+Spanish marks the speaker's gender in phrases travelers say constantly: *alérgico/alérgica*, *cansado/cansada*, *vegetariano/vegetariana*. The user chooses it, and the model never guesses.
+
+- A setting (in the nav drawer) with three permanent slugs: `neutral` (the default), `feminine`, `masculine`. Display labels live in `src/lib/labels.ts`. Stored in `UserDoc.speakerGender`, or in `localStorage` when logged out (section 7).
+- `/api/translate` gains an optional `speakerGender` request field, defaulting to `neutral`. The client sends the current setting on every call: show cards, `/translate`, and the trip pack.
+- The section 8 template gains a `{{SPEAKER_GENDER}}` variable and one rule: *"When the speaker refers to themselves, use {{SPEAKER_GENDER}} grammatical agreement. If it is neutral, prefer constructions that avoid gendered agreement — 'Tengo alergia a…' rather than 'Soy alérgico a…' — and use the masculine form only where no natural neutral phrasing exists."*
+- Changing the setting does not re-translate existing show cards. Each card stores the translation it was made with. Editing a card re-translates it with the current setting.
+
 ### Creating a card
 
-- `allergy`, `diet`, `medical`, `custom`: the user edits the English and the client POSTs it to `/api/translate`, unchanged from M2. The result is stored on the card, so creating a card needs signal but showing it never does.
+- `allergy`, `diet`, `medical`, `custom`: the user edits the English and the client POSTs it to `/api/translate` with the current `speakerGender`. The result is stored on the card, so creating a card needs signal but showing it never does.
 - `address`: **no model call.** The card shows a fixed localized lead line ("Por favor, lléveme a:") from `src/lib/labels.ts`, followed by the address exactly as typed. Street names and building names must not be translated, and the model has no reason to touch them.
 - Editing the English text re-translates the card and needs signal. Offline, the text field is disabled with a plain statement why. Renaming and deleting work offline.
 
@@ -409,28 +419,31 @@ The three list states from section 6 apply. The empty state invites the user to 
 
 ## 13. Trip pack (M6)
 
-Before leaving, the user describes their trip in plain English ("vegetarian, two weeks in Mexico City and Oaxaca, staying in hostels, overnight buses") and gets 20 phrases specific to it, ready to save to the vault for offline use. The preset phrasebook covers what every traveler needs. The trip pack covers what *this* traveler needs.
+Before leaving, the user describes their trip in plain English ("vegetarian, two weeks in Mexico City and Oaxaca, staying in hostels, overnight buses") and gets 25 phrases specific to it, ready to save to the vault for offline use. The preset phrasebook covers what every traveler needs. The trip pack covers what *this* traveler needs.
 
 ### Flow (`/trip`)
+
+**Sign-in required.** Logged out, `/trip` shows a sign-in invitation in the empty-state style (section 6), not the form. A trip pack costs about 25 translations, and its value is the saved vault, which already wants an account.
 
 1. The user enters a title (≤ 60 chars) and a description (≤ 500 chars, the same cap as `/api/translate`).
 2. Generate → loading state: skeleton phrase cards plus a line saying this takes a little while. It's one request, not a stream.
 3. Preview: generated phrases render as standard phrase cards, each with a checkbox, all checked by default.
-4. "Save N to vault" writes a `TripPack` plus one `SavedPhrase` per checked phrase, each with `tripPackId` set. Logged out, both go to `localStorage` and sync on login per section 7.
+4. "Save N to vault" writes a `TripPack` plus one `SavedPhrase` per checked phrase, each with `tripPackId` set, straight to Firestore.
 5. The vault gains a trip filter alongside the category filter.
 
 ### `/api/trip-pack`
 
-- POST `{ title, description, locale }` → `{ phrases: Phrase[] }`.
+- POST `{ title, description, locale, speakerGender }` → `{ phrases: Phrase[] }`, with `Authorization: Bearer <Firebase ID token>`.
+- The route verifies the token with `firebase-admin` before doing anything else. A missing or invalid token gets a 401, which the client shows as the error state with a sign-in action. This is the first route that knows who is calling.
 - Model, effort, and sampling rules are identical to section 8: `claude-sonnet-5`, `output_config.effort: "low"`, no sampling parameters, structured outputs via `output_config.format`. The schema is an object with one `phrases` array whose items are the section 8 response shape.
-- `max_tokens`: **16000.** Twenty phrases at roughly 150 tokens each is about 3,000 tokens of answer, and thinking counts against the cap (section 8). 16000 gives the same kind of headroom 4096 gives a single phrase while staying a plain non-streaming request. If measured latency makes the loading state painful, switch to streaming before reducing the phrase count.
-- Validate every phrase's `category` with `isCategory()`, falling back to `general` exactly as `/api/translate` does. Accept up to 25 phrases and truncate beyond that. Fewer than 10 is an error state, not a short pack.
-- Throttle: a separate, tighter bucket in `rateLimit.ts`. A trip pack costs roughly twenty translations, so 3 per IP per hour, not 10 per minute.
+- `max_tokens`: **16000.** Twenty-five phrases at roughly 150 tokens each is about 3,750 tokens of answer, and thinking counts against the cap (section 8). 16000 gives the same kind of headroom 4096 gives a single phrase while staying a plain non-streaming request. If measured latency makes the loading state painful, switch to streaming before reducing the phrase count.
+- Validate every phrase's `category` with `isCategory()`, falling back to `general` exactly as `/api/translate` does. The prompt asks for 25. Accept up to 25 and truncate beyond that. Fewer than 10 is an error state, not a short pack.
+- Throttle: a separate, tighter bucket in `rateLimit.ts`, keyed on the verified `uid` rather than the IP: 3 packs per user per hour. It's still the coarse in-memory throttle from M2, now keyed on an identity.
 - Network-only; offline shows the error state with an offline-specific message.
 
 ### Trip-pack prompt
 
-A separate template from section 8, with the same variables (`{{LOCALE_NAME}}`, never a hardcoded region). It reuses section 8's rules 2, 3, 4, 5 and 7 verbatim, so they live in one shared constant in code, not two copies that drift. It adds:
+A separate template from section 8, with the same variables (`{{LOCALE_NAME}}` and `{{SPEAKER_GENDER}}`, never a hardcoded region). It reuses section 8's rules 2, 3, 4, 5 and 7 verbatim, so they live in one shared constant in code, not two copies that drift. It adds:
 
 - Generate phrases the traveler will **say** or **show**: English source, Spanish target. Every phrase has `sourceLanguage: "en"`.
 - Be specific to the described trip, not a generic phrasebook. A vegetarian gets "Does this have meat broth in it?", not "Where is the bathroom?"
