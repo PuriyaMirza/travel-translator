@@ -1,0 +1,23 @@
+rules_version = '2';
+
+// SPEC.md §7: a user reads and writes only their own subtree; everything
+// else is denied by default (no rule matches → denied).
+//
+// One recursive match, not a block per collection, so collections added
+// later (M5 showCards, M6 tripPacks) need no rules change. Under
+// rules_version 2, {document=**} also matches zero segments, so this single
+// match covers the users/{uid} document itself as well as everything below.
+//
+// Deployed by pasting into Firebase console → Firestore → Rules. This file is
+// the source of truth; keep the console in step with it.
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isOwner(uid) {
+      return request.auth != null && request.auth.uid == uid;
+    }
+
+    match /users/{uid}/{document=**} {
+      allow read, write: if isOwner(uid);
+    }
+  }
+}

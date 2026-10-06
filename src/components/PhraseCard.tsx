@@ -2,6 +2,7 @@
 
 import type { Phrase } from "@/lib/types";
 import { useSpeech } from "@/lib/useSpeech";
+import { SaveButton } from "./SaveButton";
 import { SpeakButton } from "./SpeakButton";
 
 /**
@@ -29,12 +30,15 @@ export function PhraseCard({ phrase }: { phrase: Phrase }) {
           <p className="text-small mt-1 text-muted italic">{phrase.pronunciation}</p>
         </div>
 
-        <SpeakButton
-          onSpeak={() => speak(phrase.id, phrase.natural, language)}
-          isSpeaking={speakingId === phrase.id}
-          supported={supported}
-          label={phrase.natural}
-        />
+        <div className="flex shrink-0 flex-col gap-2">
+          <SpeakButton
+            onSpeak={() => speak(phrase.id, phrase.natural, language)}
+            isSpeaking={speakingId === phrase.id}
+            supported={supported}
+            label={phrase.natural}
+          />
+          <SaveButton phrase={phrase} />
+        </div>
       </div>
 
       {(showLiteral || phrase.culturalNote) && (
