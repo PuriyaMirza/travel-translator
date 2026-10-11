@@ -240,3 +240,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Open questions:**
   - **Speaker gender changes the shipped M2 route and prompt (§8) in M5.** It's additive (an optional field defaulting to today's behaviour), but it is the first edit to a shipped prompt. Worth a regression check against the M2 few-shot examples when M5 lands.
   - **"Super picks" in the user's reply was read as "user picks".** Confirm.
+
+### [2026-10-11 12:00] Figma mockup frames for the translator flow
+- **Milestone:** M0–M6 (design only; no code touched)
+- **Files:** modified BUILDLOG.md. Figma page "Language App" (file z1KG6ozWc2BW0Eg6SqX5QK, node 95:1696): created a `Voyage` color variable collection, a `Header` component, and 8 mobile frames (390×844): 01 Home, 02 Category (Food & Drink), 03 Translate empty, 04 Translate loading, 05 Translate result, 06 Translate error (offline), 07 Vault, 08 Show card (show mode).
+- **Decisions:** Variables use SPEC.md §5 token names plus one extra, `error-wash` (#FEF2F2), for the crimson-tinted error card. Display face is EB Garamond Bold (SPEC §11 pairing), body is Inter. Icons are lucide SVGs imported as vectors, with literal hex strokes (not variable-bound). Sample copy is taken from src/lib/phrases.ts where possible; the pharmacy phrase and its cultural note are invented for the mockup.
+- **Deviations:** Wordmark text "DIALOG" is a literal in Figma (copied from brand.ts name; Figma has no import). Banner on frame 02 is a gradient, not photography (matches current code, not SPEC §5). Frames 07 and 08 show M3/M5 screens ahead of the current milestone, as design reference only.
+- **Incomplete:** No nav drawer, sign-in, /cards list, or /trip frames. No prototype links between frames. Frames are not tokenised for gradients or icon colors. Frame 03 includes a "Recent" list, which is M6 (SPEC §13).
+- **Open questions:** Should the flow also cover the nav drawer/speaker-gender setting and sign-in? Is the pharmacy example OK as the canonical result sample?
