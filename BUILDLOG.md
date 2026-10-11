@@ -248,3 +248,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** Wordmark text "DIALOG" is a literal in Figma (copied from brand.ts name; Figma has no import). Banner on frame 02 is a gradient, not photography (matches current code, not SPEC §5). Frames 07 and 08 show M3/M5 screens ahead of the current milestone, as design reference only.
 - **Incomplete:** No nav drawer, sign-in, /cards list, or /trip frames. No prototype links between frames. Frames are not tokenised for gradients or icon colors. Frame 03 includes a "Recent" list, which is M6 (SPEC §13).
 - **Open questions:** Should the flow also cover the nav drawer/speaker-gender setting and sign-in? Is the pharmacy example OK as the canonical result sample?
+
+### [2026-10-11 21:00] Reference phrase lists: es-419, fr-FR, de-DE (100 each)
+- **Milestone:** none (reference data, not wired into the app)
+- **Files:** created data/phrases/es-419.csv, data/phrases/fr-FR.csv, data/phrases/de-DE.csv; modified BUILDLOG.md
+- **Decisions:** Stored under `data/`, outside `src/`, so nothing imports them. Columns: id, situation (category slug), locale, english, natural, literal. All three files share the same 100 ids and English source, so rows join across languages. es-419 = the 42 presets from src/lib/phrases.ts plus 58 new. fr/de swap two Spanish-specific rows: `greetings-little-language` ("I don't speak much French/German") and `general-pay-cash` (replaces "Do you accept dollars?"). Formal register (usted / vous / Sie). Gendered forms avoided where possible; French "Enchanté(e)" and "végétarien(ne)" keep the (e) form.
+- **Deviations:** SPEC.md §1 makes other languages out of scope for v1. These files are storage only, at the user's request; no code reads them. The es-419 file has 58 phrases not in phrases.ts.
+- **Incomplete:** No pronunciation or culturalNote columns, which the Phrase type requires; they must be added before any import. The 58 new Spanish phrases and all French/German rows are model-written and checked only by a second model pass, not by a native speaker. Locale tags fr-FR / de-DE are assumed.
+- **Open questions:** How these get into the app (Firestore vs Neon decision still pending). Whether pronunciation respelling applies to French/German.
