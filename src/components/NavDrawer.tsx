@@ -6,8 +6,10 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { VISIBLE_CATEGORIES } from "@/lib/categories";
 import { categoryLabel } from "@/lib/labels";
+import { NAV_LINKS } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "./Eyebrow";
+import { SpeakerGenderControl } from "./SpeakerGenderControl";
 
 export function NavDrawer() {
   const pathname = usePathname();
@@ -74,25 +76,20 @@ export function NavDrawer() {
             </div>
 
             <div className="overflow-y-auto px-6 pb-10">
-              <Link
-                href="/"
-                className={cn(
-                  "text-h2 block py-2 font-display text-ink",
-                  pathname === "/" && "text-brand",
-                )}
-              >
-                Home
-              </Link>
-
-              <Link
-                href="/translate"
-                className={cn(
-                  "text-body-bold block py-2 text-ink transition hover:text-brand motion-reduce:transition-none",
-                  pathname === "/translate" && "text-brand",
-                )}
-              >
-                Translate
-              </Link>
+              {NAV_LINKS.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    link.href === "/"
+                      ? "text-h2 block py-2 font-display text-ink"
+                      : "text-body-bold block py-2 text-ink transition hover:text-brand motion-reduce:transition-none",
+                    pathname === link.href && "text-brand",
+                  )}
+                >
+                  {link.label}
+                </Link>
+              ))}
 
               <Eyebrow tone="muted" className="mt-6 mb-1">
                 Phrasebook
@@ -115,6 +112,8 @@ export function NavDrawer() {
                   );
                 })}
               </ul>
+
+              <SpeakerGenderControl />
             </div>
           </nav>
         </div>

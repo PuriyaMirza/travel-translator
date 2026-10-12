@@ -4,12 +4,13 @@ import { z } from "zod/v4";
 import { brand } from "./brand";
 import { isCategory } from "./categories";
 import { localeName } from "./locale";
-import type { Phrase } from "./types";
+import type { Phrase, SpeakerGender } from "./types";
 
 /**
  * The translation backend (SPEC.md §8). Never imported by a client component —
- * `ANTHROPIC_API_KEY` stays server-side (SPEC.md §2 rule 6). Only
- * `src/app/api/translate/route.ts` may import this file; that boundary is
+ * `ANTHROPIC_API_KEY` stays server-side (SPEC.md §2 rule 6). Only the route
+ * handlers (`api/translate`, and `api/trip-pack` via `tripPack.ts`) may import
+ * this file; that boundary is
  * verified by grepping the built client bundle for the SDK and the key (see
  * BUILDLOG.md), rather than adding the `server-only` package for one file.
  */
@@ -22,7 +23,7 @@ import type { Phrase } from "./types";
 // because the SDK exposes no dedicated option for it.
 const workspaceId = process.env.ANTHROPIC_WORKSPACE_ID;
 
-const client = new Anthropic(
+export const client = new Anthropic(
   workspaceId ? { defaultHeaders: { "anthropic-workspace-id": workspaceId } } : {},
 );
 
@@ -33,7 +34,7 @@ const client = new Anthropic(
 // "upgrade" this because a coding session happens to run on a bigger model —
 // raise EFFORT and measure first. No date suffix: IDs in this family carry
 // none, and appending one yields a model that doesn't exist.
-const MODEL = "claude-sonnet-5";
+export const MODEL = "claude-sonnet-5";
 
 // Sampling parameters (temperature/top_p/top_k) are removed on current
 // models and return a 400 — SPEC.md §8's original "temperature around 0.3"
@@ -41,7 +42,7 @@ const MODEL = "claude-sonnet-5";
 // prompt plus structured outputs, with a low effort level: this is a short,
 // well-specified transformation, not a task that benefits from deep
 // reasoning.
-const EFFORT = "low";
+export const EFFORT = "low";
 
 // SPEC.md §8. Thinking tokens count toward max_tokens and adaptive thinking
 // is on unless explicitly disabled, so this budgets thinking *plus* answer,
@@ -54,7 +55,7 @@ const EFFORT = "low";
 // stays a plain non-streaming request.
 const MAX_TOKENS = 4096;
 
-const TranslationSchema = z.object({
+export const TranslationSchema = z.object({
   sourceText: z.string(),
   sourceLanguage: z.enum(["en", "es"]),
   targetLanguage: z.enum(["en", "es"]),
@@ -71,7 +72,38 @@ const TranslationSchema = z.object({
   pronunciation: z.string(),
 });
 
-function buildSystemPrompt(locale: string): string {
+/**
+ * The prompt rules the translate prompt (SPEC.md §8) and the trip-pack prompt
+ * (SPEC.md §13) share. One copy, so the two cannot drift. Each template adds
+ * its own numbering; the text is the same word for word.
+ *
+ * Continuation lines carry their own indent so a rule drops into a numbered
+ * list unchanged.
+ */
+export const sharedPromptRules = {
+  literalAndNatural: `Give a "literal" translation (correct, neutral, safe in formal settings)
+   and a "natural" translation (what a native speaker would really say).`,
+  neutralSpanish: `Use neutral Latin American Spanish. No vosotros. Avoid strong regional
+   slang unless the input itself is slang.`,
+  pronunciation: `Pronunciation guides use Latin American sounds: seseo (c/z = s, never
+   "th"), ll and y as a soft "y" sound. Write them so an English speaker
+   reading aloud phonetically will be understood. If the input is Spanish and
+   the output is English, write a plain phonetic guide for the English
+   instead.`,
+  culturalNote: `Fill culturalNote only when there is something a traveler would
+   genuinely get wrong — a politeness convention, a false friend, a word
+   that means something different here. Otherwise leave it as an empty
+   string. Do not pad it.`,
+  category: `category must be exactly one of: greetings, dining, transit, shopping,
+   lodging, emergency, general. Use general when nothing else fits.`,
+  speakerGender: (speakerGender: SpeakerGender) =>
+    `When the speaker refers to themselves, use ${speakerGender} grammatical
+   agreement. If it is neutral, prefer constructions that avoid gendered
+   agreement — "Tengo alergia a…" rather than "Soy alérgico a…" — and use
+   the masculine form only where no natural neutral phrasing exists.`,
+};
+
+function buildSystemPrompt(locale: string, speakerGender: SpeakerGender): string {
   return `You are an expert linguist specializing in ${localeName(locale)} as spoken in
 everyday life. You are the translation backend for a travel phrasebook app.
 
@@ -80,21 +112,12 @@ native speaker actually talks — not textbook or Castilian phrasing.
 
 Rules:
 1. Detect whether the input is English or Spanish; translate to the other.
-2. Give a "literal" translation (correct, neutral, safe in formal settings)
-   and a "natural" translation (what a native speaker would really say).
-3. Use neutral Latin American Spanish. No vosotros. Avoid strong regional
-   slang unless the input itself is slang.
-4. Pronunciation guides use Latin American sounds: seseo (c/z = s, never
-   "th"), ll and y as a soft "y" sound. Write them so an English speaker
-   reading aloud phonetically will be understood. If the input is Spanish and
-   the output is English, write a plain phonetic guide for the English
-   instead.
-5. Fill culturalNote only when there is something a traveler would
-   genuinely get wrong — a politeness convention, a false friend, a word
-   that means something different here. Otherwise leave it as an empty
-   string. Do not pad it.
-6. category must be exactly one of: greetings, dining, transit, shopping,
-   lodging, emergency, general. Use general when nothing else fits.
+2. ${sharedPromptRules.literalAndNatural}
+3. ${sharedPromptRules.neutralSpanish}
+4. ${sharedPromptRules.pronunciation}
+5. ${sharedPromptRules.culturalNote}
+6. ${sharedPromptRules.category}
+7. ${sharedPromptRules.speakerGender(speakerGender)}
 
 Examples:
 
@@ -153,7 +176,10 @@ export function normalizeTranslation(
   };
 }
 
-export async function translate(text: string): Promise<Phrase> {
+export async function translate(
+  text: string,
+  speakerGender: SpeakerGender = "neutral",
+): Promise<Phrase> {
   const trimmed = text.trim();
   if (!trimmed) {
     throw new TranslationRequestError({ code: "empty", message: "Type something to translate." });
@@ -172,7 +198,7 @@ export async function translate(text: string): Promise<Phrase> {
     response = await client.messages.parse({
       model: MODEL,
       max_tokens: MAX_TOKENS,
-      system: buildSystemPrompt(locale),
+      system: buildSystemPrompt(locale, speakerGender),
       messages: [{ role: "user", content: trimmed }],
       output_config: {
         format: zodOutputFormat(TranslationSchema),

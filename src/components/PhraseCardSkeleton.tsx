@@ -16,7 +16,10 @@ export function PhraseCardSkeleton() {
           <div className="h-6 w-4/5 rounded-full bg-sand" />
           <div className="h-3.5 w-1/2 rounded-full bg-sand" />
         </div>
-        <div className="size-11 shrink-0 rounded-full bg-sand" />
+        <div className="flex shrink-0 flex-col gap-2">
+          <div className="size-11 rounded-full bg-sand" />
+          <div className="size-11 rounded-full bg-sand" />
+        </div>
       </div>
     </div>
   );

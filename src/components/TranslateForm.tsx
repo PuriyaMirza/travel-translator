@@ -1,7 +1,15 @@
 "use client";
 
-import { Languages, Loader2 } from "lucide-react";
+import { History, Languages, Loader2, Smartphone } from "lucide-react";
+import { brand } from "@/lib/brand";
 import { useState } from "react";
+import {
+  findRecentTranslation,
+  storeRecentTranslation,
+  useRecentTranslations,
+} from "@/lib/local/recentTranslations";
+import { useSpeakerGender } from "@/lib/local/settings";
+import { NETWORK_MESSAGE, OFFLINE_MESSAGE } from "@/lib/messages";
 import type { Phrase } from "@/lib/types";
 import { ErrorCard } from "./ErrorCard";
 import { PhraseCard } from "./PhraseCard";
@@ -10,14 +18,16 @@ import { PhraseCardSkeleton } from "./PhraseCardSkeleton";
 type Result =
   | { status: "empty" }
   | { status: "loading" }
-  | { status: "success"; phrase: Phrase }
+  | { status: "success"; phrase: Phrase; fromDevice: boolean }
   | { status: "error"; message: string };
 
-const OFFLINE_MESSAGE =
-  "You're offline. Translation needs a connection — the phrasebook still works without one.";
-const NETWORK_MESSAGE = "Couldn't reach the server. Check your connection and try again.";
+// How many recent translations the list under the input shows. The cache
+// holds 50 (SPEC.md §13); the list is a shortcut, not the whole history.
+const RECENT_SHOWN = 10;
 
 export function TranslateForm() {
+  const { speakerGender } = useSpeakerGender();
+  const recent = useRecentTranslations();
   const [input, setInput] = useState("");
   const [result, setResult] = useState<Result>({ status: "empty" });
   // What was actually submitted, so "Try again" retries the request rather
@@ -26,7 +36,14 @@ export function TranslateForm() {
 
   const runTranslation = async (text: string) => {
     if (typeof navigator !== "undefined" && !navigator.onLine) {
-      setResult({ status: "error", message: OFFLINE_MESSAGE });
+      // Offline, an exact match in the recent-translations cache stands in
+      // for the network (SPEC.md §13); anything else is the offline error.
+      const cached = findRecentTranslation(text, brand.defaultLocale, speakerGender);
+      setResult(
+        cached
+          ? { status: "success", phrase: cached, fromDevice: true }
+          : { status: "error", message: OFFLINE_MESSAGE },
+      );
       return;
     }
 
@@ -35,14 +52,15 @@ export function TranslateForm() {
       const response = await fetch("/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, speakerGender }),
       });
       const body = await response.json();
       if (!response.ok) {
         setResult({ status: "error", message: body.error?.message ?? NETWORK_MESSAGE });
         return;
       }
-      setResult({ status: "success", phrase: body.phrase });
+      storeRecentTranslation(text, speakerGender, body.phrase);
+      setResult({ status: "success", phrase: body.phrase, fromDevice: false });
     } catch {
       setResult({ status: "error", message: NETWORK_MESSAGE });
     }
@@ -54,6 +72,12 @@ export function TranslateForm() {
     if (!text) return;
     setLastSubmitted(text);
     void runTranslation(text);
+  };
+
+  const showRecent = (entry: (typeof recent)[number]) => {
+    setInput(entry.sourceText);
+    setLastSubmitted(entry.sourceText);
+    setResult({ status: "success", phrase: entry.phrase, fromDevice: true });
   };
 
   const isLoading = result.status === "loading";
@@ -84,6 +108,28 @@ export function TranslateForm() {
         </button>
       </form>
 
+      {recent.length > 0 && (
+        <section aria-labelledby="recent-heading">
+          <h2 id="recent-heading" className="text-small flex items-center gap-2 text-muted">
+            <History className="size-4" />
+            Recent
+          </h2>
+          <ul className="mt-2 flex flex-wrap gap-2">
+            {recent.slice(0, RECENT_SHOWN).map((entry) => (
+              <li key={entry.key} className="min-w-0 max-w-full">
+                <button
+                  type="button"
+                  onClick={() => showRecent(entry)}
+                  className="text-small block max-w-full truncate rounded-full bg-sand px-4 py-2 text-ink transition hover:bg-sand/70 motion-reduce:transition-none"
+                >
+                  {entry.sourceText}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
       {result.status === "empty" && (
         <div className="rounded-card border-2 border-dashed border-hairline p-8 text-center">
           <p className="text-body text-muted">
@@ -94,7 +140,17 @@ export function TranslateForm() {
 
       {result.status === "loading" && <PhraseCardSkeleton />}
 
-      {result.status === "success" && <PhraseCard phrase={result.phrase} />}
+      {result.status === "success" && (
+        <div className="space-y-2">
+          {result.fromDevice && (
+            <p className="text-small flex items-center gap-2 text-muted">
+              <Smartphone className="size-4" />
+              Saved on this device
+            </p>
+          )}
+          <PhraseCard phrase={result.phrase} />
+        </div>
+      )}
 
       {result.status === "error" && (
         <ErrorCard message={result.message} onRetry={() => void runTranslation(lastSubmitted)} />

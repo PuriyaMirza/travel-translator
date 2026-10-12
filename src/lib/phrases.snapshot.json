@@ -1,0 +1,2729 @@
+[
+  {
+    "id": "greetings-hello",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Hello",
+    "literal": "Guten Tag",
+    "natural": "Hallo",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-good-morning",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Good morning",
+    "literal": "Guten Morgen",
+    "natural": "Guten Morgen",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-thank-you",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Thank you very much",
+    "literal": "Ich danke Ihnen vielmals",
+    "natural": "Vielen Dank",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-excuse-me",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Excuse me",
+    "literal": "Entschuldigen Sie bitte",
+    "natural": "Entschuldigung",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-do-you-speak-english",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Do you speak English?",
+    "literal": "Sprechen Sie Englisch?",
+    "natural": "Sprechen Sie Englisch?",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-little-language",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "I don't speak much German",
+    "literal": "Ich spreche nur wenig Deutsch",
+    "natural": "Ich spreche nicht so gut Deutsch",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-nice-to-meet-you",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Nice to meet you",
+    "literal": "Es freut mich, Sie kennenzulernen",
+    "natural": "Freut mich",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-menu",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "Could I see the menu?",
+    "literal": "Könnte ich bitte die Speisekarte sehen?",
+    "natural": "Kann ich bitte die Speisekarte sehen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-table-for-two",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "A table for two, please",
+    "literal": "Ich hätte gern einen Tisch für zwei Personen",
+    "natural": "Einen Tisch für zwei, bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-vegetarian",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "I'm vegetarian",
+    "literal": "Ich ernähre mich vegetarisch",
+    "natural": "Ich esse vegetarisch",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-does-this-have-meat",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "Does this have meat in it?",
+    "literal": "Enthält dieses Gericht Fleisch?",
+    "natural": "Ist da Fleisch drin?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-allergy",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "I have an allergy to...",
+    "literal": "Ich habe eine Allergie gegen...",
+    "natural": "Ich bin allergisch gegen...",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-check",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "The check, please",
+    "literal": "Könnte ich bitte die Rechnung haben?",
+    "natural": "Zahlen, bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-tip-included",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "Is the tip included?",
+    "literal": "Ist das Trinkgeld inbegriffen?",
+    "natural": "Ist das Trinkgeld schon dabei?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-where-bus",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Where do I catch the bus?",
+    "literal": "Wo kann ich den Bus nehmen?",
+    "natural": "Wo steige ich in den Bus ein?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-fare",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "How much is the fare?",
+    "literal": "Wie hoch ist der Fahrpreis?",
+    "natural": "Was kostet die Fahrkarte?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-this-address",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Please take me to this address",
+    "literal": "Könnten Sie mich bitte zu dieser Adresse bringen?",
+    "natural": "Bitte fahren Sie mich zu dieser Adresse",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-airport",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Does this go to the airport?",
+    "literal": "Fährt dieser Bus zum Flughafen?",
+    "natural": "Fährt der zum Flughafen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-train-station",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Where is the train station?",
+    "literal": "Wo befindet sich der Bahnhof?",
+    "natural": "Wo ist der Bahnhof?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-meter",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Could you use the meter?",
+    "literal": "Könnten Sie bitte das Taxameter einschalten?",
+    "natural": "Machen Sie bitte das Taxameter an",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-stop-here",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Stop here, please",
+    "literal": "Bitte halten Sie hier an",
+    "natural": "Hier bitte anhalten",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-how-much",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "How much does this cost?",
+    "literal": "Wie viel kostet das?",
+    "natural": "Was kostet das?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-cards",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "Do you take cards?",
+    "literal": "Akzeptieren Sie Kartenzahlung?",
+    "natural": "Kann man mit Karte zahlen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-just-looking",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "I'm just looking, thanks",
+    "literal": "Ich sehe mich nur um, danke",
+    "natural": "Ich schaue nur, danke",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-another-size",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "Do you have this in another size?",
+    "literal": "Hätten Sie dies in einer anderen Größe?",
+    "natural": "Haben Sie das in einer anderen Größe?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-better-price",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "Could you give me a better price?",
+    "literal": "Könnten Sie mir einen besseren Preis machen?",
+    "natural": "Können Sie mir beim Preis entgegenkommen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-ill-take-it",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "I'll take it",
+    "literal": "Das nehme ich",
+    "natural": "Ich nehme es",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-change",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "Do you have change?",
+    "literal": "Hätten Sie Wechselgeld?",
+    "natural": "Können Sie wechseln?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-reservation",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "I have a reservation",
+    "literal": "Ich habe eine Reservierung auf meinen Namen",
+    "natural": "Ich habe eine Reservierung",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-checkout-time",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "What time is check-out?",
+    "literal": "Wie lautet die Check-out-Zeit?",
+    "natural": "Bis wann muss ich auschecken?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-breakfast-included",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "Is breakfast included?",
+    "literal": "Ist das Frühstück inbegriffen?",
+    "natural": "Ist Frühstück dabei?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-ac-broken",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "The air conditioning isn't working",
+    "literal": "Die Klimaanlage funktioniert nicht",
+    "natural": "Die Klimaanlage geht nicht",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-another-towel",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "Could I have another towel?",
+    "literal": "Könnte ich bitte ein weiteres Handtuch haben?",
+    "natural": "Kann ich noch ein Handtuch haben?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-wifi-password",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "What's the Wi-Fi password?",
+    "literal": "Wie lautet das WLAN-Passwort?",
+    "natural": "Wie ist das WLAN-Passwort?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-leave-bags",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "Can I leave my bags here?",
+    "literal": "Darf ich mein Gepäck hier lassen?",
+    "natural": "Kann ich mein Gepäck hier lassen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-need-help",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "I need help",
+    "literal": "Ich benötige Hilfe",
+    "natural": "Ich brauche Hilfe",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-call-ambulance",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "Call an ambulance",
+    "literal": "Bitte rufen Sie einen Krankenwagen",
+    "natural": "Rufen Sie einen Krankenwagen",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-need-doctor",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "I need a doctor",
+    "literal": "Ich benötige einen Arzt",
+    "natural": "Ich brauche einen Arzt",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-nearest-hospital",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "Where is the nearest hospital?",
+    "literal": "Wo befindet sich das nächstgelegene Krankenhaus?",
+    "natural": "Wo ist das nächste Krankenhaus?",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-lost-passport",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "I lost my passport",
+    "literal": "Ich habe meinen Reisepass verloren",
+    "natural": "Ich habe meinen Reisepass verloren",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-wallet-stolen",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "My wallet was stolen",
+    "literal": "Meine Geldbörse wurde gestohlen",
+    "natural": "Mein Portemonnaie wurde gestohlen",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-allergic-penicillin",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "I'm allergic to penicillin",
+    "literal": "Ich habe eine Penicillinallergie",
+    "natural": "Ich bin allergisch gegen Penicillin",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-good-afternoon",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Good afternoon / good evening",
+    "literal": "Guten Tag / Guten Abend",
+    "natural": "Guten Tag / Guten Abend",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-good-night",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Good night",
+    "literal": "Gute Nacht",
+    "natural": "Gute Nacht",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-goodbye",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Goodbye",
+    "literal": "Auf Wiedersehen",
+    "natural": "Tschüss",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-please",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "Please",
+    "literal": "Bitte",
+    "natural": "Bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-youre-welcome",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "You're welcome",
+    "literal": "Keine Ursache",
+    "natural": "Gern geschehen",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-how-are-you",
+    "locale": "de-DE",
+    "category": "greetings",
+    "sourceText": "How are you?",
+    "literal": "Wie geht es Ihnen?",
+    "natural": "Wie geht's?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-glass-of-water",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "A glass of water, please",
+    "literal": "Ein Glas Wasser, bitte",
+    "natural": "Ein Glas Wasser, bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-no-ice",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "Water without ice, please",
+    "literal": "Ich hätte gern Wasser ohne Eis",
+    "natural": "Wasser ohne Eis, bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-ready-to-order",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "We're ready to order",
+    "literal": "Wir möchten jetzt bestellen",
+    "natural": "Wir würden gern bestellen",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-recommend",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "What do you recommend?",
+    "literal": "Was können Sie mir empfehlen?",
+    "natural": "Was empfehlen Sie?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-no-pork",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "I don't eat pork",
+    "literal": "Ich verzehre kein Schweinefleisch",
+    "natural": "Ich esse kein Schweinefleisch",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-is-it-spicy",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "Is it spicy?",
+    "literal": "Ist dieses Gericht scharf?",
+    "natural": "Ist das scharf?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-another-beer",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "Another beer, please",
+    "literal": "Könnten Sie mir bitte noch ein Bier bringen?",
+    "natural": "Noch ein Bier, bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-delicious",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "The food is delicious",
+    "literal": "Das Essen war ausgezeichnet",
+    "natural": "Das schmeckt super",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-to-go",
+    "locale": "de-DE",
+    "category": "dining",
+    "sourceText": "Can I get this to go?",
+    "literal": "Könnten Sie mir das zum Mitnehmen einpacken?",
+    "natural": "Kann ich das mitnehmen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-bus-stop",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Where is the bus stop?",
+    "literal": "Wo befindet sich die Bushaltestelle?",
+    "natural": "Wo ist die Bushaltestelle?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-one-ticket",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "One ticket, please",
+    "literal": "Eine Fahrkarte, bitte",
+    "natural": "Eine Fahrkarte, bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-round-trip",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "A round-trip ticket, please",
+    "literal": "Eine Rückfahrkarte, bitte",
+    "natural": "Hin und zurück, bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-platform",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Which platform does it leave from?",
+    "literal": "Von welchem Gleis fährt der Zug ab?",
+    "natural": "Von welchem Gleis fährt der?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-departure-time",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "What time does it leave?",
+    "literal": "Um wie viel Uhr fährt er ab?",
+    "natural": "Wann fährt er ab?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-arrival-time",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "What time does it arrive?",
+    "literal": "Um wie viel Uhr kommt er an?",
+    "natural": "Wann kommt er an?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-how-long",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "How long does it take?",
+    "literal": "Wie lange dauert die Fahrt?",
+    "natural": "Wie lange dauert das?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-find-taxi",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Where can I get a taxi?",
+    "literal": "Wo kann ich ein Taxi bekommen?",
+    "natural": "Wo finde ich ein Taxi?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-downtown",
+    "locale": "de-DE",
+    "category": "transit",
+    "sourceText": "Does this go downtown?",
+    "literal": "Fährt dieser Bus in die Innenstadt?",
+    "natural": "Fährt der in die Innenstadt?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-try-on",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "Can I try this on?",
+    "literal": "Dürfte ich das anprobieren?",
+    "natural": "Kann ich das anprobieren?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-too-expensive",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "That's too expensive",
+    "literal": "Das ist mir zu kostspielig",
+    "natural": "Das ist zu teuer",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-bag",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "Could I have a bag?",
+    "literal": "Könnte ich bitte eine Tüte haben?",
+    "natural": "Kann ich eine Tüte haben?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-receipt",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "Could I have a receipt?",
+    "literal": "Könnte ich bitte eine Quittung haben?",
+    "natural": "Kann ich einen Beleg haben?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-closing-time",
+    "locale": "de-DE",
+    "category": "shopping",
+    "sourceText": "What time do you close?",
+    "literal": "Um wie viel Uhr schließen Sie?",
+    "natural": "Wann machen Sie zu?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-rooms-available",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "Do you have any rooms available?",
+    "literal": "Haben Sie Zimmer verfügbar?",
+    "natural": "Haben Sie noch Zimmer frei?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-two-nights",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "A room for two nights, please",
+    "literal": "Ich hätte gern ein Zimmer für zwei Nächte",
+    "natural": "Ein Zimmer für zwei Nächte, bitte",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-call-taxi",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "Could you call me a taxi?",
+    "literal": "Könnten Sie bitte ein Taxi für mich rufen?",
+    "natural": "Können Sie mir ein Taxi rufen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-key-not-working",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "My room key doesn't work",
+    "literal": "Der Schlüssel zu meinem Zimmer funktioniert nicht",
+    "natural": "Meine Zimmerkarte funktioniert nicht",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-no-hot-water",
+    "locale": "de-DE",
+    "category": "lodging",
+    "sourceText": "There's no hot water",
+    "literal": "Es gibt kein heißes Wasser",
+    "natural": "Es gibt kein warmes Wasser",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-call-police",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "Call the police",
+    "literal": "Bitte rufen Sie die Polizei",
+    "natural": "Rufen Sie die Polizei",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-accident",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "There's been an accident",
+    "literal": "Es hat einen Unfall gegeben",
+    "natural": "Es gab einen Unfall",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-feel-sick",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "I don't feel well",
+    "literal": "Ich fühle mich nicht wohl",
+    "natural": "Mir geht es nicht gut",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-pharmacy",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "Where is the nearest pharmacy?",
+    "literal": "Wo befindet sich die nächstgelegene Apotheke?",
+    "natural": "Wo ist die nächste Apotheke?",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-diabetes",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "I have diabetes",
+    "literal": "Ich leide an Diabetes",
+    "natural": "Ich habe Diabetes",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-leave-me-alone",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "Leave me alone",
+    "literal": "Bitte lassen Sie mich in Ruhe",
+    "natural": "Lassen Sie mich in Ruhe",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-english-speaker",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "I need someone who speaks English",
+    "literal": "Ich benötige eine Person, die Englisch spricht",
+    "natural": "Ich brauche jemanden, der Englisch spricht",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-embassy",
+    "locale": "de-DE",
+    "category": "emergency",
+    "sourceText": "I need to contact my embassy",
+    "literal": "Ich muss mich mit meiner Botschaft in Verbindung setzen",
+    "natural": "Ich muss meine Botschaft kontaktieren",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-bathroom",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Where is the bathroom?",
+    "literal": "Wo befinden sich die Toiletten?",
+    "natural": "Wo ist die Toilette?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-dont-understand",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "I don't understand",
+    "literal": "Ich verstehe Sie nicht",
+    "natural": "Ich verstehe nicht",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-repeat",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Could you repeat that?",
+    "literal": "Könnten Sie das bitte wiederholen?",
+    "natural": "Können Sie das wiederholen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-slower",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Could you speak more slowly?",
+    "literal": "Könnten Sie bitte langsamer sprechen?",
+    "natural": "Können Sie langsamer sprechen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-sorry",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "I'm sorry",
+    "literal": "Es tut mir leid",
+    "natural": "Entschuldigung",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-lost",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "I'm lost",
+    "literal": "Ich habe mich verirrt",
+    "natural": "Ich habe mich verlaufen",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-map",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Can you show me on the map?",
+    "literal": "Könnten Sie es mir bitte auf der Karte zeigen?",
+    "natural": "Können Sie mir das auf der Karte zeigen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-far",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Is it far from here?",
+    "literal": "Ist es weit von hier entfernt?",
+    "natural": "Ist es weit von hier?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-atm",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Where is the ATM?",
+    "literal": "Wo befindet sich der Geldautomat?",
+    "natural": "Wo ist der Geldautomat?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-wifi",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Is there Wi-Fi?",
+    "literal": "Haben Sie WLAN?",
+    "natural": "Gibt es WLAN?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-time",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "What time is it?",
+    "literal": "Wie viel Uhr ist es?",
+    "natural": "Wie spät ist es?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-sim-card",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Where can I buy a SIM card?",
+    "literal": "Wo kann ich eine SIM-Karte kaufen?",
+    "natural": "Wo kann ich eine SIM-Karte kaufen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-photo",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Could you take a photo of us?",
+    "literal": "Könnten Sie bitte ein Foto von uns machen?",
+    "natural": "Können Sie ein Foto von uns machen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-exchange-money",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Where can I exchange money?",
+    "literal": "Wo kann ich Geld umtauschen?",
+    "natural": "Wo kann ich Geld wechseln?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-pay-cash",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Can I pay in cash?",
+    "literal": "Darf ich bar bezahlen?",
+    "natural": "Kann ich bar zahlen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-can-you-help",
+    "locale": "de-DE",
+    "category": "general",
+    "sourceText": "Can you help me?",
+    "literal": "Könnten Sie mir bitte helfen?",
+    "natural": "Können Sie mir helfen?",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-hello",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Hello",
+    "literal": "Hola",
+    "natural": "Hola",
+    "pronunciation": "OH-lah"
+  },
+  {
+    "id": "greetings-good-morning",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Good morning",
+    "literal": "Buenos días",
+    "natural": "Buenos días",
+    "culturalNote": "Used until about midday, then buenas tardes. Greeting someone before you ask them anything is expected, not optional — skipping it reads as brusque.",
+    "pronunciation": "BWEH-nohs DEE-ahs"
+  },
+  {
+    "id": "greetings-thank-you",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Thank you very much",
+    "literal": "Muchas gracias",
+    "natural": "Muchas gracias",
+    "culturalNote": "GRAH-see-ahs, never grah-THEE-ahs. The Castilian lisp is not used anywhere in Latin America.",
+    "pronunciation": "MOO-chahs GRAH-see-ahs"
+  },
+  {
+    "id": "greetings-excuse-me",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Excuse me",
+    "literal": "Disculpe",
+    "natural": "Disculpe",
+    "culturalNote": "For getting a stranger's attention. Permiso is for squeezing past someone, and perdón is for apologising after you have already bumped into them.",
+    "pronunciation": "dees-KOOL-peh"
+  },
+  {
+    "id": "greetings-do-you-speak-english",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Do you speak English?",
+    "literal": "¿Habla usted inglés?",
+    "natural": "¿Habla inglés?",
+    "pronunciation": "AH-blah een-GLEHS"
+  },
+  {
+    "id": "greetings-little-spanish",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "I don't speak much Spanish",
+    "literal": "No hablo mucho español",
+    "natural": "Hablo poquito español",
+    "culturalNote": "Saying this early nearly always makes the other person slow down. Poquito is warmer than the flat no hablo and tends to get a friendlier response.",
+    "pronunciation": "AH-bloh poh-KEE-toh ehs-pah-NYOL"
+  },
+  {
+    "id": "greetings-nice-to-meet-you",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Nice to meet you",
+    "literal": "Es un placer conocerlo",
+    "natural": "Mucho gusto",
+    "pronunciation": "MOO-choh GOOS-toh"
+  },
+  {
+    "id": "dining-menu",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "Could I see the menu?",
+    "literal": "¿Podría ver el menú?",
+    "natural": "¿Me da el menú, por favor?",
+    "culturalNote": "La carta is the more common word in many countries; both are understood everywhere.",
+    "pronunciation": "meh dah ehl meh-NOO, por fah-VOR"
+  },
+  {
+    "id": "dining-table-for-two",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "A table for two, please",
+    "literal": "Una mesa para dos, por favor",
+    "natural": "Una mesa para dos, por favor",
+    "pronunciation": "OO-nah MEH-sah PAH-rah dohs, por fah-VOR"
+  },
+  {
+    "id": "dining-vegetarian",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "I'm vegetarian",
+    "literal": "Soy vegetariano",
+    "natural": "Soy vegetariano",
+    "culturalNote": "Say vegetariana if you are a woman. Worth adding no como pollo ni pescado — chicken and fish are often not counted as meat.",
+    "pronunciation": "soy veh-heh-tah-ree-AH-noh"
+  },
+  {
+    "id": "dining-does-this-have-meat",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "Does this have meat in it?",
+    "literal": "¿Esto contiene carne?",
+    "natural": "¿Esto lleva carne?",
+    "culturalNote": "Lleva starts with a soft y sound, not a hard L. Beans and rice are very often cooked with pork fat, so this is worth asking even about a side dish.",
+    "pronunciation": "EHS-toh YEH-vah KAR-neh"
+  },
+  {
+    "id": "dining-allergy",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "I have an allergy to...",
+    "literal": "Tengo una alergia a...",
+    "natural": "Soy alérgico a...",
+    "culturalNote": "Alérgica if you are a woman. The g in alérgico is a throaty h sound.",
+    "pronunciation": "soy ah-LEHR-hee-koh ah"
+  },
+  {
+    "id": "dining-check",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "The check, please",
+    "literal": "La cuenta, por favor",
+    "natural": "La cuenta, por favor",
+    "culturalNote": "It will not be brought until you ask. Sitting on a finished table is normal and nobody is trying to rush you out.",
+    "pronunciation": "lah KWEHN-tah, por fah-VOR"
+  },
+  {
+    "id": "dining-tip-included",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "Is the tip included?",
+    "literal": "¿La propina está incluida?",
+    "natural": "¿La propina está incluida?",
+    "culturalNote": "Often added automatically as propina or servicio. Check before tipping again — expectations vary a lot from country to country.",
+    "pronunciation": "lah proh-PEE-nah ehs-TAH een-kloo-EE-dah"
+  },
+  {
+    "id": "transit-where-bus",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Where do I catch the bus?",
+    "literal": "¿Dónde tomo el autobús?",
+    "natural": "¿Dónde tomo el autobús?",
+    "culturalNote": "The local word changes by country — camión, colectivo, micro, guagua. Autobús is understood everywhere, so it is the safe one to travel with.",
+    "pronunciation": "DOHN-deh TOH-moh ehl ow-toh-BOOS"
+  },
+  {
+    "id": "transit-fare",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "How much is the fare?",
+    "literal": "¿Cuánto cuesta el pasaje?",
+    "natural": "¿Cuánto es el pasaje?",
+    "pronunciation": "KWAN-toh ehs ehl pah-SAH-heh"
+  },
+  {
+    "id": "transit-this-address",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Please take me to this address",
+    "literal": "Por favor, lléveme a esta dirección",
+    "natural": "Lléveme a esta dirección, por favor",
+    "culturalNote": "Showing the address on your phone while you say it removes most of the risk of being misheard.",
+    "pronunciation": "YEH-veh-meh ah EHS-tah dee-rehk-see-OHN, por fah-VOR"
+  },
+  {
+    "id": "transit-airport",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Does this go to the airport?",
+    "literal": "¿Este va al aeropuerto?",
+    "natural": "¿Este va al aeropuerto?",
+    "pronunciation": "EHS-teh vah ahl ah-eh-roh-PWEHR-toh"
+  },
+  {
+    "id": "transit-train-station",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Where is the train station?",
+    "literal": "¿Dónde está la estación de tren?",
+    "natural": "¿Dónde queda la estación de tren?",
+    "culturalNote": "Queda is the more natural verb for where a fixed place is. Estación is ehs-tah-see-OHN — the c is an s.",
+    "pronunciation": "DOHN-deh KEH-dah lah ehs-tah-see-OHN deh trehn"
+  },
+  {
+    "id": "transit-meter",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Could you use the meter?",
+    "literal": "¿Podría usar el taxímetro?",
+    "natural": "¿Me pone el taxímetro, por favor?",
+    "culturalNote": "Settle the meter or agree a flat price before the car moves. Asking once you are already riding leaves you with no room to negotiate.",
+    "pronunciation": "meh POH-neh ehl tahk-SEE-meh-troh, por fah-VOR"
+  },
+  {
+    "id": "transit-stop-here",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Stop here, please",
+    "literal": "Pare aquí, por favor",
+    "natural": "Aquí está bien, gracias",
+    "pronunciation": "ah-KEE ehs-TAH bee-EHN, GRAH-see-ahs"
+  },
+  {
+    "id": "shopping-how-much",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "How much does this cost?",
+    "literal": "¿Cuánto cuesta esto?",
+    "natural": "¿Cuánto cuesta?",
+    "pronunciation": "KWAN-toh KWEHS-tah"
+  },
+  {
+    "id": "shopping-cards",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "Do you take cards?",
+    "literal": "¿Aceptan tarjetas de crédito?",
+    "natural": "¿Aceptan tarjeta?",
+    "culturalNote": "The j in tarjeta is a throaty h. Plenty of markets and small shops are cash only, so ask before you pick things up.",
+    "pronunciation": "ah-SEHP-tahn tar-HEH-tah"
+  },
+  {
+    "id": "shopping-just-looking",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "I'm just looking, thanks",
+    "literal": "Solo estoy mirando, gracias",
+    "natural": "Solo estoy viendo, gracias",
+    "pronunciation": "SOH-loh ehs-TOY vee-EHN-doh, GRAH-see-ahs"
+  },
+  {
+    "id": "shopping-another-size",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "Do you have this in another size?",
+    "literal": "¿Tiene esto en otra talla?",
+    "natural": "¿Lo tiene en otra talla?",
+    "culturalNote": "Talla is TAH-yah, with a soft y. Use número instead when you mean shoes.",
+    "pronunciation": "loh tee-EH-neh ehn OH-trah TAH-yah"
+  },
+  {
+    "id": "shopping-better-price",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "Could you give me a better price?",
+    "literal": "¿Podría darme un mejor precio?",
+    "natural": "¿Me hace un mejor precio?",
+    "culturalNote": "Fine in a market or with a street vendor. In a shop with printed price tags it will just be awkward.",
+    "pronunciation": "meh AH-seh oon meh-HOR PREH-see-oh"
+  },
+  {
+    "id": "shopping-ill-take-it",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "I'll take it",
+    "literal": "Lo voy a comprar",
+    "natural": "Me lo llevo",
+    "pronunciation": "meh loh YEH-voh"
+  },
+  {
+    "id": "shopping-change",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "Do you have change?",
+    "literal": "¿Tiene cambio?",
+    "natural": "¿Tiene cambio?",
+    "culturalNote": "Small vendors frequently cannot break a large note. Breaking big bills at a supermarket early in the day saves a lot of friction later.",
+    "pronunciation": "tee-EH-neh KAHM-bee-oh"
+  },
+  {
+    "id": "lodging-reservation",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "I have a reservation",
+    "literal": "Tengo una reservación",
+    "natural": "Tengo una reservación",
+    "culturalNote": "Reserva is used just as widely; both are understood.",
+    "pronunciation": "TEHN-goh OO-nah reh-sehr-vah-see-OHN"
+  },
+  {
+    "id": "lodging-checkout-time",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "What time is check-out?",
+    "literal": "¿A qué hora es la salida?",
+    "natural": "¿A qué hora es la salida?",
+    "culturalNote": "The h in hora is completely silent.",
+    "pronunciation": "ah keh OH-rah ehs lah sah-LEE-dah"
+  },
+  {
+    "id": "lodging-breakfast-included",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "Is breakfast included?",
+    "literal": "¿El desayuno está incluido?",
+    "natural": "¿Incluye el desayuno?",
+    "pronunciation": "een-KLOO-yeh ehl deh-sah-YOO-noh"
+  },
+  {
+    "id": "lodging-ac-broken",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "The air conditioning isn't working",
+    "literal": "El aire acondicionado no funciona",
+    "natural": "No funciona el aire",
+    "culturalNote": "El aire on its own is understood as the air conditioning. The same sentence works for anything else in the room — just swap in la ducha for the shower or la luz for the light.",
+    "pronunciation": "noh foonk-see-OH-nah ehl AH-ee-reh"
+  },
+  {
+    "id": "lodging-another-towel",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "Could I have another towel?",
+    "literal": "¿Podría darme otra toalla?",
+    "natural": "¿Me puede traer otra toalla?",
+    "pronunciation": "meh PWEH-deh trah-EHR OH-trah toh-AH-yah"
+  },
+  {
+    "id": "lodging-wifi-password",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "What's the Wi-Fi password?",
+    "literal": "¿Cuál es la contraseña del wifi?",
+    "natural": "¿Cuál es la clave del wifi?",
+    "culturalNote": "Clave is what most people say day to day. Wifi is pronounced WEE-fee, not WY-fy.",
+    "pronunciation": "kwahl ehs lah KLAH-veh dehl WEE-fee"
+  },
+  {
+    "id": "lodging-leave-bags",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "Can I leave my bags here?",
+    "literal": "¿Puedo dejar mis maletas aquí?",
+    "natural": "¿Puedo dejar mis maletas aquí?",
+    "culturalNote": "Useful on the last morning — most places will hold luggage after check-out without charging.",
+    "pronunciation": "PWEH-doh deh-HAR mees mah-LEH-tahs ah-KEE"
+  },
+  {
+    "id": "emergency-need-help",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I need help",
+    "literal": "Necesito ayuda",
+    "natural": "Necesito ayuda",
+    "pronunciation": "neh-seh-SEE-toh ah-YOO-dah"
+  },
+  {
+    "id": "emergency-call-ambulance",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "Call an ambulance",
+    "literal": "Llame una ambulancia",
+    "natural": "¡Llame una ambulancia!",
+    "culturalNote": "Llame opens with a soft y. The emergency number is not 911 everywhere — look up the local one when you arrive.",
+    "pronunciation": "YAH-meh OO-nah ahm-boo-LAHN-see-ah"
+  },
+  {
+    "id": "emergency-need-doctor",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I need a doctor",
+    "literal": "Necesito un médico",
+    "natural": "Necesito un médico",
+    "pronunciation": "neh-seh-SEE-toh oon MEH-dee-koh"
+  },
+  {
+    "id": "emergency-nearest-hospital",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "Where is the nearest hospital?",
+    "literal": "¿Dónde está el hospital más cercano?",
+    "natural": "¿Dónde queda el hospital más cercano?",
+    "culturalNote": "Hospital starts with the vowel — the h is silent. Cercano is sehr-KAH-noh, never thehr-KAH-noh.",
+    "pronunciation": "DOHN-deh KEH-dah ehl ohs-pee-TAHL mahs sehr-KAH-noh"
+  },
+  {
+    "id": "emergency-lost-passport",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I lost my passport",
+    "literal": "Perdí mi pasaporte",
+    "natural": "Perdí mi pasaporte",
+    "pronunciation": "pehr-DEE mee pah-sah-POR-teh"
+  },
+  {
+    "id": "emergency-wallet-stolen",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "My wallet was stolen",
+    "literal": "Me robaron la cartera",
+    "natural": "Me robaron la cartera",
+    "culturalNote": "Billetera is equally common. You will need a police report — denuncia — before any insurer will pay out.",
+    "pronunciation": "meh roh-BAH-rohn lah kar-TEH-rah"
+  },
+  {
+    "id": "emergency-allergic-penicillin",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I'm allergic to penicillin",
+    "literal": "Soy alérgico a la penicilina",
+    "natural": "Soy alérgico a la penicilina",
+    "culturalNote": "Alérgica if you are a woman. Both c sounds in penicilina are plain s sounds.",
+    "pronunciation": "soy ah-LEHR-hee-koh ah lah peh-nee-see-LEE-nah"
+  },
+  {
+    "id": "greetings-good-afternoon",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Good afternoon / good evening",
+    "literal": "Buenas tardes",
+    "natural": "Buenas tardes",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-good-night",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Good night",
+    "literal": "Buenas noches",
+    "natural": "Buenas noches",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-goodbye",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Goodbye",
+    "literal": "Adiós",
+    "natural": "Hasta luego",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-please",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "Please",
+    "literal": "Por favor",
+    "natural": "Por favor",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-youre-welcome",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "You're welcome",
+    "literal": "No hay de qué",
+    "natural": "De nada",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-how-are-you",
+    "locale": "es-419",
+    "category": "greetings",
+    "sourceText": "How are you?",
+    "literal": "¿Cómo está usted?",
+    "natural": "¿Cómo está?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-glass-of-water",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "A glass of water, please",
+    "literal": "Un vaso de agua, por favor",
+    "natural": "Un vaso de agua, por favor",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-no-ice",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "Water without ice, please",
+    "literal": "Agua sin hielo, por favor",
+    "natural": "Agua sin hielo, por favor",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-ready-to-order",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "We're ready to order",
+    "literal": "Quisiéramos pedir, por favor",
+    "natural": "Ya queremos pedir, por favor",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-recommend",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "What do you recommend?",
+    "literal": "¿Qué me recomienda usted?",
+    "natural": "¿Qué me recomienda?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-no-pork",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "I don't eat pork",
+    "literal": "No consumo carne de cerdo",
+    "natural": "No como cerdo",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-is-it-spicy",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "Is it spicy?",
+    "literal": "¿Este plato es picante?",
+    "natural": "¿Es picante?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-another-beer",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "Another beer, please",
+    "literal": "¿Podría traerme otra cerveza, por favor?",
+    "natural": "Otra cerveza, por favor",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-delicious",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "The food is delicious",
+    "literal": "La comida está deliciosa",
+    "natural": "Está muy rico",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-to-go",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "Can I get this to go?",
+    "literal": "¿Podría empacarlo para llevar?",
+    "natural": "¿Me lo puede preparar para llevar?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-bus-stop",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Where is the bus stop?",
+    "literal": "¿Dónde está la parada de autobús?",
+    "natural": "¿Dónde queda la parada?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-one-ticket",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "One ticket, please",
+    "literal": "Un boleto, por favor",
+    "natural": "Un boleto, por favor",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-round-trip",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "A round-trip ticket, please",
+    "literal": "Un boleto de ida y vuelta, por favor",
+    "natural": "Un boleto de ida y vuelta, por favor",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-platform",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Which platform does it leave from?",
+    "literal": "¿De qué andén sale el tren?",
+    "natural": "¿De qué andén sale?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-departure-time",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "What time does it leave?",
+    "literal": "¿A qué hora sale?",
+    "natural": "¿A qué hora sale?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-arrival-time",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "What time does it arrive?",
+    "literal": "¿A qué hora llega?",
+    "natural": "¿A qué hora llega?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-how-long",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "How long does it take?",
+    "literal": "¿Cuánto tiempo se tarda?",
+    "natural": "¿Cuánto tarda?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-find-taxi",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Where can I get a taxi?",
+    "literal": "¿Dónde puedo tomar un taxi?",
+    "natural": "¿Dónde hay taxis?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-downtown",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Does this go downtown?",
+    "literal": "¿Este autobús va al centro?",
+    "natural": "¿Este va al centro?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-try-on",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "Can I try this on?",
+    "literal": "¿Podría probarme esto?",
+    "natural": "¿Me lo puedo probar?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-too-expensive",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "That's too expensive",
+    "literal": "Es demasiado costoso",
+    "natural": "Está muy caro",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-bag",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "Could I have a bag?",
+    "literal": "¿Podría darme una bolsa?",
+    "natural": "¿Me da una bolsa?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-receipt",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "Could I have a receipt?",
+    "literal": "¿Podría darme el recibo, por favor?",
+    "natural": "¿Me da el recibo, por favor?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-closing-time",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "What time do you close?",
+    "literal": "¿A qué hora cierra la tienda?",
+    "natural": "¿A qué hora cierran?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-rooms-available",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "Do you have any rooms available?",
+    "literal": "¿Tienen habitaciones disponibles?",
+    "natural": "¿Tienen habitaciones disponibles?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-two-nights",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "A room for two nights, please",
+    "literal": "Quisiera una habitación para dos noches",
+    "natural": "Una habitación para dos noches, por favor",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-call-taxi",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "Could you call me a taxi?",
+    "literal": "¿Podría llamar un taxi, por favor?",
+    "natural": "¿Me puede llamar un taxi?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-key-not-working",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "My room key doesn't work",
+    "literal": "La llave de mi habitación no funciona",
+    "natural": "La llave de mi cuarto no funciona",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-no-hot-water",
+    "locale": "es-419",
+    "category": "lodging",
+    "sourceText": "There's no hot water",
+    "literal": "No hay agua caliente",
+    "natural": "No hay agua caliente",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-call-police",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "Call the police",
+    "literal": "Llame a la policía",
+    "natural": "Llame a la policía",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-accident",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "There's been an accident",
+    "literal": "Ha ocurrido un accidente",
+    "natural": "Hubo un accidente",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-feel-sick",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I don't feel well",
+    "literal": "No me siento bien",
+    "natural": "No me siento bien",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-pharmacy",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "Where is the nearest pharmacy?",
+    "literal": "¿Dónde queda la farmacia más cercana?",
+    "natural": "¿Dónde hay una farmacia cerca?",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-diabetes",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I have diabetes",
+    "literal": "Tengo diabetes",
+    "natural": "Tengo diabetes",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-leave-me-alone",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "Leave me alone",
+    "literal": "Por favor, déjeme en paz",
+    "natural": "Déjeme en paz",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-english-speaker",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I need someone who speaks English",
+    "literal": "Necesito a una persona que hable inglés",
+    "natural": "Necesito a alguien que hable inglés",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-embassy",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I need to contact my embassy",
+    "literal": "Necesito comunicarme con mi embajada",
+    "natural": "Necesito comunicarme con mi embajada",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-bathroom",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Where is the bathroom?",
+    "literal": "¿Dónde se encuentra el baño?",
+    "natural": "¿Dónde está el baño?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-dont-understand",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "I don't understand",
+    "literal": "No comprendo",
+    "natural": "No entiendo",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-repeat",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Could you repeat that?",
+    "literal": "¿Podría repetirlo, por favor?",
+    "natural": "¿Me lo puede repetir?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-slower",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Could you speak more slowly?",
+    "literal": "¿Podría hablar más despacio, por favor?",
+    "natural": "¿Puede hablar más despacio?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-sorry",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "I'm sorry",
+    "literal": "Lo siento",
+    "natural": "Perdón",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-lost",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "I'm lost",
+    "literal": "Me he perdido",
+    "natural": "Me perdí",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-map",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Can you show me on the map?",
+    "literal": "¿Podría mostrármelo en el mapa?",
+    "natural": "¿Me lo puede mostrar en el mapa?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-far",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Is it far from here?",
+    "literal": "¿Está lejos de aquí?",
+    "natural": "¿Queda lejos?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-atm",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Where is the ATM?",
+    "literal": "¿Dónde está el cajero automático?",
+    "natural": "¿Dónde hay un cajero?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-wifi",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Is there Wi-Fi?",
+    "literal": "¿Tienen conexión Wi-Fi?",
+    "natural": "¿Hay Wi-Fi?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-time",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "What time is it?",
+    "literal": "¿Qué hora es?",
+    "natural": "¿Qué hora es?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-sim-card",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Where can I buy a SIM card?",
+    "literal": "¿Dónde puedo comprar una tarjeta SIM?",
+    "natural": "¿Dónde puedo comprar un chip?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-photo",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Could you take a photo of us?",
+    "literal": "¿Podría tomarnos una fotografía?",
+    "natural": "¿Nos puede tomar una foto?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-exchange-money",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Where can I exchange money?",
+    "literal": "¿Dónde puedo cambiar dinero?",
+    "natural": "¿Dónde puedo cambiar dinero?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-dollars",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Do you accept dollars?",
+    "literal": "¿Aceptan dólares estadounidenses?",
+    "natural": "¿Aceptan dólares?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-can-you-help",
+    "locale": "es-419",
+    "category": "general",
+    "sourceText": "Can you help me?",
+    "literal": "¿Podría ayudarme, por favor?",
+    "natural": "¿Me puede ayudar?",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-hello",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Hello",
+    "literal": "Bonjour",
+    "natural": "Bonjour",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-good-morning",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Good morning",
+    "literal": "Bonjour",
+    "natural": "Bonjour",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-thank-you",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Thank you very much",
+    "literal": "Je vous remercie beaucoup",
+    "natural": "Merci beaucoup",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-excuse-me",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Excuse me",
+    "literal": "Pardonnez-moi",
+    "natural": "Excusez-moi",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-do-you-speak-english",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Do you speak English?",
+    "literal": "Parlez-vous anglais ?",
+    "natural": "Vous parlez anglais ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-little-language",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "I don't speak much French",
+    "literal": "Je parle très peu le français",
+    "natural": "Je ne parle pas bien français",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-nice-to-meet-you",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Nice to meet you",
+    "literal": "C'est un plaisir de faire votre connaissance",
+    "natural": "Enchanté(e)",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-menu",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "Could I see the menu?",
+    "literal": "Pourrais-je voir la carte, s'il vous plaît ?",
+    "natural": "Je pourrais voir la carte ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-table-for-two",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "A table for two, please",
+    "literal": "Je voudrais une table pour deux personnes, s'il vous plaît",
+    "natural": "Une table pour deux, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-vegetarian",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "I'm vegetarian",
+    "literal": "Je suis végétarien(ne)",
+    "natural": "Je ne mange pas de viande",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-does-this-have-meat",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "Does this have meat in it?",
+    "literal": "Ce plat contient-il de la viande ?",
+    "natural": "Il y a de la viande dedans ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-allergy",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "I have an allergy to...",
+    "literal": "J'ai une allergie à...",
+    "natural": "Je suis allergique à...",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-check",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "The check, please",
+    "literal": "Pourrais-je avoir l'addition, s'il vous plaît ?",
+    "natural": "L'addition, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-tip-included",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "Is the tip included?",
+    "literal": "Le service est-il compris ?",
+    "natural": "Le service est compris ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-where-bus",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Where do I catch the bus?",
+    "literal": "Où puis-je prendre le bus ?",
+    "natural": "Où est-ce que je prends le bus ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-fare",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "How much is the fare?",
+    "literal": "Quel est le prix du billet ?",
+    "natural": "C'est combien, le billet ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-this-address",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Please take me to this address",
+    "literal": "Pourriez-vous m'emmener à cette adresse, s'il vous plaît ?",
+    "natural": "Emmenez-moi à cette adresse, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-airport",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Does this go to the airport?",
+    "literal": "Ce bus va-t-il à l'aéroport ?",
+    "natural": "Ce bus va à l'aéroport ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-train-station",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Where is the train station?",
+    "literal": "Pourriez-vous m'indiquer la gare ?",
+    "natural": "Où est la gare ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-meter",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Could you use the meter?",
+    "literal": "Pourriez-vous allumer le compteur, s'il vous plaît ?",
+    "natural": "Vous pouvez mettre le compteur ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-stop-here",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Stop here, please",
+    "literal": "Veuillez vous arrêter ici, s'il vous plaît",
+    "natural": "Arrêtez-vous ici, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-how-much",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "How much does this cost?",
+    "literal": "Combien cela coûte-t-il ?",
+    "natural": "C'est combien ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-cards",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "Do you take cards?",
+    "literal": "Acceptez-vous les cartes bancaires ?",
+    "natural": "Vous prenez la carte ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-just-looking",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "I'm just looking, thanks",
+    "literal": "Je jette simplement un coup d'œil, merci",
+    "natural": "Je regarde, merci",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-another-size",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "Do you have this in another size?",
+    "literal": "Auriez-vous ceci dans une autre taille ?",
+    "natural": "Vous l'avez dans une autre taille ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-better-price",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "Could you give me a better price?",
+    "literal": "Pourriez-vous me faire un meilleur prix ?",
+    "natural": "Vous pouvez me faire un meilleur prix ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-ill-take-it",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "I'll take it",
+    "literal": "Je vais le prendre",
+    "natural": "Je le prends",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-change",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "Do you have change?",
+    "literal": "Auriez-vous de la monnaie ?",
+    "natural": "Vous avez de la monnaie ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-reservation",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "I have a reservation",
+    "literal": "J'ai effectué une réservation",
+    "natural": "J'ai une réservation",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-checkout-time",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "What time is check-out?",
+    "literal": "À quelle heure dois-je quitter la chambre ?",
+    "natural": "À quelle heure doit-on libérer la chambre ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-breakfast-included",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "Is breakfast included?",
+    "literal": "Le petit-déjeuner est-il inclus ?",
+    "natural": "Le petit-déjeuner est compris ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-ac-broken",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "The air conditioning isn't working",
+    "literal": "La climatisation ne fonctionne pas",
+    "natural": "La climatisation ne marche pas",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-another-towel",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "Could I have another towel?",
+    "literal": "Pourrais-je avoir une serviette supplémentaire ?",
+    "natural": "Je pourrais avoir une autre serviette ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-wifi-password",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "What's the Wi-Fi password?",
+    "literal": "Quel est le mot de passe du Wi-Fi ?",
+    "natural": "C'est quoi, le mot de passe du wifi ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-leave-bags",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "Can I leave my bags here?",
+    "literal": "Puis-je laisser mes bagages ici ?",
+    "natural": "Je peux laisser mes bagages ici ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-need-help",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "I need help",
+    "literal": "J'ai besoin d'aide, s'il vous plaît",
+    "natural": "J'ai besoin d'aide",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-call-ambulance",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "Call an ambulance",
+    "literal": "Veuillez appeler une ambulance",
+    "natural": "Appelez une ambulance",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-need-doctor",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "I need a doctor",
+    "literal": "J'ai besoin de voir un médecin",
+    "natural": "J'ai besoin d'un médecin",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-nearest-hospital",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "Where is the nearest hospital?",
+    "literal": "Pourriez-vous m'indiquer l'hôpital le plus proche ?",
+    "natural": "Où est l'hôpital le plus proche ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-lost-passport",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "I lost my passport",
+    "literal": "J'ai perdu mon passeport",
+    "natural": "J'ai perdu mon passeport",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-wallet-stolen",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "My wallet was stolen",
+    "literal": "Mon portefeuille a été volé",
+    "natural": "On m'a volé mon portefeuille",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-allergic-penicillin",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "I'm allergic to penicillin",
+    "literal": "J'ai une allergie à la pénicilline",
+    "natural": "Je suis allergique à la pénicilline",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-good-afternoon",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Good afternoon / good evening",
+    "literal": "Bonjour / Bonsoir",
+    "natural": "Bonjour / Bonsoir",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-good-night",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Good night",
+    "literal": "Bonne nuit",
+    "natural": "Bonne nuit",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-goodbye",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Goodbye",
+    "literal": "Au revoir, bonne journée",
+    "natural": "Au revoir",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-please",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "Please",
+    "literal": "S'il vous plaît",
+    "natural": "S'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-youre-welcome",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "You're welcome",
+    "literal": "Je vous en prie",
+    "natural": "De rien",
+    "pronunciation": ""
+  },
+  {
+    "id": "greetings-how-are-you",
+    "locale": "fr-FR",
+    "category": "greetings",
+    "sourceText": "How are you?",
+    "literal": "Comment allez-vous ?",
+    "natural": "Ça va ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-glass-of-water",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "A glass of water, please",
+    "literal": "Un verre d'eau, s'il vous plaît",
+    "natural": "Un verre d'eau, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-no-ice",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "Water without ice, please",
+    "literal": "Je voudrais de l'eau sans glaçons, s'il vous plaît",
+    "natural": "De l'eau sans glaçons, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-ready-to-order",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "We're ready to order",
+    "literal": "Nous voudrions commander, s'il vous plaît",
+    "natural": "On peut commander ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-recommend",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "What do you recommend?",
+    "literal": "Que me recommandez-vous ?",
+    "natural": "Qu'est-ce que vous me conseillez ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-no-pork",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "I don't eat pork",
+    "literal": "Je ne consomme pas de porc",
+    "natural": "Je ne mange pas de porc",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-is-it-spicy",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "Is it spicy?",
+    "literal": "Ce plat est-il épicé ?",
+    "natural": "C'est épicé ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-another-beer",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "Another beer, please",
+    "literal": "Pourriez-vous m'apporter une autre bière, s'il vous plaît ?",
+    "natural": "Une autre bière, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-delicious",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "The food is delicious",
+    "literal": "Le repas était délicieux",
+    "natural": "C'est délicieux",
+    "pronunciation": ""
+  },
+  {
+    "id": "dining-to-go",
+    "locale": "fr-FR",
+    "category": "dining",
+    "sourceText": "Can I get this to go?",
+    "literal": "Pourriez-vous me le préparer à emporter ?",
+    "natural": "C'est possible à emporter ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-bus-stop",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Where is the bus stop?",
+    "literal": "Où se trouve l'arrêt de bus ?",
+    "natural": "Où est l'arrêt de bus ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-one-ticket",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "One ticket, please",
+    "literal": "Un billet, s'il vous plaît",
+    "natural": "Un billet, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-round-trip",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "A round-trip ticket, please",
+    "literal": "Un billet aller-retour, s'il vous plaît",
+    "natural": "Un aller-retour, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-platform",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Which platform does it leave from?",
+    "literal": "De quelle voie part le train ?",
+    "natural": "Il part de quelle voie ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-departure-time",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "What time does it leave?",
+    "literal": "À quelle heure part-il ?",
+    "natural": "Il part à quelle heure ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-arrival-time",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "What time does it arrive?",
+    "literal": "À quelle heure arrive-t-il ?",
+    "natural": "Il arrive à quelle heure ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-how-long",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "How long does it take?",
+    "literal": "Combien de temps dure le trajet ?",
+    "natural": "Ça prend combien de temps ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-find-taxi",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Where can I get a taxi?",
+    "literal": "Où puis-je trouver un taxi ?",
+    "natural": "Où est-ce que je peux trouver un taxi ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "transit-downtown",
+    "locale": "fr-FR",
+    "category": "transit",
+    "sourceText": "Does this go downtown?",
+    "literal": "Ce bus va-t-il au centre-ville ?",
+    "natural": "Ce bus va au centre-ville ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-try-on",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "Can I try this on?",
+    "literal": "Puis-je l'essayer ?",
+    "natural": "Je peux l'essayer ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-too-expensive",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "That's too expensive",
+    "literal": "C'est trop onéreux",
+    "natural": "C'est trop cher",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-bag",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "Could I have a bag?",
+    "literal": "Pourrais-je avoir un sac, s'il vous plaît ?",
+    "natural": "Je pourrais avoir un sac ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-receipt",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "Could I have a receipt?",
+    "literal": "Pourrais-je avoir un reçu, s'il vous plaît ?",
+    "natural": "Je peux avoir un ticket de caisse ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "shopping-closing-time",
+    "locale": "fr-FR",
+    "category": "shopping",
+    "sourceText": "What time do you close?",
+    "literal": "À quelle heure fermez-vous ?",
+    "natural": "Vous fermez à quelle heure ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-rooms-available",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "Do you have any rooms available?",
+    "literal": "Avez-vous des chambres disponibles ?",
+    "natural": "Vous avez des chambres libres ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-two-nights",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "A room for two nights, please",
+    "literal": "Je voudrais une chambre pour deux nuits",
+    "natural": "Une chambre pour deux nuits, s'il vous plaît",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-call-taxi",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "Could you call me a taxi?",
+    "literal": "Pourriez-vous appeler un taxi pour moi, s'il vous plaît ?",
+    "natural": "Vous pouvez m'appeler un taxi ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-key-not-working",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "My room key doesn't work",
+    "literal": "La clé de ma chambre ne fonctionne pas",
+    "natural": "Ma clé de chambre ne marche pas",
+    "pronunciation": ""
+  },
+  {
+    "id": "lodging-no-hot-water",
+    "locale": "fr-FR",
+    "category": "lodging",
+    "sourceText": "There's no hot water",
+    "literal": "Il n'y a pas d'eau chaude dans la chambre",
+    "natural": "Il n'y a pas d'eau chaude",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-call-police",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "Call the police",
+    "literal": "Veuillez appeler la police",
+    "natural": "Appelez la police",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-accident",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "There's been an accident",
+    "literal": "Un accident vient de se produire",
+    "natural": "Il y a eu un accident",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-feel-sick",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "I don't feel well",
+    "literal": "Je ne me sens pas bien",
+    "natural": "Je ne me sens pas bien",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-pharmacy",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "Where is the nearest pharmacy?",
+    "literal": "Pourriez-vous m'indiquer la pharmacie la plus proche ?",
+    "natural": "Où est la pharmacie la plus proche ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-diabetes",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "I have diabetes",
+    "literal": "J'ai du diabète",
+    "natural": "Je suis diabétique",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-leave-me-alone",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "Leave me alone",
+    "literal": "Veuillez me laisser tranquille",
+    "natural": "Laissez-moi tranquille",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-english-speaker",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "I need someone who speaks English",
+    "literal": "J'ai besoin d'une personne qui parle anglais",
+    "natural": "Il me faut quelqu'un qui parle anglais",
+    "pronunciation": ""
+  },
+  {
+    "id": "emergency-embassy",
+    "locale": "fr-FR",
+    "category": "emergency",
+    "sourceText": "I need to contact my embassy",
+    "literal": "Je dois prendre contact avec mon ambassade",
+    "natural": "Je dois contacter mon ambassade",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-bathroom",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Where is the bathroom?",
+    "literal": "Pourriez-vous m'indiquer les toilettes ?",
+    "natural": "Où sont les toilettes ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-dont-understand",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "I don't understand",
+    "literal": "Je ne comprends pas",
+    "natural": "Je ne comprends pas",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-repeat",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Could you repeat that?",
+    "literal": "Pourriez-vous répéter, s'il vous plaît ?",
+    "natural": "Vous pouvez répéter ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-slower",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Could you speak more slowly?",
+    "literal": "Pourriez-vous parler plus lentement, s'il vous plaît ?",
+    "natural": "Vous pouvez parler plus lentement ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-sorry",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "I'm sorry",
+    "literal": "Je vous prie de m'excuser",
+    "natural": "Pardon",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-lost",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "I'm lost",
+    "literal": "Je n'arrive pas à trouver mon chemin",
+    "natural": "Je ne sais plus où je suis",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-map",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Can you show me on the map?",
+    "literal": "Pourriez-vous me le montrer sur la carte ?",
+    "natural": "Vous pouvez me montrer sur la carte ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-far",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Is it far from here?",
+    "literal": "Est-ce loin d'ici ?",
+    "natural": "C'est loin d'ici ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-atm",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Where is the ATM?",
+    "literal": "Où se trouve le distributeur de billets ?",
+    "natural": "Où est le distributeur ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-wifi",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Is there Wi-Fi?",
+    "literal": "Y a-t-il une connexion Wi-Fi ?",
+    "natural": "Il y a du wifi ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-time",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "What time is it?",
+    "literal": "Quelle heure est-il ?",
+    "natural": "Il est quelle heure ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-sim-card",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Where can I buy a SIM card?",
+    "literal": "Où puis-je acheter une carte SIM ?",
+    "natural": "Où est-ce que je peux acheter une carte SIM ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-photo",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Could you take a photo of us?",
+    "literal": "Pourriez-vous nous prendre en photo, s'il vous plaît ?",
+    "natural": "Vous pouvez nous prendre en photo ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-exchange-money",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Where can I exchange money?",
+    "literal": "Où puis-je changer de l'argent ?",
+    "natural": "Où est-ce que je peux changer de l'argent ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-pay-cash",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Can I pay in cash?",
+    "literal": "Puis-je régler en espèces ?",
+    "natural": "Je peux payer en espèces ?",
+    "pronunciation": ""
+  },
+  {
+    "id": "general-can-you-help",
+    "locale": "fr-FR",
+    "category": "general",
+    "sourceText": "Can you help me?",
+    "literal": "Pourriez-vous m'aider, s'il vous plaît ?",
+    "natural": "Vous pouvez m'aider ?",
+    "pronunciation": ""
+  }
+]

@@ -24,7 +24,7 @@ These exist because v1 is one language and one region, and v2 is many. Every one
 2. **Locale is a parameter, never a hardcoded assumption.** No file contains the string "Puerto Rico" or region-specific logic in v1. The AI prompt takes locale and region as variables.
 3. **Category slugs are lowercase English and permanent.** Display labels are localized separately. `dining` is the slug forever; "Comida y Bebida" is a label in a translations file. Keying data, routes, or API payloads off a translated string is the specific failure mode this rule exists to prevent.
 4. **Every stored phrase carries a `locale` field.** From the very first write. Without it there is no way to tell `es-419` phrases from `es-PR` phrases later, and no clean migration.
-5. **camelCase everywhere** — TypeScript, JSON API responses, Firestore fields. One convention, no mapping layer, no snake/camel bugs.
+5. **camelCase everywhere above the database** — TypeScript and JSON API responses. Postgres columns are snake_case (unquoted identifiers fold to lowercase). The one mapping point is the SQL itself: every query aliases its columns (`source_text AS "sourceText"`), so nothing above the query layer ever sees snake_case.
 6. **No API keys client-side.** All model calls go through Next.js route handlers.
 
 ---
@@ -36,14 +36,14 @@ These exist because v1 is one language and one region, and v2 is many. Every one
 | Framework | Next.js 14+, App Router, TypeScript |
 | Styling | Tailwind CSS, tokens as CSS custom properties |
 | AI | Anthropic API (`claude-sonnet-5`), called from server route handlers only |
-| Database | Cloud Firestore (offline persistence enabled) |
-| Auth | Firebase Auth, email/password |
+| Database | Neon Postgres. Driver: `@neondatabase/serverless`. Plain SQL migrations in `db/migrations/`; no ORM. |
+| Auth | Neon Auth, email/password. Sessions verified server-side in route handlers via one `requireUser()` helper. |
+| Offline store | IndexedDB on the device, through `idb`. See section 7, "Local-first sync". |
 | Audio | Web Speech API (`window.speechSynthesis`) |
 | Hosting | Vercel |
 | Icons | `lucide-react` — no emoji as UI icons |
-| Server auth | `firebase-admin`, used only to verify Firebase ID tokens in `/api/trip-pack` (M6). Verifying needs only the Firebase project ID, not a service-account key. |
 
-Firebase Auth and Firestore are new in this build, not a port — the previous app used Google Gemini for translation, not Anthropic, so there is no AI code to carry over. Provision a fresh Firebase project rather than reusing the previous one: that project is AI-Studio-managed on a non-default Firestore database, and its schema and security rules don't match this app's data model (section 7).
+The database and auth are new in this build, not a port — the previous app used Google Gemini and Firebase, and none of its data layer carries over. The Neon project for this app is created by the owner in the Neon console; its connection string reaches the app as `DATABASE_URL` (set in Vercel project settings, never committed). Neon Auth package and env var names are confirmed against Neon's docs before M3 code lands.
 
 ### Model
 
@@ -188,72 +188,169 @@ Every list screen needs three states beyond default: loading (skeleton cards, `-
 
 ## 7. Data model
 
+### Tables (Postgres)
+
+```sql
+-- Shared, read-only content. Source of truth for every language pack.
+create table phrases (
+  id             text not null,          -- e.g. 'dining-menu'; same id across locales
+  locale         text not null,          -- 'es-419', 'fr-FR', 'de-DE'
+  category       text not null check (category in
+                   ('greetings','dining','transit','shopping','lodging','emergency','general')),
+  source_text    text not null,          -- English
+  literal        text not null,
+  natural_text   text not null,         -- "natural" is reserved in Postgres; aliased to natural
+  cultural_note  text not null default '',
+  pronunciation  text not null default '',
+  sort_order     int  not null default 0,
+  primary key (id, locale)
+);
+
+-- Per-user settings. user_id is the Neon Auth user id.
+create table user_settings (
+  user_id          text primary key,
+  preferred_locale text not null default 'es-419',
+  speaker_gender   text not null default 'neutral'
+                     check (speaker_gender in ('neutral','feminine','masculine')),
+  updated_at       timestamptz not null default now()
+);
+
+create table trip_packs (
+  id           uuid primary key,           -- client-generated
+  user_id      text not null,
+  locale       text not null,
+  title        varchar(60)  not null,
+  description  varchar(500) not null,
+  phrase_count int not null,
+  created_at   timestamptz not null default now()
+);
+
+create table saved_phrases (
+  id             uuid primary key,         -- client-generated
+  user_id        text not null,
+  locale         text not null,
+  source_text    text not null,
+  literal        text not null,
+  natural_text   text not null,         -- "natural" is reserved in Postgres; aliased to natural
+  cultural_note  text not null default '',
+  pronunciation  text not null,
+  category       text not null,
+  trip_pack_id   uuid references trip_packs(id),
+  saved_at       timestamptz not null,
+  updated_at     timestamptz not null,
+  deleted_at     timestamptz,             -- tombstone
+  synced_at      timestamptz not null default now()  -- server clock; the pull cursor
+);
+create unique index saved_phrases_dedupe
+  on saved_phrases (user_id, locale, lower(trim(source_text)))
+  where deleted_at is null;
+create index saved_phrases_sync on saved_phrases (user_id, synced_at);
+
+create table show_cards (
+  id             uuid primary key,         -- client-generated
+  user_id        text not null,
+  locale         text not null,
+  kind           text not null check (kind in ('allergy','diet','medical','address','custom')),
+  title          text not null,            -- the user's own English label, e.g. "Peanut allergy"
+  source_text    text not null,            -- for 'address', the address verbatim
+  literal        text not null,            -- the Spanish shown in show mode (section 12)
+  natural_text   text not null,         -- "natural" is reserved in Postgres; aliased to natural
+  cultural_note  text not null default '',
+  pronunciation  text not null,
+  created_at     timestamptz not null,
+  updated_at     timestamptz not null,
+  deleted_at     timestamptz,
+  synced_at      timestamptz not null default now()
+);
+create index show_cards_sync on show_cards (user_id, synced_at);
+```
+
+### TypeScript shapes
+
 ```ts
-// users/{uid}
-interface UserDoc {
-  uid: string;
-  email: string;
-  createdAt: Timestamp;
-  lastLoginAt: Timestamp;
-  preferredLocale: string;   // 'es-419'
+interface UserSettings {
+  preferredLocale: string;       // 'es-419'
   speakerGender: SpeakerGender;  // 'neutral' | 'feminine' | 'masculine'; default 'neutral'. Read from M5 (section 12)
+  updatedAt: string;             // ISO timestamp
 }
 
-// users/{uid}/savedPhrases/{id}
 interface SavedPhrase {
-  id: string;
-  locale: string;            // REQUIRED. 'es-419' in v1.
-  sourceText: string;        // English
+  id: string;                    // client-generated UUID
+  locale: string;                // REQUIRED. 'es-419' in v1.
+  sourceText: string;            // English
   literal: string;
-  natural: string;           // how a native speaker would actually say it
-  culturalNote?: string;
+  natural: string;               // how a native speaker would actually say it
+  culturalNote: string;          // '' when there is nothing to say
   pronunciation: string;
   category: Category;
-  savedAt: Timestamp;
-  syncedFromLocal: boolean;
-  tripPackId?: string;       // set when saved from a trip pack (section 13); absent otherwise
+  tripPackId?: string;           // set when saved from a trip pack (section 13); absent otherwise
+  savedAt: string;
+  updatedAt: string;
+  deletedAt?: string;            // tombstone; present = deleted
 }
 
-// users/{uid}/showCards/{id}    — written from M5 (section 12)
-interface ShowCard {
+interface ShowCard {             // written from M5 (section 12)
   id: string;
-  locale: string;            // REQUIRED, same rule as SavedPhrase
-  kind: ShowCardKind;        // 'allergy' | 'diet' | 'medical' | 'address' | 'custom'
-  title: string;             // the user's own English label, e.g. "Peanut allergy"
-  sourceText: string;        // English the user wrote; for 'address', the address verbatim
-  literal: string;           // the Spanish shown in show mode (see section 12)
+  locale: string;                // REQUIRED, same rule as SavedPhrase
+  kind: ShowCardKind;            // 'allergy' | 'diet' | 'medical' | 'address' | 'custom'
+  title: string;
+  sourceText: string;
+  literal: string;
   natural: string;
-  culturalNote?: string;
+  culturalNote: string;
   pronunciation: string;
-  createdAt: Timestamp;
-  updatedAt: Timestamp;
-  syncedFromLocal: boolean;
+  createdAt: string;
+  updatedAt: string;
+  deletedAt?: string;
 }
 
-// users/{uid}/tripPacks/{id}    — written from M6 (section 13)
-interface TripPack {
+interface TripPack {             // written from M6 (section 13)
   id: string;
-  locale: string;            // REQUIRED
-  title: string;             // user-entered, ≤ 60 chars, e.g. "Mexico City, 2 weeks"
-  description: string;       // the trip description sent to the model
+  locale: string;                // REQUIRED
+  title: string;                 // user-entered, ≤ 60 chars, e.g. "Mexico City, 2 weeks"
+  description: string;           // the trip description sent to the model
   phraseCount: number;
-  createdAt: Timestamp;      // no syncedFromLocal: trip packs require sign-in, so they are never local-first
+  createdAt: string;
 }
 ```
 
+Email and login times live in Neon Auth, not in our tables.
+
 `ShowCardKind` and `SpeakerGender` slugs follow the same rule as category slugs (section 2, rule 3): lowercase English, permanent, display labels in `src/lib/labels.ts`.
 
-**M3 ships all three shapes.** `showCards` and `tripPacks` have no writer until M5 and M6, but their types and security rules land in M3 so neither milestone has to reopen the schema or the rules.
+**M3 ships all tables.** `show_cards` and `trip_packs` have no writer until M5 and M6, but their schema and types land in M3 so neither milestone has to reopen them.
 
-Security rules: a user reads and writes only their own subtree, default deny everything else. Write the ownership rule as a recursive match on `users/{uid}/{document=**}`, not one block per collection, so collections added later are covered without a rules change.
+### Access control
 
-### Local-first sync (the part the old build never specified)
+There are no database-side rules to lean on, so the server enforces ownership:
 
-- Logged out: phrases go to `localStorage`, `syncedFromLocal: false`
-- On login: upload local phrases, dedupe on `sourceText + locale`, mark `syncedFromLocal: true`, then clear local
-- Conflicts: last write wins, keyed on `savedAt`
-- Build the sync as one helper parameterised by collection, dedupe key, and timestamp field — not code specific to saved phrases. M3 uses it for `savedPhrases`. M5 reuses it for `showCards` (dedupe on `kind + sourceText + locale`, last write wins on `updatedAt`). Trip packs require sign-in and never pass through it. Logged out, `speakerGender` lives in `localStorage` and is written to `UserDoc` on login if the doc still has the default.
-- Use the current Firestore persistence API (`persistentLocalCache` via `initializeFirestore`) — `enableIndexedDbPersistence` is deprecated
+- Every route handler that touches user tables calls `requireUser(request)` first. It returns the verified Neon Auth user id or responds 401.
+- Every user-table query filters on `user_id = $1` with that verified id, never with an id from the request body.
+- `phrases` is readable without auth and writable only by migrations and the seed script.
+- Postgres row-level security is a possible later hardening, not a v1 requirement.
+
+### The phrase library
+
+- `phrases` in Neon is the source of truth. It is seeded from `data/phrases/*.csv` (one file per locale, shared ids across files).
+- A script exports it to a committed JSON snapshot bundled into the app. The phrasebook therefore works with zero signal on first load, and builds never need database access.
+- Re-export and commit the snapshot whenever the table changes.
+
+### Local-first sync
+
+- Every user-data write goes to IndexedDB first. The UI reads from IndexedDB and updates immediately.
+- Each write also appends an operation to an **outbox** store in IndexedDB.
+- When online and signed in, the outbox flushes to `POST /api/sync`. Then `GET /api/sync?since=<cursor>` pulls rows changed on other devices.
+- Ids are client-generated UUIDs, so a row created offline keeps its id after syncing.
+- Deletes are tombstones (`deletedAt`), so they sync like any other write.
+- Conflicts: last write wins on `updatedAt` (the client's clock), resolved on the server.
+- The pull cursor is `synced_at`, the server's clock, set on every write — never `updatedAt`, which a device with a wrong clock could set to anything. Each pull re-reads a 30-second overlap so a late-committing write isn't skipped; applying a row twice is harmless.
+- Duplicates (same dedupe key, different id, e.g. the same phrase saved on two offline devices) are stored as tombstones, so the sending device converges on the surviving row at its next pull.
+- On sign-in, local data with no owner is adopted by that account. Local data owned by a different account is cleared, never uploaded. On sign-out, the device's copy is cleared; the server keeps it.
+- Logged out: the same IndexedDB stores, and the outbox waits. On sign-in it flushes and the user's server rows are pulled down. There is no separate "upload localStorage on login" path.
+- Build the sync as one helper parameterised by table, dedupe key, and timestamp field, not code specific to saved phrases. M3 uses it for `saved_phrases` (dedupe on `locale + normalized sourceText`). M5 reuses it for `show_cards` (dedupe on `kind + locale + normalized sourceText`).
+- Trip packs are created online only (they need the model call) and are cached into IndexedDB after creation.
+- Logged out, `speakerGender` lives in IndexedDB and is written to `user_settings` on sign-in if the server row still has the default.
+- The service worker never caches `/api/sync`. Sync runs on the `online` event and on app focus.
 
 ---
 
@@ -331,9 +428,9 @@ The response itself is a few hundred tokens, so 4096 looks generous — it isn't
 - Manifest: standalone, portrait, `#FAF8F5` background, `#B91C1C` theme, 192 and 512 icons
 - Service worker: cache-first for the app shell, fonts, and category images
 - Cache the shell for every app route by pattern, not from a hand-maintained route list. Routes added after M4 (`/cards`, `/cards/[id]`, `/trip`) must work offline without editing the service worker.
-- Firestore handles offline data natively — don't hand-roll it
+- The phrase library ships in the bundle (section 7). User data is read from IndexedDB; the network is only for sync. The outbox is hand-rolled, so keep it to the one helper.
 - `/api/translate` and `/api/trip-pack` are network-only; offline shows the error state with an offline-specific message. Exception from M6: `/translate` first checks the recent-translations cache (section 13).
-- `/cards` and `/cards/[id]` render entirely from local data (Firestore's offline cache, or `localStorage` when logged out). No server fetch on that path. A show card that needs signal to open is useless.
+- `/cards` and `/cards/[id]` render entirely from IndexedDB, signed in or not. No server fetch on that path. A show card that needs signal to open is useless.
 - The phrasebook and vault must be fully usable with zero signal. That's the whole point of the product.
 - iOS: `viewport-fit=cover` plus `env(safe-area-inset-top)` on the header, or it bleeds into the Dynamic Island
 
@@ -349,13 +446,13 @@ Ship each milestone to Vercel before starting the next.
 
 **M2 — Live translation.** `/translate`, the Anthropic route handler, result card, all three states. No auth yet — the route is public, protected only by an input-length cap and a coarse per-IP throttle. Auth arrives in M3.
 
-**M3 — Accounts and vault.** Firebase Auth, Firestore, local-first sync per section 7. Includes the `ShowCard` and `TripPack` types, `UserDoc.speakerGender`, the optional `tripPackId` on `SavedPhrase`, the recursive ownership rule, and the collection-generic sync helper, even though nothing writes the new collections yet.
+**M3 — Accounts and vault.** Neon Auth (email/password), the Neon schema and migrations, `requireUser()`, `/api/sync` (push and pull), the IndexedDB stores and outbox, and the generic sync helper. All five tables ship, even though `show_cards` and `trip_packs` have no writer until M5 and M6. Also the `phrases` table, seeded from `data/phrases/*.csv`, and the snapshot export script.
 
-**M4 — Offline.** Service worker, manifest, iOS install, offline states. Shell caching is route-pattern based per section 9.
+**M4 — Offline.** Service worker, manifest, iOS install, offline states. Shell caching is route-pattern based per section 9. User-data sync is already offline-tolerant from M3, so M4 is shell caching and offline UI states.
 
 **M5 — Show cards.** `/cards`, `/cards/[id]`, show mode, the five kinds, all three list states. The speaker-gender setting, and the matching optional field on `/api/translate`. See section 12.
 
-**M6 — Trip pack.** `/trip`, `/api/trip-pack` behind sign-in (adds `firebase-admin`), save-to-vault with `tripPackId`, vault filter by trip, and the recent-translations cache on `/translate`. See section 13.
+**M6 — Trip pack.** `/trip`, `/api/trip-pack` behind sign-in (uses `requireUser()`), save-to-vault with `tripPackId`, vault filter by trip, and the recent-translations cache on `/translate`. See section 13.
 
 Write ~40 preset phrases across the six visible categories before M1 — evenly spread, not 5 dining and 1 shopping like the old set.
 
@@ -365,9 +462,9 @@ Write ~40 preset phrases across the six visible categories before M1 — evenly 
 
 The old repo (`Puriya-translation-project-march-2026`) is a reference, not a template — and a limited one. It is a single-screen Vite SPA (one 472-line `App.tsx`, no routing, no phrasebook, no categories, no text-to-speech) built against Google Gemini, not Anthropic.
 
-Take from it: the `cn()` class-name helper (`clsx` + `tailwind-merge`), the Tailwind `@theme` token pattern, two of its colour values (`#A3D9C9` and `#F4EBD0`, both already folded into section 5), the EB Garamond / Inter font pairing, and the general shape of its `firestore.rules` (default-deny, ownership helper functions) — not its actual rules, which target a different schema.
+Take from it: the `cn()` class-name helper (`clsx` + `tailwind-merge`), the Tailwind `@theme` token pattern, two of its colour values (`#A3D9C9` and `#F4EBD0`, both already folded into section 5), and the EB Garamond / Inter font pairing. Nothing from its data layer carries over.
 
-Ignore everything else: its translation service (Gemini, a different response shape, a hardcoded region in the prompt), its Firestore schema and Auth provider (Google popup, not email/password), its app name (invented — this project is not called Sentido), and its Firebase project (AI-Studio-managed — provision a fresh one instead; see section 3).
+Ignore everything else: its translation service (Gemini, a different response shape, a hardcoded region in the prompt), its Firestore schema, rules, and Auth provider (this build uses Neon; see section 3), and its app name (invented — this project is not called Sentido).
 
 ---
 
@@ -391,7 +488,7 @@ Starter text lives in a local file keyed by kind slug and UI locale, like labels
 
 Spanish marks the speaker's gender in phrases travelers say constantly: *alérgico/alérgica*, *cansado/cansada*, *vegetariano/vegetariana*. The user chooses it, and the model never guesses.
 
-- A setting (in the nav drawer) with three permanent slugs: `neutral` (the default), `feminine`, `masculine`. Display labels live in `src/lib/labels.ts`. Stored in `UserDoc.speakerGender`, or in `localStorage` when logged out (section 7).
+- A setting (in the nav drawer) with three permanent slugs: `neutral` (the default), `feminine`, `masculine`. Display labels live in `src/lib/labels.ts`. Stored in `user_settings.speaker_gender`, or in IndexedDB when logged out (section 7).
 - `/api/translate` gains an optional `speakerGender` request field, defaulting to `neutral`. The client sends the current setting on every call: show cards, `/translate`, and the trip pack.
 - The section 8 template gains a `{{SPEAKER_GENDER}}` variable and one rule: *"When the speaker refers to themselves, use {{SPEAKER_GENDER}} grammatical agreement. If it is neutral, prefer constructions that avoid gendered agreement — 'Tengo alergia a…' rather than 'Soy alérgico a…' — and use the masculine form only where no natural neutral phrasing exists."*
 - Changing the setting does not re-translate existing show cards. Each card stores the translation it was made with. Editing a card re-translates it with the current setting.
@@ -428,13 +525,13 @@ Before leaving, the user describes their trip in plain English ("vegetarian, two
 1. The user enters a title (≤ 60 chars) and a description (≤ 500 chars, the same cap as `/api/translate`).
 2. Generate → loading state: skeleton phrase cards plus a line saying this takes a little while. It's one request, not a stream.
 3. Preview: generated phrases render as standard phrase cards, each with a checkbox, all checked by default.
-4. "Save N to vault" writes a `TripPack` plus one `SavedPhrase` per checked phrase, each with `tripPackId` set, straight to Firestore.
+4. "Save N to vault" writes a `TripPack` plus one `SavedPhrase` per checked phrase, each with `tripPackId` set, written to IndexedDB and the outbox and synced via `/api/sync` (section 7).
 5. The vault gains a trip filter alongside the category filter.
 
 ### `/api/trip-pack`
 
-- POST `{ title, description, locale, speakerGender }` → `{ phrases: Phrase[] }`, with `Authorization: Bearer <Firebase ID token>`.
-- The route verifies the token with `firebase-admin` before doing anything else. A missing or invalid token gets a 401, which the client shows as the error state with a sign-in action. This is the first route that knows who is calling.
+- POST `{ title, description, locale, speakerGender }` → `{ phrases: Phrase[] }`, with the Neon Auth session.
+- The route calls `requireUser()` before doing anything else. A missing or invalid token gets a 401, which the client shows as the error state with a sign-in action. This is the first route that knows who is calling.
 - Model, effort, and sampling rules are identical to section 8: `claude-sonnet-5`, `output_config.effort: "low"`, no sampling parameters, structured outputs via `output_config.format`. The schema is an object with one `phrases` array whose items are the section 8 response shape.
 - `max_tokens`: **16000.** Twenty-five phrases at roughly 150 tokens each is about 3,750 tokens of answer, and thinking counts against the cap (section 8). 16000 gives the same kind of headroom 4096 gives a single phrase while staying a plain non-streaming request. If measured latency makes the loading state painful, switch to streaming before reducing the phrase count.
 - Validate every phrase's `category` with `isCategory()`, falling back to `general` exactly as `/api/translate` does. The prompt asks for 25. Accept up to 25 and truncate beyond that. Fewer than 10 is an error state, not a short pack.
