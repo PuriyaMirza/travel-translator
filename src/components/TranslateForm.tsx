@@ -2,6 +2,7 @@
 
 import { Languages, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { NETWORK_MESSAGE, OFFLINE_MESSAGE } from "@/lib/messages";
 import type { Phrase } from "@/lib/types";
 import { ErrorCard } from "./ErrorCard";
 import { PhraseCard } from "./PhraseCard";
@@ -12,10 +13,6 @@ type Result =
   | { status: "loading" }
   | { status: "success"; phrase: Phrase }
   | { status: "error"; message: string };
-
-const OFFLINE_MESSAGE =
-  "You're offline. Translation needs a connection — the phrasebook still works without one.";
-const NETWORK_MESSAGE = "Couldn't reach the server. Check your connection and try again.";
 
 export function TranslateForm() {
   const [input, setInput] = useState("");

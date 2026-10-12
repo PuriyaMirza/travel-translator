@@ -1,6 +1,8 @@
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond, Inter } from "next/font/google";
 import { Header } from "@/components/Header";
+import { OfflineBanner } from "@/components/OfflineBanner";
+import { ServiceWorkerRegistrar } from "@/components/ServiceWorkerRegistrar";
 import { SyncProvider } from "@/components/SyncProvider";
 import { brand } from "@/lib/brand";
 import "./globals.css";
@@ -20,6 +22,7 @@ const inter = Inter({
 export const metadata: Metadata = {
   title: brand.name,
   description: brand.tagline,
+  appleWebApp: { capable: true, title: brand.name, statusBarStyle: "default" },
 };
 
 export const viewport: Viewport = {
@@ -41,8 +44,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="font-sans text-body flex min-h-full flex-col">
         <Header />
+        <OfflineBanner />
         {children}
         <SyncProvider />
+        <ServiceWorkerRegistrar />
       </body>
     </html>
   );
