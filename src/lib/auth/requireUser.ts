@@ -6,7 +6,9 @@ import { getAuth } from "./server";
  * touches user tables calls this first and filters every query on the id it
  * returns — never on an id taken from the request body.
  */
-export async function requireUser(): Promise<
+export async function requireUser(
+  unauthorizedMessage = "Sign in to sync your saved phrases.",
+): Promise<
   { userId: string; response?: never } | { userId?: never; response: NextResponse }
 > {
   const { data: session } = await getAuth().getSession();
@@ -14,7 +16,7 @@ export async function requireUser(): Promise<
   if (!userId) {
     return {
       response: NextResponse.json(
-        { error: { code: "unauthorized", message: "Sign in to sync your saved phrases." } },
+        { error: { code: "unauthorized", message: unauthorizedMessage } },
         { status: 401 },
       ),
     };

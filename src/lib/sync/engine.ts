@@ -2,6 +2,7 @@
 
 import type { SavedPhrase, ShowCard } from "@/lib/types";
 import { clearUserData, localDb, notifyLocalChange, type SyncedTable } from "@/lib/local/db";
+import { refreshTripPacks } from "@/lib/local/tripPacks";
 
 /*
  * Client half of the generic sync helper (SPEC.md §7 "Local-first sync").
@@ -95,6 +96,12 @@ async function pull(): Promise<SyncResult> {
   }
 
   await db.put("meta", data.cursor, "cursor");
+  // Trip packs aren't in the outbox (SPEC.md §13); refresh the names so other
+  // devices can label their saved phrases. Best effort: a failure here must
+  // not fail a sync that already succeeded.
+  try {
+    if (await refreshTripPacks()) changed = true;
+  } catch {}
   if (changed) notifyLocalChange();
   return "synced";
 }

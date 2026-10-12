@@ -1,7 +1,8 @@
 /**
- * A coarse, in-memory per-IP throttle for the public `/api/translate` route
- * (SPEC.md §10: "protected only by an input-length cap and a coarse per-IP
- * throttle" — full auth arrives in M3).
+ * Coarse, in-memory throttles for the routes that spend model calls:
+ * `translate` is keyed on IP (SPEC.md §10: public in M2, full auth arrives in
+ * M3), `tripPack` on the verified user id (SPEC.md §13: 3 packs per user per
+ * hour, because a pack costs about 25 translations).
  *
  * Deliberately weak: it resets on cold start and doesn't survive multiple
  * server instances, so it stops casual abuse rather than a determined one.
@@ -10,34 +11,45 @@
  * limiting; reach for a shared store (e.g. Redis) if that's ever needed.
  */
 
-const WINDOW_MS = 60_000;
-const MAX_REQUESTS_PER_WINDOW = 10;
+const BUCKETS = {
+  translate: { windowMs: 60_000, max: 10 },
+  tripPack: { windowMs: 60 * 60_000, max: 3 },
+} as const;
 
-const hits = new Map<string, number[]>();
+export type RateLimitBucket = keyof typeof BUCKETS;
 
-/** Bounds memory growth from IPs that only ever make one request. */
-function pruneStaleEntries(now: number) {
-  for (const [ip, timestamps] of hits) {
-    if (timestamps.every((t) => now - t > WINDOW_MS)) {
-      hits.delete(ip);
+// bucket -> key (IP or user id) -> request timestamps inside the window
+const hits: Record<RateLimitBucket, Map<string, number[]>> = {
+  translate: new Map(),
+  tripPack: new Map(),
+};
+
+/** Bounds memory growth from keys that only ever make one request. */
+function pruneStaleEntries(bucket: RateLimitBucket, now: number) {
+  const { windowMs } = BUCKETS[bucket];
+  for (const [key, timestamps] of hits[bucket]) {
+    if (timestamps.every((t) => now - t > windowMs)) {
+      hits[bucket].delete(key);
     }
   }
 }
 
-export function isRateLimited(ip: string): boolean {
+/** Records a hit and reports whether `key` is over the bucket's limit. */
+export function isRateLimited(key: string, bucket: RateLimitBucket = "translate"): boolean {
+  const { windowMs, max } = BUCKETS[bucket];
   const now = Date.now();
-  const timestamps = (hits.get(ip) ?? []).filter((t) => now - t < WINDOW_MS);
+  const timestamps = (hits[bucket].get(key) ?? []).filter((t) => now - t < windowMs);
 
-  if (timestamps.length >= MAX_REQUESTS_PER_WINDOW) {
-    hits.set(ip, timestamps);
+  if (timestamps.length >= max) {
+    hits[bucket].set(key, timestamps);
     return true;
   }
 
   timestamps.push(now);
-  hits.set(ip, timestamps);
+  hits[bucket].set(key, timestamps);
 
   // Cheap amortised cleanup — no separate timer, no dependency.
-  if (hits.size > 1000) pruneStaleEntries(now);
+  if (hits[bucket].size > 1000) pruneStaleEntries(bucket, now);
 
   return false;
 }

@@ -18,8 +18,15 @@ export async function listSavedPhrases(): Promise<SavedPhrase[]> {
     .sort((a, b) => b.savedAt.localeCompare(a.savedAt));
 }
 
-/** Save a phrase. A phrase already saved is returned as-is, not duplicated. */
-export async function savePhrase(phrase: Phrase): Promise<SavedPhrase> {
+/**
+ * Save a phrase. A phrase already saved is returned as-is, not duplicated —
+ * including its existing `tripPackId` (or lack of one). `tripPackId` is set
+ * only on a new row (SPEC.md §13).
+ */
+export async function savePhrase(
+  phrase: Phrase,
+  options: { tripPackId?: string } = {},
+): Promise<SavedPhrase> {
   const key = savedPhraseKey(phrase);
   const existing = (await listSavedPhrases()).find((p) => savedPhraseKey(p) === key);
   if (existing) return existing;
@@ -34,6 +41,7 @@ export async function savePhrase(phrase: Phrase): Promise<SavedPhrase> {
     culturalNote: phrase.culturalNote ?? "",
     pronunciation: phrase.pronunciation,
     category: phrase.category,
+    ...(options.tripPackId && { tripPackId: options.tripPackId }),
     savedAt: now,
     updatedAt: now,
   };

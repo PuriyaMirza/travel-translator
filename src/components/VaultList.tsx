@@ -7,6 +7,7 @@ import { CATEGORIES, type Category } from "@/lib/categories";
 import { categoryLabel } from "@/lib/labels";
 import { authClient } from "@/lib/auth/client";
 import { useSavedPhrases } from "@/lib/local/savedPhrases";
+import { useTripPacks } from "@/lib/local/tripPacks";
 import type { Phrase } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { ErrorCard } from "./ErrorCard";
@@ -14,13 +15,15 @@ import { PhraseCard } from "./PhraseCard";
 import { PhraseCardSkeleton } from "./PhraseCardSkeleton";
 
 /**
- * The vault list (SPEC.md §6): category filter plus the three list states —
+ * The vault list (SPEC.md §6, §13): category and trip filters (they combine) plus the three list states —
  * loading skeletons, an empty state that invites action, and an error card.
  */
 export function VaultList() {
   const { state, reload } = useSavedPhrases();
   const { data: session, isPending } = authClient.useSession();
+  const tripPacks = useTripPacks();
   const [filter, setFilter] = useState<Category | "all">("all");
+  const [tripFilter, setTripFilter] = useState<string>("all");
 
   if (state.status === "loading") {
     return (
@@ -42,9 +45,13 @@ export function VaultList() {
   }
 
   const phrases = state.phrases;
-  const categories = CATEGORIES.filter((c) => phrases.some((p) => p.category === c));
+  // Only trips that still have a saved phrase on this device get a pill.
+  const trips = tripPacks.filter((t) => phrases.some((p) => p.tripPackId === t.id));
+  const activeTrip = trips.some((t) => t.id === tripFilter) ? tripFilter : "all";
+  const inTrip = activeTrip === "all" ? phrases : phrases.filter((p) => p.tripPackId === activeTrip);
+  const categories = CATEGORIES.filter((c) => inTrip.some((p) => p.category === c));
   const active = filter !== "all" && categories.includes(filter) ? filter : "all";
-  const shown = active === "all" ? phrases : phrases.filter((p) => p.category === active);
+  const shown = active === "all" ? inTrip : inTrip.filter((p) => p.category === active);
 
   return (
     <div className="space-y-6">
@@ -76,6 +83,25 @@ export function VaultList() {
         </div>
       ) : (
         <>
+          {trips.length > 0 && (
+            <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by trip">
+              {[{ id: "all", title: "All trips" }, ...trips].map((t) => (
+                <button
+                  key={t.id}
+                  type="button"
+                  onClick={() => setTripFilter(t.id)}
+                  aria-pressed={activeTrip === t.id}
+                  className={cn(
+                    "text-small max-w-full truncate rounded-full px-4 py-2 transition motion-reduce:transition-none",
+                    activeTrip === t.id ? "bg-charcoal text-inverse" : "bg-sand text-ink hover:bg-sand/70",
+                  )}
+                >
+                  {t.title}
+                </button>
+              ))}
+            </div>
+          )}
+
           {categories.length > 1 && (
             <div className="flex flex-wrap gap-2" role="group" aria-label="Filter by category">
               {(["all", ...categories] as const).map((c) => (
