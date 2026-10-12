@@ -84,6 +84,12 @@ async function handleNavigation(event) {
     }
     return res;
   } catch (err) {
+    // Show mode renders from IndexedDB, so any card id can open on the one
+    // pre-rendered shell page (SPEC.md §9, §12); the page reads the id from the URL.
+    if (/^\/cards\/[^/]+$/.test(path)) {
+      const shell = await pages.match("/cards/_shell", { ignoreVary: true });
+      if (shell) return shell;
+    }
     // Offline and never cached: the home page beats a browser error.
     const home = await pages.match("/", { ignoreVary: true });
     if (home) return home;

@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { isRateLimited } from "@/lib/rateLimit";
 import { translate, TranslationRequestError } from "@/lib/translate";
+import { SPEAKER_GENDERS, type SpeakerGender } from "@/lib/types";
 
 /**
  * POST /translate — SPEC.md §6. Public in M2, protected only by the input
@@ -37,8 +38,21 @@ export async function POST(request: NextRequest) {
     );
   }
 
+  // Optional (SPEC.md §12). Absent means neutral; present but not one of the
+  // three slugs is a client bug, so it is rejected rather than guessed at.
+  const rawGender =
+    typeof body === "object" && body !== null && "speakerGender" in body && body.speakerGender !== undefined
+      ? body.speakerGender
+      : "neutral";
+  if (!SPEAKER_GENDERS.includes(rawGender as SpeakerGender)) {
+    return NextResponse.json(
+      { error: { code: "unknown", message: "Unknown speaker setting. Choose neutral, feminine or masculine." } },
+      { status: 400 },
+    );
+  }
+
   try {
-    const phrase = await translate(text);
+    const phrase = await translate(text, rawGender as SpeakerGender);
     return NextResponse.json({ phrase });
   } catch (error) {
     if (error instanceof TranslationRequestError) {

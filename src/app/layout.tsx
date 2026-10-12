@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond, Inter } from "next/font/google";
+import { ChromeGate } from "@/components/ChromeGate";
 import { Header } from "@/components/Header";
 import { OfflineBanner } from "@/components/OfflineBanner";
 import { ServiceWorkerRegistrar } from "@/components/ServiceWorkerRegistrar";
@@ -43,8 +44,10 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       className={`${ebGaramond.variable} ${inter.variable} h-full antialiased`}
     >
       <body className="font-sans text-body flex min-h-full flex-col">
-        <Header />
-        <OfflineBanner />
+        <ChromeGate>
+          <Header />
+          <OfflineBanner />
+        </ChromeGate>
         {children}
         <SyncProvider />
         <ServiceWorkerRegistrar />

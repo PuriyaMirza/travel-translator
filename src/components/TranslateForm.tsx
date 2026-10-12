@@ -2,6 +2,7 @@
 
 import { Languages, Loader2 } from "lucide-react";
 import { useState } from "react";
+import { useSpeakerGender } from "@/lib/local/settings";
 import { NETWORK_MESSAGE, OFFLINE_MESSAGE } from "@/lib/messages";
 import type { Phrase } from "@/lib/types";
 import { ErrorCard } from "./ErrorCard";
@@ -15,6 +16,7 @@ type Result =
   | { status: "error"; message: string };
 
 export function TranslateForm() {
+  const { speakerGender } = useSpeakerGender();
   const [input, setInput] = useState("");
   const [result, setResult] = useState<Result>({ status: "empty" });
   // What was actually submitted, so "Try again" retries the request rather
@@ -32,7 +34,7 @@ export function TranslateForm() {
       const response = await fetch("/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text }),
+        body: JSON.stringify({ text, speakerGender }),
       });
       const body = await response.json();
       if (!response.ok) {

@@ -4,7 +4,7 @@ import { z } from "zod/v4";
 import { brand } from "./brand";
 import { isCategory } from "./categories";
 import { localeName } from "./locale";
-import type { Phrase } from "./types";
+import type { Phrase, SpeakerGender } from "./types";
 
 /**
  * The translation backend (SPEC.md §8). Never imported by a client component —
@@ -71,7 +71,7 @@ const TranslationSchema = z.object({
   pronunciation: z.string(),
 });
 
-function buildSystemPrompt(locale: string): string {
+function buildSystemPrompt(locale: string, speakerGender: SpeakerGender): string {
   return `You are an expert linguist specializing in ${localeName(locale)} as spoken in
 everyday life. You are the translation backend for a travel phrasebook app.
 
@@ -95,6 +95,10 @@ Rules:
    string. Do not pad it.
 6. category must be exactly one of: greetings, dining, transit, shopping,
    lodging, emergency, general. Use general when nothing else fits.
+7. When the speaker refers to themselves, use ${speakerGender} grammatical
+   agreement. If it is neutral, prefer constructions that avoid gendered
+   agreement — "Tengo alergia a…" rather than "Soy alérgico a…" — and use
+   the masculine form only where no natural neutral phrasing exists.
 
 Examples:
 
@@ -153,7 +157,10 @@ export function normalizeTranslation(
   };
 }
 
-export async function translate(text: string): Promise<Phrase> {
+export async function translate(
+  text: string,
+  speakerGender: SpeakerGender = "neutral",
+): Promise<Phrase> {
   const trimmed = text.trim();
   if (!trimmed) {
     throw new TranslationRequestError({ code: "empty", message: "Type something to translate." });
@@ -172,7 +179,7 @@ export async function translate(text: string): Promise<Phrase> {
     response = await client.messages.parse({
       model: MODEL,
       max_tokens: MAX_TOKENS,
-      system: buildSystemPrompt(locale),
+      system: buildSystemPrompt(locale, speakerGender),
       messages: [{ role: "user", content: trimmed }],
       output_config: {
         format: zodOutputFormat(TranslationSchema),

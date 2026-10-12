@@ -9,6 +9,7 @@ import { categoryLabel } from "@/lib/labels";
 import { NAV_LINKS } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "./Eyebrow";
+import { SpeakerGenderControl } from "./SpeakerGenderControl";
 
 export function NavDrawer() {
   const pathname = usePathname();
@@ -111,6 +112,8 @@ export function NavDrawer() {
                   );
                 })}
               </ul>
+
+              <SpeakerGenderControl />
             </div>
           </nav>
         </div>
