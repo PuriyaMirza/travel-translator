@@ -256,3 +256,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** SPEC.md §1 makes other languages out of scope for v1. These files are storage only, at the user's request; no code reads them. The es-419 file has 58 phrases not in phrases.ts.
 - **Incomplete:** No pronunciation or culturalNote columns, which the Phrase type requires; they must be added before any import. The 58 new Spanish phrases and all French/German rows are model-written and checked only by a second model pass, not by a native speaker. Locale tags fr-FR / de-DE are assumed.
 - **Open questions:** How these get into the app (Firestore vs Neon decision still pending). Whether pronunciation respelling applies to French/German.
+
+### [2026-10-12 00:30] Draft proposal: Firestore → Neon with local-first sync
+- **Milestone:** none (planning; precedes M3)
+- **Files:** created docs/proposals/neon-migration.md; modified BUILDLOG.md
+- **Decisions:** Proposal only. Phrase library bundled from a Neon snapshot; user data via IndexedDB + outbox + `/api/sync`, last write wins on `updatedAt`, tombstones for deletes, client-generated UUIDs.
+- **Deviations:** None yet. SPEC.md is unchanged; the proposal lists the exact SPEC edits to apply on approval.
+- **Incomplete:** Neon Auth SDK package and env var names are not confirmed. No database has been created.
+- **Open questions:** snake_case columns + SQL aliases vs quoted camelCase; Neon Auth vs another provider; `idb` dependency; new Neon project via the Vercel Marketplace.
