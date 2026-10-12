@@ -264,3 +264,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** None yet. SPEC.md is unchanged; the proposal lists the exact SPEC edits to apply on approval.
 - **Incomplete:** Neon Auth SDK package and env var names are not confirmed. No database has been created.
 - **Open questions:** snake_case columns + SQL aliases vs quoted camelCase; Neon Auth vs another provider; `idb` dependency; new Neon project via the Vercel Marketplace.
+
+### [2026-10-12 01:00] SPEC.md: switch data layer from Firestore to Neon
+- **Milestone:** none (spec change; precedes M3)
+- **Files:** modified SPEC.md, docs/proposals/neon-migration.md, BUILDLOG.md
+- **Decisions (owner-approved):** Neon Postgres + Neon Auth (email/password); snake_case columns with SQL aliases (§2 rule 5 rewritten); `idb` approved for IndexedDB; `@neondatabase/serverless` driver; plain SQL migrations, no ORM. The owner creates the Neon project in the Neon console, not via the Vercel Marketplace.
+- **Deviations:** None from the approved proposal. Spec changes: §2 rule 5, §3 stack, §7 (Postgres tables, TS shapes, access control via `requireUser()`, phrase library snapshot, IndexedDB + outbox sync), §9 offline bullets, §10 M3/M4/M6, §11, §12 speaker-gender storage, §13 trip-pack auth and storage. `syncedFromLocal` and `UserDoc` removed; `deletedAt` added; timestamps are ISO strings in TS.
+- **Incomplete:** No code changes. src/lib/types.ts does not yet match the new §7 shapes; that lands with M3. Neon Auth package and env var names are not confirmed. `.env.example` does not list `DATABASE_URL` yet. The recent-translations cache (§13) still uses localStorage; that is intentional (device-only cache).
+- **Open questions:** Once the Neon project exists, `DATABASE_URL` must be set in Vercel project settings. If the project is not linked through the Vercel integration, preview-branch databases won't be created automatically.
