@@ -1,8 +1,6 @@
 # Proposal: Firestore → Neon (Postgres) with local-first offline sync
 
 Status: **approved 2026-10-12 and applied to SPEC.md.** Decisions: snake_case columns with SQL aliases; Neon Auth; `idb`; the owner creates the Neon project in the Neon console (not via the Vercel Marketplace).
-no database exists yet. On approval, the "SPEC.md changes" below are applied
-verbatim and committed with a BUILDLOG entry.
 
 ## Why
 
