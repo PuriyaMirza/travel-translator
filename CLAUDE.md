@@ -71,8 +71,15 @@ describes.
   globals that layout.tsx and the `[category]` page
   rely on.
 
-No test runner is configured. No env vars yet — M2
-adds `ANTHROPIC_API_KEY`.
+No test runner is configured. Env vars are listed in
+`.env.example`: `ANTHROPIC_API_KEY` (M2), `DATABASE_URL`,
+`NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET` (M3).
+
+Data scripts: `node scripts/build-phrase-seed.mjs` writes
+`db/seed/phrases.sql` from `data/phrases/*.csv`;
+`node scripts/export-phrase-snapshot.mjs` writes the
+bundled `src/lib/phrases.snapshot.json` (from Neon, or
+`--from-csv`). Migrations live in `db/migrations/`.
 
 Stack: Next.js 16 (App Router, React 19), Tailwind CSS
 v4 (CSS-first, no `tailwind.config`), TypeScript.
@@ -81,8 +88,9 @@ Deploys to Vercel; `vercel.json` pins
 
 ## Architecture
 
-Static phrasebook today (M0+M1 shipped). No auth, DB,
-AI, or service worker yet — those are M2–M4.
+M0–M2 shipped; M3 (Neon Postgres + Neon Auth +
+IndexedDB outbox sync) is in progress. No service
+worker yet — that is M4.
 
 ### The one-file rules, and where they resolve
 
@@ -99,9 +107,18 @@ AI, or service worker yet — those are M2–M4.
 - **Labels:** `src/lib/labels.ts` — localized display
   strings keyed by slug then locale. Never key logic
   off these.
-- **Phrases:** `src/lib/phrases.ts` — 42 presets, 7 per
-  visible category. `src/lib/types.ts` `Phrase`
+- **Phrases:** `src/lib/phrases.ts` — reads the bundled
+  `phrases.snapshot.json` (300 rows, 3 locales) and shows
+  the es-419 rows that have a pronunciation (42, 7 per
+  visible category). `src/lib/types.ts` `Phrase`
   requires `locale` on every record.
+- **User data (M3):** writes go to IndexedDB first
+  (`src/lib/local/`), queued in an outbox, synced by
+  `src/lib/sync/engine.ts` ↔ `/api/sync`
+  (`src/lib/sync/server.ts`). Every user-table query
+  goes through `requireUser()` and filters on its id.
+  Postgres column `natural_text` aliases to `natural`
+  (`natural` is a reserved word).
 - `src/lib/categoryMeta.ts` — icon + gradient wash +
   lead copy per category. Banners are CSS gradients,
   not photography (SPEC.md §5 wants photos — still a

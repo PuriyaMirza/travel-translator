@@ -94,6 +94,16 @@ export function NavDrawer() {
                 Translate
               </Link>
 
+              <Link
+                href="/vault"
+                className={cn(
+                  "text-body-bold block py-2 text-ink transition hover:text-brand motion-reduce:transition-none",
+                  pathname === "/vault" && "text-brand",
+                )}
+              >
+                Vault
+              </Link>
+
               <Eyebrow tone="muted" className="mt-6 mb-1">
                 Phrasebook
               </Eyebrow>

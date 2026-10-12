@@ -1,13 +1,11 @@
 import Link from "next/link";
 import { brand } from "@/lib/brand";
+import { AccountButton } from "./AccountButton";
 import { NavDrawer } from "./NavDrawer";
 
 /**
  * The app header (SPEC.md §5): hamburger left, wordmark centred, account
  * avatar right.
- *
- * The right slot is still held open and empty — an avatar with no account is a
- * button that does nothing. It arrives with auth in M3.
  *
  * The three-column grid (rather than `justify-between`) keeps the wordmark
  * optically centred regardless of what sits either side of it.
@@ -27,7 +25,9 @@ export function Header() {
           {brand.name}
         </Link>
 
-        <span aria-hidden className="justify-self-end" />
+        <span className="justify-self-end">
+          <AccountButton />
+        </span>
       </div>
     </header>
   );

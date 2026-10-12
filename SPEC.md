@@ -199,7 +199,7 @@ create table phrases (
                    ('greetings','dining','transit','shopping','lodging','emergency','general')),
   source_text    text not null,          -- English
   literal        text not null,
-  natural        text not null,
+  natural_text   text not null,         -- "natural" is reserved in Postgres; aliased to natural
   cultural_note  text not null default '',
   pronunciation  text not null default '',
   sort_order     int  not null default 0,
@@ -231,19 +231,20 @@ create table saved_phrases (
   locale         text not null,
   source_text    text not null,
   literal        text not null,
-  natural        text not null,
+  natural_text   text not null,         -- "natural" is reserved in Postgres; aliased to natural
   cultural_note  text not null default '',
   pronunciation  text not null,
   category       text not null,
   trip_pack_id   uuid references trip_packs(id),
   saved_at       timestamptz not null,
   updated_at     timestamptz not null,
-  deleted_at     timestamptz              -- tombstone
+  deleted_at     timestamptz,             -- tombstone
+  synced_at      timestamptz not null default now()  -- server clock; the pull cursor
 );
 create unique index saved_phrases_dedupe
   on saved_phrases (user_id, locale, lower(trim(source_text)))
   where deleted_at is null;
-create index saved_phrases_sync on saved_phrases (user_id, updated_at);
+create index saved_phrases_sync on saved_phrases (user_id, synced_at);
 
 create table show_cards (
   id             uuid primary key,         -- client-generated
@@ -253,14 +254,15 @@ create table show_cards (
   title          text not null,            -- the user's own English label, e.g. "Peanut allergy"
   source_text    text not null,            -- for 'address', the address verbatim
   literal        text not null,            -- the Spanish shown in show mode (section 12)
-  natural        text not null,
+  natural_text   text not null,         -- "natural" is reserved in Postgres; aliased to natural
   cultural_note  text not null default '',
   pronunciation  text not null,
   created_at     timestamptz not null,
   updated_at     timestamptz not null,
-  deleted_at     timestamptz
+  deleted_at     timestamptz,
+  synced_at      timestamptz not null default now()
 );
-create index show_cards_sync on show_cards (user_id, updated_at);
+create index show_cards_sync on show_cards (user_id, synced_at);
 ```
 
 ### TypeScript shapes
@@ -340,7 +342,10 @@ There are no database-side rules to lean on, so the server enforces ownership:
 - When online and signed in, the outbox flushes to `POST /api/sync`. Then `GET /api/sync?since=<cursor>` pulls rows changed on other devices.
 - Ids are client-generated UUIDs, so a row created offline keeps its id after syncing.
 - Deletes are tombstones (`deletedAt`), so they sync like any other write.
-- Conflicts: last write wins on `updatedAt` (`savedAt` before an edit), resolved on the server.
+- Conflicts: last write wins on `updatedAt` (the client's clock), resolved on the server.
+- The pull cursor is `synced_at`, the server's clock, set on every write — never `updatedAt`, which a device with a wrong clock could set to anything. Each pull re-reads a 30-second overlap so a late-committing write isn't skipped; applying a row twice is harmless.
+- Duplicates (same dedupe key, different id, e.g. the same phrase saved on two offline devices) are stored as tombstones, so the sending device converges on the surviving row at its next pull.
+- On sign-in, local data with no owner is adopted by that account. Local data owned by a different account is cleared, never uploaded. On sign-out, the device's copy is cleared; the server keeps it.
 - Logged out: the same IndexedDB stores, and the outbox waits. On sign-in it flushes and the user's server rows are pulled down. There is no separate "upload localStorage on login" path.
 - Build the sync as one helper parameterised by table, dedupe key, and timestamp field, not code specific to saved phrases. M3 uses it for `saved_phrases` (dedupe on `locale + normalized sourceText`). M5 reuses it for `show_cards` (dedupe on `kind + locale + normalized sourceText`).
 - Trip packs are created online only (they need the model call) and are cached into IndexedDB after creation.

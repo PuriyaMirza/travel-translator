@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import { EB_Garamond, Inter } from "next/font/google";
 import { Header } from "@/components/Header";
+import { SyncProvider } from "@/components/SyncProvider";
 import { brand } from "@/lib/brand";
 import "./globals.css";
 
@@ -41,6 +42,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       <body className="font-sans text-body flex min-h-full flex-col">
         <Header />
         {children}
+        <SyncProvider />
       </body>
     </html>
   );
