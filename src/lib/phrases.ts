@@ -12,7 +12,9 @@ import type { Phrase } from "./types";
  * Regenerate it with `node scripts/export-phrase-snapshot.mjs`.
  *
  * Only phrases with a pronunciation guide are shown: the app's phrase card
- * promises one, and the newer rows don't have them yet.
+ * promises one, and the newer rows don't have them yet. That is 42 rows in
+ * the six visible categories plus the 8 `general` essentials pinned on the
+ * home screen (src/lib/essentials.ts).
  *
  * House rules for the es-419 rows (data/phrases/es-419.csv):
  *
