@@ -14,15 +14,12 @@ Each photo gets a sibling `<name>.expected.json` (a `MenuScan`, per the plan's �
 | `06-fr-levantine-plats.jpg` | French | Long ingredient descriptions; **add-ons** ("Suppléments: … +5.00€"); unpriced choices ("Au choix: Merguez / Féta"); dot decimals ("16.90€") |
 | `07-it-primi.jpg` | Italian | Centred layout with prices on their own line ("16 Euro"); descriptions in parentheses; prep-time notes ("20 min"); a shadow across the page |
 | `08-ja-tomboy-drinks.jpg` | Japanese | Dense, multi-column layout; glass/carafe options (グラス / カラフェ); a **shared group price** ("All 660" covers 8 beer cocktails); glare over the lassi prices; cut off at the bottom; mixed English and Japanese headings |
+| `09-not-a-menu-settings.jpg` | English (UI) | **Not a menu → 422.** An iPhone Settings search list: a list of items with grey sub-lines that looks like a menu but has no prices or dishes. A hard negative |
 
-## Still needed
+## Ground-truth rules (owner decisions, 2026-10-29; mirrored in plan §3.4)
 
-- **One photo that isn't a menu** (a street sign, a receipt with nothing personal on it, a landscape). It tests the `isMenu: false` → 422 path.
-
-## Ground-truth questions these photos raise (settle in Phase 0, then update SPEC §14 and the prompt rules)
-
-1. **Bilingual menus (02):** `original` is the first or primary language line, and the parallel translation line produces no row. *Suggested default.*
-2. **Shared group prices (08, "All 660"):** a price printed explicitly for a group applies to every item in it. That isn't "inferring a price from a neighbour", so prompt rule 2 needs this exception spelled out.
-3. **Add-ons and "from" prices (06, 03):** keep them in `prices[].label` ("+ dill herring" with amount "+5.00", "from" with amount "7,00"). The amount stays verbatim, plus sign included.
-4. **No currency symbol (05, and 01's bare numbers):** leave `currency` as `""` unless a symbol or word is printed somewhere in the photo. Don't infer it from the language or country.
+1. **Bilingual menus (02):** `original` is the first or primary language line. The parallel translation line creates no row.
+2. **Shared group prices (08, "All 660"):** a price printed for a named group applies to every item in it.
+3. **Options, add-ons and "from" prices (04, 06, 03):** these go in `prices[].label` with the amount verbatim, sign included. A "…" under a column-header option means it isn't offered, so no entry.
+4. **Currency (all):** if a symbol or word is printed, use it (`currencySource: "printed"`). Otherwise estimate from the menu's language and the size of its prices (`"estimated"`), never from location. Expected values: 01 JPY (estimated), 02 EUR (printed), 03 EUR (printed), 04 EUR (printed), 05 EUR (estimated; the owner should confirm the country, since French is also used in CHF and CAD countries), 06 EUR (printed), 07 EUR (printed, "Euro"), 08 JPY (estimated), 09 n/a.
 5. **These are cropped photos (500–2,500 px),** smaller than a phone camera's 12+ MP originals. They test reading accuracy, not the client resize path. That path is covered by the owner's real-iPhone test in Phase 4.
