@@ -1689,7 +1689,7 @@
     "sourceText": "Where is the bathroom?",
     "literal": "¿Dónde se encuentra el baño?",
     "natural": "¿Dónde está el baño?",
-    "pronunciation": ""
+    "pronunciation": "DOHN-deh ehs-TAH ehl BAH-nyoh"
   },
   {
     "id": "general-dont-understand",
@@ -1698,7 +1698,7 @@
     "sourceText": "I don't understand",
     "literal": "No comprendo",
     "natural": "No entiendo",
-    "pronunciation": ""
+    "pronunciation": "noh ehn-TYEHN-doh"
   },
   {
     "id": "general-repeat",
@@ -1707,7 +1707,7 @@
     "sourceText": "Could you repeat that?",
     "literal": "¿Podría repetirlo, por favor?",
     "natural": "¿Me lo puede repetir?",
-    "pronunciation": ""
+    "pronunciation": "meh loh PWEH-deh reh-peh-TEER"
   },
   {
     "id": "general-slower",
@@ -1716,7 +1716,7 @@
     "sourceText": "Could you speak more slowly?",
     "literal": "¿Podría hablar más despacio, por favor?",
     "natural": "¿Puede hablar más despacio?",
-    "pronunciation": ""
+    "pronunciation": "PWEH-deh ah-BLAHR mahs dehs-PAH-syoh"
   },
   {
     "id": "general-sorry",
@@ -1725,7 +1725,7 @@
     "sourceText": "I'm sorry",
     "literal": "Lo siento",
     "natural": "Perdón",
-    "pronunciation": ""
+    "pronunciation": "pehr-DOHN"
   },
   {
     "id": "general-lost",
@@ -1734,7 +1734,7 @@
     "sourceText": "I'm lost",
     "literal": "Me he perdido",
     "natural": "Me perdí",
-    "pronunciation": ""
+    "pronunciation": "meh pehr-DEE"
   },
   {
     "id": "general-map",
@@ -1743,7 +1743,7 @@
     "sourceText": "Can you show me on the map?",
     "literal": "¿Podría mostrármelo en el mapa?",
     "natural": "¿Me lo puede mostrar en el mapa?",
-    "pronunciation": ""
+    "pronunciation": "meh loh PWEH-deh mohs-TRAHR ehn ehl MAH-pah"
   },
   {
     "id": "general-far",
@@ -1824,7 +1824,7 @@
     "sourceText": "Can you help me?",
     "literal": "¿Podría ayudarme, por favor?",
     "natural": "¿Me puede ayudar?",
-    "pronunciation": ""
+    "pronunciation": "meh PWEH-deh ah-yoo-DAHR"
   },
   {
     "id": "greetings-hello",

@@ -2,8 +2,10 @@ import Link from "next/link";
 import { Languages } from "lucide-react";
 import { brand } from "@/lib/brand";
 import { dailyPhrase } from "@/lib/dailyPhrase";
+import { ESSENTIAL_PHRASES } from "@/lib/essentials";
 import { CategoryGrid } from "@/components/CategoryGrid";
 import { DailyPhraseCard } from "@/components/DailyPhraseCard";
+import { EssentialPhrases } from "@/components/EssentialPhrases";
 import { Eyebrow } from "@/components/Eyebrow";
 
 /**
@@ -19,6 +21,10 @@ export default function Home() {
       <p className="text-lead text-muted">{brand.tagline}</p>
 
       <div className="mt-8">
+        <EssentialPhrases phrases={ESSENTIAL_PHRASES} />
+      </div>
+
+      <div className="mt-10">
         <DailyPhraseCard phrase={dailyPhrase()} />
       </div>
 
