@@ -92,68 +92,71 @@ Editorial, not utilitarian. The reference feel is a well-made travel magazine: g
 
 ### Colors
 
+"Stamp blues" (adopted Oct 2026 from Figma: Playground Env › Language App › "Stamp blues palette · A Light editorial"). Ink-outlined, flat, no drop shadows. Figma variable names in brackets.
+
 ```css
 :root {
-  --bg-main:        #FAF8F5;  /* warm cream — page background */
+  --bg-main:        #F2F1EA;  /* stone — page background [surface-4] */
   --bg-card:        #FFFFFF;
-  --bg-card-subtle: #F4EBD0;  /* warm sand — pills, skeletons */
-  --bg-dark:        #1C1917;  /* charcoal — overlays, banners */
+  --bg-card-subtle: #A6DCD9;  /* mint — feature cards, hovers, skeletons [surface-3] */
+  --bg-dark:        #1A1856;  /* navy — overlays, show mode [surface-1] */
 
-  --brand:          #B91C1C;  /* deep crimson — the accent, used with restraint */
-  --brand-hover:    #991B1B;
-  --accent-gold:    #EAB308;
-  --accent-sea:     #A3D9C9;
+  --brand:          #33308A;  /* indigo — eyebrows, primary actions [surface-2] */
+  --brand-hover:    #1A1856;
+  --accent-sea:     #A6DCD9;
+  --accent-rule:    #16151C;  /* the short rule before eyebrows [accent-2] */
 
-  --text-main:      #1C1917;
-  --text-muted:     #8C7C6B;  /* warm sepia */
-  --text-inverse:   #FFFFFF;
+  --text-main:      #1A1856;
+  --text-muted:     #33308A;  /* the design has no grey */
+  --text-inverse:   #F2F1EA;
 
-  --border-light:   #E7E5E4;
-  --border-brand:   #FCA5A5;
+  --border-light:   #1A1856;  /* outlines are solid ink */
+  --border-brand:   #33308A;
 
-  --shadow-soft: 0 10px 25px -5px rgba(0,0,0,0.04), 0 8px 10px -6px rgba(0,0,0,0.02);
+  --shadow-soft: none;
 }
 ```
 
-Crimson is for the wordmark, primary actions, and the eyebrow labels. Nothing else. If a screen has more than two crimson elements, one of them is wrong.
+Mint is for one feature surface per screen (the daily phrase, a translation result). Indigo fills are for the primary action only.
 
 ### Typography
 
 Two faces, deliberately contrasted:
 
-- **Display** — a high-contrast serif or a wide geometric sans for the wordmark and page titles. The wordmark is set in caps with wide letter-spacing (~0.08em) and is the loudest thing on any screen.
-- **Body/UI** — Inter for everything else.
+- **Display** — Fraunces, always Light Italic with `"SOFT" 0, "WONK" 1`. Page titles and pronunciation guides.
+- **Body/UI** — Manrope for everything else, including the wordmark (Bold, caps, 0.22em tracking).
 
 | Token | Size | Weight | Line height | Notes |
 |---|---|---|---|---|
-| `display` | 32px | 700 | 1.15 | page titles |
-| `h1` | 24px | 700 | 1.2 | |
+| `display` | 36px | 300 | 40px | page titles, Fraunces italic |
+| `h1` | 24px | 300 | 1.2 | Fraunces italic |
 | `h2` | 20px | 600 | 1.3 | |
-| `lead` | 20px | 300 | 1.5 | the big airy intro paragraph on category pages — this is the editorial signature, keep it light-weight and roomy |
+| `lead` | 20px | 300 | 1.5 | the airy intro paragraph on category pages |
 | `body` | 16px | 400 | 1.5 | |
 | `body-bold` | 16px | 600 | 1.5 | |
 | `small` | 14px | 400 | 1.4 | |
-| `eyebrow` | 12px | 500 | 1.3 | uppercase, 0.1em tracking, crimson or muted — e.g. "PHRASEBOOK: TRANSIT" |
+| `eyebrow` | 11px | 600 | 1.35 | uppercase, 0.14em tracking, indigo, led by a 20×2px near-black rule |
+| `wordmark` | 18px | 700 | 1.35 | uppercase, 0.22em tracking |
 
 ### Shape
 
-- Cards: 32px radius — implemented as the `rounded-card` utility. (Tailwind v4's built-in `rounded-3xl` is 24px, not 32px — don't use it here.)
-- Inset images: 24px radius — implemented as `rounded-image`.
-- Buttons and pills: fully rounded
-- Card press state: `scale(0.98)`, 100ms
-- Card hover: `translateY(-2px)`, deeper shadow, border shifts to `--border-brand` (implemented as the `border-blush` utility — see the implementation note below)
+- Cards: 24px radius — `rounded-card`.
+- Category tiles: 18px — `rounded-tile`. Translate input: 20px — `rounded-field`.
+- Inset images: 24px radius — `rounded-image`.
+- Buttons, chips and inputs-as-links: fully rounded
+- Press state: `scale(0.98)`, 100ms. Hover: mint wash (`bg-sand/60`), no lift or shadow.
 
 ### Implementation note: token naming
 
 `:root` holds the tokens above under these exact names — that is the contract. Tailwind's `@theme inline` then maps them to shorter utility names, because these `--text-*` colour names collide with Tailwind v4's own `--text-*` font-size namespace:
 
 ```
-bg-canvas, bg-card, bg-sand, bg-charcoal
+bg-canvas, bg-card, bg-sand, bg-charcoal, bg-rule
 text-brand, text-ink, text-muted, text-inverse
 border-hairline, border-blush
 ```
 
-`--border-brand` maps to `border-blush` specifically, not `border-brand` — a literal `border-brand` utility would resolve to crimson (`#B91C1C`), not this token's pale pink (`#FCA5A5`).
+`--border-brand` maps to `border-blush` specifically, not `border-brand` — a literal `border-brand` utility resolves to `--brand`. Both are indigo today, but keep the mapping so the two can diverge.
 
 ### The layout decision that matters
 
@@ -182,7 +185,7 @@ Header bar: hamburger left, wordmark centered, account avatar right. No floating
 | `/trip` | Trip prep: describe the trip, preview generated phrases, save them to the vault. M6 — see section 13. |
 | `/api/trip-pack` | POST. Server route → Anthropic. Generates a batch of phrases for one trip. M6. |
 
-Every list screen needs three states beyond default: loading (skeleton cards, `--bg-card-subtle` blocks, `animate-pulse`), empty (dashed border, a clear invitation to act, never an apology), and error (crimson-tinted card, plain statement of what failed, retry button). Error copy names the problem and the fix — it does not apologize and does not mention the AI provider by name.
+Every list screen needs three states beyond default: loading (skeleton cards, `--bg-card-subtle` blocks, `animate-pulse`), empty (dashed border, a clear invitation to act, never an apology), and error (brand-tinted card, plain statement of what failed, retry button). Error copy names the problem and the fix — it does not apologize and does not mention the AI provider by name.
 
 ---
 
@@ -506,7 +509,7 @@ Spanish marks the speaker's gender in phrases travelers say constantly: *alérgi
 - The user's English `sourceText` sits underneath in `small` and `--text-muted`, so a bilingual reader can check it and the user knows exactly what they're showing.
 - Speak button (existing `useSpeech`) for reading it aloud.
 - The Screen Wake Lock API keeps the screen on while show mode is open. This is progressive: where the API is missing, nothing breaks and nothing is shown.
-- No crimson in show mode. It's a high-contrast reading surface, not a branded one.
+- No brand accents in show mode. It's a high-contrast reading surface, not a branded one.
 
 ### List (`/cards`)
 

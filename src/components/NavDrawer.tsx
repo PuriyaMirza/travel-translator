@@ -46,7 +46,7 @@ export function NavDrawer() {
         aria-expanded={open}
         className="-ml-2 flex size-10 items-center justify-center rounded-full text-ink transition hover:bg-sand/60 motion-reduce:transition-none"
       >
-        <Menu className="size-5" />
+        <Menu className="size-[22px]" />
       </button>
 
       {open && (

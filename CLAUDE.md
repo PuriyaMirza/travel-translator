@@ -97,8 +97,10 @@ worker yet — that is M4.
 - **Brand:** `src/lib/brand.ts` exports `brand.name`,
   `.tagline`, `.defaultLocale` (`es-419`). `layout.tsx`
   reads it for `<title>`. `viewport.themeColor` in
-  layout.tsx duplicates `--brand` (`#B91C1C`) because
-  Next needs a static literal — keep the two in step.
+  layout.tsx and `theme_color` in manifest.ts duplicate
+  `--bg-main` (`#F2F1EA`) because Next needs a static
+  literal — keep them in step. The app icons hardcode
+  navy `#1A1856` / stone `#F2F1EA` for the same reason.
 - **Categories:** `src/lib/categories.ts` —
   `CATEGORIES` tuple is canonical and permanent.
   `VISIBLE_CATEGORIES` drops `general` (the model's
@@ -142,10 +144,15 @@ short Tailwind utility names (`bg-canvas`, `text-ink`,
 Footguns already paid for (see BUILDLOG.md):
 
 - `--border-brand` → `border-blush`, NOT `border-brand`
-  (which would resolve to crimson).
-- Cards use `rounded-card` (32px) / images
-  `rounded-image` (24px); Tailwind v4's `rounded-3xl`
-  is 24px.
+  (which resolves to `--brand`; same indigo today, but
+  the two are allowed to diverge).
+- Cards use `rounded-card` (24px), category tiles
+  `rounded-tile` (18px), the translate input
+  `rounded-field` (20px), images `rounded-image` (24px).
+- `font-display` also sets italic + Fraunces
+  `"SOFT" 0, "WONK" 1` (in `@layer utilities`,
+  globals.css). Spanish shown in show mode stays bold
+  sans for legibility.
 - `shadow-soft` is an `@utility`, not a theme token
   (token form self-references).
 - `src/lib/utils.ts` `cn()` extends `tailwind-merge`

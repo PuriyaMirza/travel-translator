@@ -1,6 +1,6 @@
 "use client";
 
-import { History, Languages, Loader2, Smartphone } from "lucide-react";
+import { Languages, Loader2, Smartphone } from "lucide-react";
 import { brand } from "@/lib/brand";
 import { useState } from "react";
 import {
@@ -12,8 +12,8 @@ import { useSpeakerGender } from "@/lib/local/settings";
 import { NETWORK_MESSAGE, OFFLINE_MESSAGE } from "@/lib/messages";
 import type { Phrase } from "@/lib/types";
 import { ErrorCard } from "./ErrorCard";
-import { PhraseCard } from "./PhraseCard";
 import { PhraseCardSkeleton } from "./PhraseCardSkeleton";
+import { TranslationResult } from "./TranslationResult";
 
 type Result =
   | { status: "empty" }
@@ -24,6 +24,9 @@ type Result =
 // How many recent translations the list under the input shows. The cache
 // holds 50 (SPEC.md §13); the list is a shortcut, not the whole history.
 const RECENT_SHOWN = 10;
+
+// Mirrors MAX_INPUT_LENGTH in src/lib/translate.ts (server-only, so not importable here).
+const MAX_INPUT = 500;
 
 export function TranslateForm() {
   const { speakerGender } = useSpeakerGender();
@@ -82,56 +85,43 @@ export function TranslateForm() {
 
   const isLoading = result.status === "loading";
 
+  // Figma: Language App › "Stamp blues palette · A Light editorial · Translate
+  // result". Input, then the state (empty / loading / result / error), then the
+  // recent translations as an italic footer line.
   return (
-    <div className="space-y-6">
-      <form onSubmit={handleSubmit} className="space-y-3">
-        <textarea
-          value={input}
-          onChange={(event) => setInput(event.target.value)}
-          placeholder="Type what you need to say…"
-          rows={3}
-          maxLength={500}
-          aria-label="Text to translate"
-          className="text-body w-full resize-none rounded-card border border-hairline bg-card p-4 text-ink shadow-soft placeholder:text-muted focus:border-blush focus:outline-none"
-        />
+    <div className="space-y-[18px]">
+      <form onSubmit={handleSubmit} className="space-y-2.5">
+        <div className="flex flex-col gap-1.5 rounded-field border border-ink p-[18px] text-ink focus-within:border-brand">
+          <textarea
+            value={input}
+            onChange={(event) => setInput(event.target.value)}
+            placeholder="Type what you need to say…"
+            rows={2}
+            maxLength={MAX_INPUT}
+            aria-label="Text to translate"
+            aria-describedby="translate-count"
+            className="w-full resize-none bg-transparent text-[17px] leading-6 placeholder:text-muted focus:outline-none"
+          />
+          <p id="translate-count" className="text-[12px]">
+            {input.length} / {MAX_INPUT}
+          </p>
+        </div>
         <button
           type="submit"
           disabled={isLoading || !input.trim()}
-          className="text-body-bold flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-inverse transition hover:bg-brand-hover disabled:opacity-50 motion-reduce:transition-none"
+          className="flex w-full items-center justify-center gap-2 rounded-full bg-brand py-4 text-[15px] font-bold text-inverse transition hover:bg-brand-hover disabled:opacity-50 motion-reduce:transition-none"
         >
           {isLoading ? (
-            <Loader2 className="size-5 animate-spin" />
+            <Loader2 aria-hidden className="size-[18px] animate-spin" />
           ) : (
-            <Languages className="size-5" />
+            <Languages aria-hidden className="size-[18px]" />
           )}
           Translate
         </button>
       </form>
 
-      {recent.length > 0 && (
-        <section aria-labelledby="recent-heading">
-          <h2 id="recent-heading" className="text-small flex items-center gap-2 text-muted">
-            <History className="size-4" />
-            Recent
-          </h2>
-          <ul className="mt-2 flex flex-wrap gap-2">
-            {recent.slice(0, RECENT_SHOWN).map((entry) => (
-              <li key={entry.key} className="min-w-0 max-w-full">
-                <button
-                  type="button"
-                  onClick={() => showRecent(entry)}
-                  className="text-small block max-w-full truncate rounded-full bg-sand px-4 py-2 text-ink transition hover:bg-sand/70 motion-reduce:transition-none"
-                >
-                  {entry.sourceText}
-                </button>
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
       {result.status === "empty" && (
-        <div className="rounded-card border-2 border-dashed border-hairline p-8 text-center">
+        <div className="rounded-card border border-dashed border-ink p-8 text-center">
           <p className="text-body text-muted">
             Type an English or Spanish phrase above to see how you&rsquo;d actually say it.
           </p>
@@ -144,16 +134,36 @@ export function TranslateForm() {
         <div className="space-y-2">
           {result.fromDevice && (
             <p className="text-small flex items-center gap-2 text-muted">
-              <Smartphone className="size-4" />
+              <Smartphone aria-hidden className="size-4" />
               Saved on this device
             </p>
           )}
-          <PhraseCard phrase={result.phrase} />
+          <TranslationResult phrase={result.phrase} />
         </div>
       )}
 
       {result.status === "error" && (
         <ErrorCard message={result.message} onRetry={() => void runTranslation(lastSubmitted)} />
+      )}
+
+      {recent.length > 0 && (
+        <section aria-labelledby="recent-heading" className="border-t border-rule pt-2">
+          <p className="text-center font-display text-[13px] font-light text-ink">
+            <span id="recent-heading">Recent</span>
+            {recent.slice(0, RECENT_SHOWN).map((entry) => (
+              <span key={entry.key}>
+                <span aria-hidden> · </span>
+                <button
+                  type="button"
+                  onClick={() => showRecent(entry)}
+                  className="underline-offset-2 hover:underline"
+                >
+                  {entry.sourceText}
+                </button>
+              </span>
+            ))}
+          </p>
+        </section>
       )}
     </div>
   );

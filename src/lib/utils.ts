@@ -25,6 +25,7 @@ const twMerge = extendTailwindMerge({
             "body-bold",
             "small",
             "eyebrow",
+            "wordmark",
           ],
         },
       ],

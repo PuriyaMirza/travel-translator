@@ -32,15 +32,16 @@ export function AccountButton() {
     };
   }, [open]);
 
+  // Outlined ink circle (Stamp blues design).
   const avatarClass =
-    "-mr-2 flex size-10 items-center justify-center rounded-full text-ink transition hover:bg-sand/60 motion-reduce:transition-none";
+    "flex size-[34px] items-center justify-center rounded-full border border-ink text-ink transition hover:bg-sand/60 motion-reduce:transition-none";
 
-  if (isPending) return <span className="size-10" aria-hidden />;
+  if (isPending) return <span className="block size-[34px]" aria-hidden />;
 
   if (!session?.user) {
     return (
       <Link href="/auth/sign-in" aria-label="Sign in" className={avatarClass}>
-        <User className="size-5" />
+        <User className="size-4" />
       </Link>
     );
   }
@@ -60,7 +61,7 @@ export function AccountButton() {
         aria-expanded={open}
         className={`${avatarClass} bg-sand`}
       >
-        <User className="size-5" />
+        <User className="size-4" />
       </button>
 
       {open && (
