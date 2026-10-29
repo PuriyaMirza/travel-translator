@@ -433,3 +433,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - The dev server logs a 500 from `/api/auth/get-session` (Neon env vars aren't set in this sandbox); harmless here.
   - The 200% check doubles the root font size; it is not Safari's text-size setting. Real-iPhone checks stay in the Phase 4 phone test.
 - **Open questions:** none for the owner from Phase 2.
+
+### [2026-10-29 20:00] M7 Phase 3 prep: Neon Auth trusted domain for the feat/menu-scan preview
+- **Milestone:** M7
+- **Files:** modified `BUILDLOG.md`. External: Neon project `wild-queen-99254638`, branch `production` (`br-summer-cloud-b8bf9vq4`), Neon Auth trusted domains.
+- **Decisions (owner-approved, 2026-10-29):** added `https://travel-translator-git-feat-menu-scan-puriyas-projects-c08df284.vercel.app` (better_auth), the stable branch alias, so sign-in works on the preview for the eval run and the Phase 4 phone test. Verified by listing the domains afterwards (4 entries; the 3 existing ones unchanged).
+- **Deviations:** none.
+- **Incomplete:** Not tested with a real sign-in from the preview (this sandbox can't reach *.vercel.app). Whether Vercel Deployment Protection blocks the eval script on the preview is unknown.
+- **Open questions:** Remove this domain (and the older `git-claude-c-e1a932` one) once M7 ships?
