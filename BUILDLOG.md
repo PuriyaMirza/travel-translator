@@ -413,3 +413,23 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** column widths (above). The currency picker sits under the "Your menu" heading on the left, not in the header's top-right corner as SPEC §14 says — to fix in Phase 2.
 - **Incomplete:** `fetchMenuScan` still returns the Renoir fixture after 1.8 s; dev-only `?force=401|413|…` forces each error. Unknown statuses (incl. 500) reuse `MENU_UPSTREAM_MESSAGE`. Not run: `npm run build`, axe. C checked result/loading/empty/error/offline at 390 and 320 px in Playwright (no page scroll; focus moves verified for forced 401/413/422/429/502/network; Cancel returns focus to Take photo); I viewed the 320 px result screenshot.
 - **Open questions:** none for the owner yet; widths and picker placement are mine to settle in Phase 2.
+
+### [2026-10-29 19:55] M7 Phase 2 done: real scan call, a11y test suite, scanner hang fix
+- **Milestone:** M7
+- **Files:** created `playwright.config.ts`, `tests/a11y/menu.spec.ts`. Modified `src/components/MenuScanner.tsx`, `src/components/MenuTable.tsx`, `package.json` (`test:a11y` script; devDependencies `@playwright/test` 1.63.0 and `@axe-core/playwright` ^4.14.0, approved D5; `overrides.playwright-core` 1.63.0), `package-lock.json`, `.gitignore` (`/test-results/`, `/playwright-report/`), `CLAUDE.md` (Commands: `test:a11y`), `SPEC.md` §14 (column widths, scroll region), `BUILDLOG.md`.
+- **Decisions:**
+  - `fetchMenuScan` now does the real multipart `POST /api/menu-scan`; non-200 → `MenuScanFetchError(status, code, message)`; the 200 body is re-validated with `MenuScanSchema` (malformed → 502 path). Fixture import and dev `?force=` switches deleted. 500/unknown statuses now show `MENU_UNKNOWN_MESSAGE`, 502 shows `MENU_UPSTREAM_MESSAGE`.
+  - Currency picker held in the top-right corner (header row no longer wraps; the eyebrow wraps beside it), per SPEC §14.
+  - `@playwright/test` pinned to 1.63.0 to match the preinstalled browser. `@axe-core/playwright` pulled `playwright-core` 1.64.1, whose `Page` type didn't match; an npm `overrides` entry pins it to 1.63.0 so there is one Playwright in the tree.
+  - Suite: axe with WCAG 2.0/2.1/2.2 A+AA tags, no page-level horizontal scroll, and focus assertions, for empty, loading, result (with and without Option), 422, 413, 429, 502, 401 and offline at 320 and 390 px, plus the Renoir result at 320 px with 200% root font size. `/api/menu-scan` is mocked; the real client image prep runs on the Renoir photo.
+- **Bugs found and fixed by the suite:**
+  1. **Scanner could hang forever on "Reading your menu…"** (about 1 run in 7). `MenuScanner` had `useEffect(() => () => abortRef.current?.abort(), [])`. React re-runs effect cleanups while keeping state (StrictMode / Fast Refresh in dev), which aborted the live scan; `start()` treats any abort as intentional and returned silently. Confirmed with temporary logging (cleanup fired, then "prepared, aborted: true"), then removed the effect: 0/20 hangs in the same loop, and the full suite passed 4 runs in a row. Aborting never stopped the server-side model call anyway. I did not prove whether production can hit the same path, but the fix removes the mechanism.
+  2. **At 200% text the table scrolled horizontally inside a box keyboard users couldn't reach** (axe `scrollable-region-focusable`). The wrapper is now a focusable, labelled region with a focus ring.
+- **Checks:** `npm run lint`, `npm run typecheck`, `npm run build` all clean. `npm run test:a11y`: 21/21. The client bundle contains no `ANTHROPIC_API_KEY`, no `@anthropic-ai` and no fixture menu text.
+- **Deviations:** column widths 28/34/16/22 (SPEC updated to match).
+- **Incomplete:**
+  - Nothing has hit the real model, Neon Auth or the deployed route (Phase 3 runs that, on the owner's environment or the Vercel preview).
+  - The scroll region is always a tab stop, even when nothing overflows.
+  - The dev server logs a 500 from `/api/auth/get-session` (Neon env vars aren't set in this sandbox); harmless here.
+  - The 200% check doubles the root font size; it is not Safari's text-size setting. Real-iPhone checks stay in the Phase 4 phone test.
+- **Open questions:** none for the owner from Phase 2.

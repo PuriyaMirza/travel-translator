@@ -22,6 +22,7 @@ import {
   MENU_RATE_LIMITED_MESSAGE,
   MENU_SIGN_IN_MESSAGE,
   MENU_TOO_LARGE_MESSAGE,
+  MENU_UNKNOWN_MESSAGE,
   MENU_UPSTREAM_MESSAGE,
   NETWORK_MESSAGE,
   OFFLINE_MENU_MESSAGE,
@@ -31,15 +32,7 @@ import { Eyebrow } from "./Eyebrow";
 import { countItems, currencyLabel, currencyName, MenuTable } from "./MenuTable";
 
 /* ---------------------------------------------------------------------------
- * Network. EVERYTHING that talks to the server lives in `fetchMenuScan`.
- *
- * TODO (M7 Phase 2): replace the body with the real call —
- *   POST /api/menu-scan, multipart/form-data, one field `image` (the blob as
- *   "menu.jpg") — and `{ scan }` out of a 200. For any non-200, read
- *   `body.error.{code,message}` and throw `new MenuScanFetchError(status, code,
- *   message)`. A rejected `fetch` (no network) can just propagate: the scanner
- *   treats any non-MenuScanFetchError, non-abort throw as a network failure.
- *   Then delete the fixture import and `devForcedFailure` below.
+ * Network. Everything that talks to the server lives in `fetchMenuScan`.
  * ------------------------------------------------------------------------- */
 
 /** A non-200 from /api/menu-scan, in the route's `{ error: { code, message } }` shape. */
@@ -55,56 +48,31 @@ export class MenuScanFetchError extends Error {
   }
 }
 
-const STUB_DELAY_MS = 1800;
-
 /**
- * Dev only: `/menu?force=401|413|415|422|429|502|500|network|slow` makes the
- * stub fail (or, for `slow`, take 20 s so the "up to a minute" line shows).
+ * POST /api/menu-scan (SPEC.md §14): multipart, one field `image`. A rejected
+ * `fetch` (no network) propagates as-is; the scanner treats any throw that
+ * isn't a MenuScanFetchError or an abort as a network failure. The 200 body is
+ * re-validated against the contract so a malformed response lands in the error
+ * state instead of a half-rendered table.
  */
-function devForcedFailure(): string | null {
-  if (process.env.NODE_ENV === "production") return null;
-  return new URLSearchParams(window.location.search).get("force");
-}
-
-const FORCED_ERRORS: Record<string, [number, string]> = {
-  "401": [401, "unauthorized"],
-  "413": [413, "too_large"],
-  "415": [415, "unsupported_type"],
-  "422": [422, "not_a_menu"],
-  "429": [429, "rate_limited"],
-  "502": [502, "upstream"],
-  "500": [500, "unknown"],
-};
-
-function wait(ms: number, signal: AbortSignal): Promise<void> {
-  return new Promise((resolve, reject) => {
-    if (signal.aborted) {
-      reject(new DOMException("Aborted", "AbortError"));
-      return;
-    }
-    const timer = setTimeout(() => {
-      signal.removeEventListener("abort", onAbort);
-      resolve();
-    }, ms);
-    const onAbort = () => {
-      clearTimeout(timer);
-      reject(new DOMException("Aborted", "AbortError"));
-    };
-    signal.addEventListener("abort", onAbort, { once: true });
-  });
-}
-
-// `blob` goes unused until the real call lands.
 export async function fetchMenuScan(blob: Blob, signal: AbortSignal): Promise<MenuScan> {
-  const force = devForcedFailure();
-  await wait(force === "slow" ? 20_000 : STUB_DELAY_MS, signal);
-  if (force === "network") throw new TypeError("Failed to fetch");
-  const forced = force ? FORCED_ERRORS[force] : undefined;
-  if (forced) throw new MenuScanFetchError(forced[0], forced[1], "Forced for development.");
-  const { default: fixture } = await import(
-    "../../data/menu-fixtures/01-ja-renoir-coffee.expected.json"
-  );
-  return MenuScanSchema.parse(fixture);
+  const form = new FormData();
+  form.append("image", blob, "menu.jpg");
+  const response = await fetch("/api/menu-scan", { method: "POST", body: form, signal });
+
+  const body: unknown = await response.json().catch(() => null);
+  if (!response.ok) {
+    const error = (body as { error?: { code?: unknown; message?: unknown } } | null)?.error;
+    throw new MenuScanFetchError(
+      response.status,
+      typeof error?.code === "string" ? error.code : "unknown",
+      typeof error?.message === "string" ? error.message : "",
+    );
+  }
+
+  const parsed = MenuScanSchema.safeParse((body as { scan?: unknown } | null)?.scan);
+  if (!parsed.success) throw new MenuScanFetchError(502, "upstream", "Malformed scan.");
+  return parsed.data;
 }
 
 /* ------------------------------------------------------------------------- */
@@ -138,8 +106,10 @@ function failureStage(error: unknown): Stage {
         return { status: "error", message: MENU_NOT_A_MENU_MESSAGE, retryable: false };
       case 429:
         return { status: "error", message: MENU_RATE_LIMITED_MESSAGE, retryable: true };
-      default:
+      case 502:
         return { status: "error", message: MENU_UPSTREAM_MESSAGE, retryable: true };
+      default:
+        return { status: "error", message: MENU_UNKNOWN_MESSAGE, retryable: true };
     }
   }
   return { status: "error", message: NETWORK_MESSAGE, retryable: true };
@@ -335,7 +305,7 @@ function CurrencyPicker({
       : "Currency, not detected";
 
   return (
-    <div className="flex items-center gap-2">
+    <div className="flex shrink-0 items-center gap-2">
       {showEstimated && (
         <span aria-hidden className="text-small text-muted">
           est.
@@ -401,8 +371,10 @@ function MenuResult({ scan, onReset }: { scan: MenuScan; onReset: () => void }) 
 
   return (
     <div className="space-y-5">
-      <div className="flex flex-wrap items-start justify-between gap-3">
-        <div className="min-w-0">
+      {/* No wrap: the picker stays in the top-right corner (SPEC.md §14) and the
+          eyebrow wraps beside it instead. */}
+      <div className="flex items-start justify-between gap-3">
+        <div className="min-w-0 flex-1">
           <Eyebrow>
             <span>
               Menu
@@ -487,7 +459,12 @@ export function MenuScanner() {
     };
   }, [thumbUrl]);
 
-  useEffect(() => () => abortRef.current?.abort(), []);
+  // No abort-on-unmount effect: React re-runs effect cleanups while keeping
+  // state (StrictMode, Fast Refresh), so it aborted live scans and `start`
+  // then returned silently, leaving "Reading your menu…" up forever (~1 run
+  // in 7 in test:a11y). Only Cancel and a newer scan abort, and both set the
+  // next stage themselves. Aborting would not stop the server-side call
+  // anyway, and a late setState after a real unmount is a no-op.
 
   // Move focus to what replaced the content the user acted on. (The result
   // moves its own focus to the results heading.)

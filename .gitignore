@@ -43,3 +43,7 @@ next-env.d.ts
 
 # menu-scan eval output
 data/menu-fixtures/results/
+
+# playwright (test:a11y)
+/test-results/
+/playwright-report/

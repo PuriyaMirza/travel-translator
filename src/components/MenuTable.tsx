@@ -114,7 +114,16 @@ export function MenuTable({ scan, currency }: { scan: MenuScan; currency: string
   }`;
 
   return (
-    <div className="overflow-x-auto rounded-card border border-hairline bg-card">
+    // Wrapping is the plan; at 200% text a long price can still overflow, and
+    // then the table scrolls inside this box (WCAG 1.4.10 allows it for data
+    // tables). A scrollable box must be reachable by keyboard, hence the
+    // focusable labelled region.
+    <div
+      role="region"
+      aria-label="Menu items"
+      tabIndex={0}
+      className="overflow-x-auto rounded-card border border-hairline bg-card focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand"
+    >
       <table className="w-full table-fixed border-collapse text-left text-ink">
         <caption className="px-3 py-2.5 text-left text-small text-muted">{caption}</caption>
         <colgroup>

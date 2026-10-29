@@ -60,7 +60,7 @@ later phase. These apply to every task:
   read badly ("—", "¥") get `sr-only` text.
 - Data tables: `<table>` with `<caption>`, scoped `<th>`,
   no `rowSpan`.
-- `npm run test:a11y` (axe, from M7 Phase 2) must pass
+- `npm run test:a11y` (axe) must pass
   with no violations before a UI change ships.
 
 ## Build log
@@ -104,8 +104,12 @@ describes.
   globals that layout.tsx and the `[category]` page
   rely on.
 
-No unit-test runner is configured. `npm run test:a11y`
-(Playwright + axe) arrives in M7 Phase 2.
+- `npm run test:a11y` — Playwright + axe over every
+  `/menu` state at 320 and 390 px (and 200% text), with
+  `/api/menu-scan` mocked. Starts `next dev` itself.
+  Screenshots go to `test-results/`.
+
+No unit-test runner is configured.
 
 `next dev` may append an agent-instruction block to
 this file ("This is NOT the Next.js you know…"). It is
