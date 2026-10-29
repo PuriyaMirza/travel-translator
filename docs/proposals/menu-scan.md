@@ -358,6 +358,13 @@ Every brief also includes this line: *Repo rules: CLAUDE.md conventions apply. N
 
 ## 8. Later (v1.1 candidates)
 
+**Planned next step (owner-confirmed, 2026-10-29): currency conversion.** v1's picker only relabels. Conversion is a separate, later milestone. Design notes for when it's planned:
+- **The printed price stays primary,** because it's what you pay. The converted amount is a secondary line, clearly approximate: "≈ $6.20".
+- **Home currency** defaults from the browser's locale region and can be changed in settings. The source currency is whatever the v1 picker currently shows.
+- **Rates** come server-side from a provider still to be chosen (research licence, cost and update frequency). They're cached daily, and the last rates are kept on the device so conversion works offline, labelled "Rates from Oct 29".
+- **Accessibility:** "approximate" is said in text, not shown with colour alone ("940 Japanese yen, about 6 US dollars 20 cents"). The rates date is readable by screen readers.
+
+
 - **Saved recent scans** on the device (IndexedDB), readable offline at the table.
 - **Multi-page menus:** "Add another page" appends to the current scan.
 - **Show to server:** tap a row to get a full-screen view of the original name, reusing ShowMode, with pronunciation and speak buttons.
