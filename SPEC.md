@@ -631,7 +631,14 @@ Prices are strings: the model copies the digits as printed and the client only a
 
 - **Request:** `POST /api/menu-scan`, `multipart/form-data`, one field `image` (`image/jpeg`, ≤ 4 MB).
 - **Response 200:** `{ scan: MenuScan }`.
-- **Errors**, in the existing `{ error: { message } }` shape: 401 signed out · 413 too large · 415 not an image · 422 `isMenu` false · 429 throttled · 502 model call failed.
+- **Errors**, in the existing `{ error: { code, message } }` shape. Copy comes from the `MENU_*` constants in `src/lib/messages.ts`:
+  - 401 `unauthorized` (`MENU_SIGN_IN_MESSAGE`)
+  - 413 `too_large` (`MENU_TOO_LARGE_MESSAGE`)
+  - 415 `unsupported_type` (`MENU_NOT_AN_IMAGE_MESSAGE`)
+  - 422 `not_a_menu` (`MENU_NOT_A_MENU_MESSAGE`)
+  - 429 `rate_limited` (`MENU_RATE_LIMITED_MESSAGE`)
+  - 502 `upstream`, model call failed or returned an unusable result (`MENU_UPSTREAM_MESSAGE`)
+  - 500 `unknown`, anything else
 
 ### Route and model call (server)
 
@@ -664,7 +671,7 @@ Rule 5, the schema-constrained output, rendering as escaped React text, and a ca
 - **Currency picker:** a native `<select>` showing the code ("JPY"), preselected with `currency`. A muted "est." shows beside it when `currencySource` is `"estimated"`. Options: the estimate first, then a "Common" group (EUR, USD, GBP, JPY, MXN, plus any currency already chosen this session), then "All currencies" from `Intl.supportedValuesOf("currency")`, each labelled with `Intl.DisplayNames(["en"], { type: "currency" })`, e.g. "Japanese yen (JPY)". Changing it re-renders every price symbol, the `sr-only` currency names and the caption, never a number. The choice lasts for the current scan only. With `currency` `""`, it reads "Currency?" and prices show exactly as printed.
 - **Table:**
   - `table-fixed`. With Option: about 30% / 34% / 16% / 20%. Without: about 36% / 44% / 20%. Text wraps; nothing truncates.
-  - One row per price option. Continuation rows leave Original and English visually empty, have no divider between them, and share the group's bottom border. Items with no price get one row with "—" in Option and Price.
+  - One row per price option. Continuation rows leave Original and English visually empty, have no divider between them, and share the group's bottom border. An item with no price gets one row with "—" in Option. Its Price cell is "—" for a `clear` item (the menu prints no price) and **"Price unclear from photo"** for a `partial` item (the price is cut off or unreadable). Owner decision, 2026-10-29.
   - Price is right-aligned, `tabular-nums`. The symbol comes from `Intl.NumberFormat("en", { style: "currency", currency })` for the *selected* currency; with none selected, the amount shows as printed.
   - Each section is its own `<tbody>` with a heading row: English name, original underneath.
   - The description is a smaller second line in the English cell.
@@ -686,7 +693,7 @@ Rule 5, the schema-constrained output, rendering as escaped React text, and a ca
 ### Accessibility (WCAG 2.2 AA; requirements, not polish)
 
 - Capture: real inputs with visible labels, lucide icons `aria-hidden`, targets ≥ 44×44 px, visible `focus-visible` ring. The preview thumbnail has `alt="Your menu photo"`. Choosing from the library works by keyboard and switch access.
-- Table semantics: a real `<table>` with a `<caption>` ("12 items from your menu. Prices in Japanese yen."). Column headers `<th scope="col">`; the English cell is the row header `<th scope="row">`; section headings `<th scope="rowgroup" colSpan={columnCount}>`. No `rowSpan`: continuation rows repeat the item name in `sr-only` text so every row reads completely ("Vienna coffee, Iced, 970 Japanese yen"). "—" cells carry `sr-only` "No option" / "No price shown".
+- Table semantics: a real `<table>` with a `<caption>` ("12 items from your menu. Prices in Japanese yen."). Column headers `<th scope="col">`; the English cell is the row header `<th scope="row">`; section headings `<th scope="rowgroup" colSpan={columnCount}>`. No `rowSpan`: continuation rows repeat the item name in `sr-only` text so every row reads completely ("Vienna coffee, Iced, 970 Japanese yen"). "—" cells carry `sr-only` "No option" / "No price shown". "Price unclear from photo" is visible text and needs no `sr-only` twin.
 - `lang={sourceLanguage}` on every original cell and original heading; `lang="en"` on English cells.
 - Prices: visible "¥940" plus `sr-only` "940 Japanese yen" (`currencyDisplay: "name"`).
 - Currency picker: accessible name "Currency"; when estimated, "Currency, estimated: Japanese yen". At least 44 px tall. No live announcement for a change the user made; the caption updates.

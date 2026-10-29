@@ -352,3 +352,12 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Should photo captions that duplicate a menu item (カフェゼリー＆バニラ is probably the cut-off カフェゼリー＆バ…) be rows at all? Ground truth follows the proposal and includes them; it means the table shows the same dish twice.
   - Is "American coffee" 870 legible enough to count as `clear`?
   - Fixture 05 currency: EUR (estimated) assumes France; the owner should confirm the country.
+
+### [2026-10-29 18:05] M7 Phase 0 gate: owner answers applied; shared copy added to the contract
+- **Milestone:** M7 (end of Phase 0; owner approved Phase 1)
+- **Files:** modified `SPEC.md` (§14 errors and Price cell), `src/lib/messages.ts` (`MENU_*` and `OFFLINE_MENU_MESSAGE`), `data/menu-fixtures/01-ja-renoir-coffee.expected.json`, `data/menu-fixtures/README.md`, `BUILDLOG.md`.
+- **Decisions (owner, 2026-10-29):** アメリカン is `partial` with no price, and any partial row with no price shows "Price unclear from photo" in the Price cell (clear rows with no price keep "—"). Photo captions stay as rows. Fixture 05 is France → EUR estimated.
+- **Decisions (mine):** Error codes for `/api/menu-scan` fixed in SPEC §14 (`unauthorized`, `too_large`, `unsupported_type`, `not_a_menu`, `rate_limited`, `upstream`, `unknown`) and all user-facing copy put in `messages.ts` now, so agents B (server) and C (UI) import the same constants instead of each inventing copy. "Price unclear from photo" applies to every partial row with no price, including cut-off names, not just glare; the schema can't tell those cases apart.
+- **Deviations:** none.
+- **Incomplete:** Copy for too-large, not-an-image, throttled and upstream errors is my wording; not owner-reviewed.
+- **Open questions:** Eval scoring for アメリカン: if the model reads "870" and calls it clear, the strict hard gate ("a price on a partial item") counts it as invented, though 870 is probably right. Harness D will report it separately so the owner can judge in Phase 3.

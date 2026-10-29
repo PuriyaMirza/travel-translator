@@ -19,8 +19,8 @@
           "original": "アメリカン",
           "english": "American coffee",
           "description": "",
-          "prices": [{ "label": "Hot", "amount": "870" }],
-          "legibility": "clear"
+          "prices": [],
+          "legibility": "partial"
         },
         {
           "original": "ウインナーコーヒー",
