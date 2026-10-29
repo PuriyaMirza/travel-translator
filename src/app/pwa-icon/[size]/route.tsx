@@ -29,8 +29,8 @@ export async function GET(
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          background: "#B91C1C",
-          color: "#FAF8F5",
+          background: "#1A1856",
+          color: "#F2F1EA",
           fontSize: Math.round(px * (1 - 2 * margin)),
           fontWeight: 700,
         }}

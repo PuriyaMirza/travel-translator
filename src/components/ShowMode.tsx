@@ -58,7 +58,7 @@ export function ShowMode() {
             <p
               lang={state.card.locale}
               className={cn(
-                "text-display font-display whitespace-pre-line text-inverse md:text-5xl",
+                "text-display font-bold whitespace-pre-line text-inverse md:text-5xl",
                 "[overflow-wrap:anywhere]",
               )}
             >

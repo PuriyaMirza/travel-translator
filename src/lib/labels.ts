@@ -75,3 +75,18 @@ export const SHOW_CARD_STARTERS: Record<"en", Record<ShowCardKind, string>> = {
 export const ADDRESS_LEAD: Record<string, string> = {
   "es-419": "Por favor, lléveme a:",
 };
+
+/**
+ * Short display names for target locales, for UI chrome such as the home
+ * eyebrow. `localeName()` in locale.ts is the prompt's longer, more precise
+ * wording ("neutral Latin American Spanish"); keep the two separate.
+ */
+export const LOCALE_LABELS: Record<string, string> = {
+  "es-419": "Latin American Spanish",
+};
+
+export function localeLabel(locale: string): string {
+  const label = LOCALE_LABELS[locale];
+  if (!label) throw new Error(`No locale label configured for "${locale}"`);
+  return label;
+}
