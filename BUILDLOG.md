@@ -397,3 +397,19 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** Not yet done in Phase 2: swapping C's fixture stub for the real `POST /api/menu-scan`, wiring C to A's `prepareMenuImage`, the D5 devDependencies and `test:a11y`, `npm run build`, axe and screenshots. The home pill and nav link were not looked at in a browser yet.
 - **Open questions:** none new.
+
+### [2026-10-29 19:20] M7 Phase 1 done: menu-scan UI (C)
+- **Milestone:** M7
+- **Files:** created `src/app/menu/page.tsx`, `src/components/MenuScanner.tsx`, `src/components/MenuTable.tsx` (agent C), `BUILDLOG.md`.
+- **Decisions (C's, accepted unless noted):**
+  - Capture: two real file inputs, `sr-only` inside labels styled as buttons, `min-h-11`, focus ring via `has-[:focus-visible]`.
+  - Table per SPEC §14 (caption, scoped `th`, English as row header, rowgroup headings, no `rowSpan`, sr-only names on continuation rows, `lang` on cells, sr-only "940 Japanese yen"). A section heading shows its original line only when it differs from the English.
+  - **Column widths 28/34/16/22 with Option** (SPEC says 30/34/16/20): at 320 px the 20% Price column broke "¥1,000" mid-number. Without Option, 36/44/20 as specified. SPEC to be updated.
+  - Not-a-menu, too-large, not-an-image and decode errors offer the capture buttons instead of "Try again" (resending the same photo can't succeed). Network, offline, 429 and 502 get "Try again".
+  - A scan with zero items is treated as not-a-menu. Item-less sections are skipped in the table.
+  - Currency names come from `Intl.DisplayNames`, which capitalises "Japanese Yen"; sr-only prices (NumberFormat) read "Japanese yen". Left as-is.
+  - `ErrorCard` not reused: it has no `role="alert"` or focus target. Its style is copied inline.
+  - Page title `Menu · {brand.name}`; no page-level eyebrow because the result has its own.
+- **Deviations:** column widths (above). The currency picker sits under the "Your menu" heading on the left, not in the header's top-right corner as SPEC §14 says — to fix in Phase 2.
+- **Incomplete:** `fetchMenuScan` still returns the Renoir fixture after 1.8 s; dev-only `?force=401|413|…` forces each error. Unknown statuses (incl. 500) reuse `MENU_UPSTREAM_MESSAGE`. Not run: `npm run build`, axe. C checked result/loading/empty/error/offline at 390 and 320 px in Playwright (no page scroll; focus moves verified for forced 401/413/422/429/502/network; Cancel returns focus to Take photo); I viewed the 320 px result screenshot.
+- **Open questions:** none for the owner yet; widths and picker placement are mine to settle in Phase 2.
