@@ -377,3 +377,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Throttle runs before MIME/size (SPEC order), so a bad upload spends one of the 10 scans.
   - Ground truth 02–09 is model-read; no price is owner-verified yet. English names/descriptions are my wording (not scored).
 - **Open questions:** Confirm the four judgment calls above during the Phase 3 price check.
+
+### [2026-10-29 18:55] M7 Phase 1: eval harness (D)
+- **Milestone:** M7
+- **Files:** created `scripts/eval-menu-scan.mjs`, `scripts/menu-scan-stub-server.mjs` (agent D). Modified `.gitignore` (`data/menu-fixtures/results/`), `BUILDLOG.md`.
+- **Decisions:** Sign-in is `POST /api/auth/sign-in/email` `{email, password}` with an `Origin` header, cookies replayed as a plain `Cookie` header (D traced it through `/api/auth/[...path]` to Neon Auth's route table). Runs sequentially and stops at the first 429 (INCOMPLETE, exit 1). Non-200/422 or network errors exclude that fixture and mark the run INCOMPLETE. Fixture 09's 422 is gated. "Invented items per menu" gates on the worst menu. Ratios are summed across the set. Extra `--fixtures <dir>` option for testing. Verified by me: the harness against the `--clean` stub over all 9 real fixtures gives PASS on every gate (129/129 clear prices, 111/111 clear items, 12/12 partial), confirming every ground-truth file loads and scores.
+- **Deviations:** none.
+- **Incomplete:** Never run against the real route. Whether Neon Auth accepts `Origin: http://localhost:3000` is unverified; if not, sign-in fails with exit 2. The cut-off metric's "not longer than expected" clause can never fail on an exact-normalised match; completed text shows up as an invented item plus an unflagged partial instead (named in the JSON's `completedBy`).
+- **Open questions:** none new.
