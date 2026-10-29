@@ -29,8 +29,9 @@ export const client = new Anthropic(
 
 // SPEC.md §3 pins this for the app's runtime translation calls. It is not a
 // cost default: §3 draws the line deliberately between the product's
-// per-request hot path and the coding agents that build this repo, which run
-// on Opus and imply nothing about what the shipped app calls. Do not
+// per-request hot path and the coding agents that build this repo (an Opus
+// orchestrator, Sonnet subagents), which imply nothing about what the
+// shipped app calls. Do not
 // "upgrade" this because a coding session happens to run on a bigger model —
 // raise EFFORT and measure first. No date suffix: IDs in this family carry
 // none, and appending one yields a model that doesn't exist.
