@@ -385,3 +385,15 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** Never run against the real route. Whether Neon Auth accepts `Origin: http://localhost:3000` is unverified; if not, sign-in fails with exit 2. The cut-off metric's "not longer than expected" clause can never fail on an exact-normalised match; completed text shows up as an invented item plus an unflagged partial instead (named in the JSON's `completedBy`).
 - **Open questions:** none new.
+
+### [2026-10-29 19:10] M7 Phase 2 (part): B follow-ups, English option labels, nav + home entry
+- **Milestone:** M7
+- **Files:** modified `src/lib/menuScan.ts`, `src/app/api/menu-scan/route.ts`, `src/lib/messages.ts` (`MENU_UNKNOWN_MESSAGE`), `src/lib/nav.ts`, `src/app/page.tsx`, `SPEC.md` §14, `BUILDLOG.md`.
+- **Decisions:**
+  - Post-processing now drops a price whose amount is empty after trimming (B flagged it would render as a blank price instead of "—").
+  - The route's 500 copy is `MENU_UNKNOWN_MESSAGE` instead of a literal.
+  - Prompt rule 7 (and SPEC §14 rule 7) now says option labels are written in English ("1/2 Ración" → "Half portion"). The old example kept "1/2 Ración" verbatim, which contradicted the schema's "label in English" and would put Spanish in the Option column. Ground truth already uses English labels; the eval matches on amount only, so this doesn't move any metric.
+  - `/menu` added to `NAV_LINKS` as "Menu scan", which also puts it in `warmUrls()` (shell works offline). Home gets a "Scan a menu" pill under the translate entry, same style, lucide `ScanText`.
+- **Deviations:** none.
+- **Incomplete:** Not yet done in Phase 2: swapping C's fixture stub for the real `POST /api/menu-scan`, wiring C to A's `prepareMenuImage`, the D5 devDependencies and `test:a11y`, `npm run build`, axe and screenshots. The home pill and nav link were not looked at in a browser yet.
+- **Open questions:** none new.

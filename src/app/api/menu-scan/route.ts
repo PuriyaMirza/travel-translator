@@ -7,6 +7,7 @@ import {
   MENU_RATE_LIMITED_MESSAGE,
   MENU_SIGN_IN_MESSAGE,
   MENU_TOO_LARGE_MESSAGE,
+  MENU_UNKNOWN_MESSAGE,
 } from "@/lib/messages";
 import { isRateLimited } from "@/lib/rateLimit";
 
@@ -66,6 +67,6 @@ export async function POST(request: NextRequest) {
     }
     // The error name only: never the object, in case it carries request content.
     console.error("Unexpected error in /api/menu-scan:", error instanceof Error ? error.name : "unknown");
-    return fail(500, "unknown", "Something went wrong. Try again.");
+    return fail(500, "unknown", MENU_UNKNOWN_MESSAGE);
   }
 }
