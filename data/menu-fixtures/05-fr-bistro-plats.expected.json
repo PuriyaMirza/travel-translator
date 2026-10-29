@@ -1,0 +1,287 @@
+{
+  "isMenu": true,
+  "sourceLanguage": "fr",
+  "currency": "EUR",
+  "currencySource": "estimated",
+  "sections": [
+    {
+      "original": "Plats",
+      "english": "Mains",
+      "items": [
+        {
+          "original": "Saucisse au jus, purée",
+          "english": "Sausage with gravy and mashed potatoes",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "9,60"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Émincé de volaille sauce poulette, purée",
+          "english": "Sliced chicken in poulette sauce with mashed potatoes",
+          "description": "Poulette sauce is a creamy sauce with egg yolk and lemon.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "9,90"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Coquillettes, jambon blanc et truffe d'été",
+          "english": "Macaroni with ham and summer truffle",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "9,90"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Gratin de courge au bleu d'Auvergne & noix",
+          "english": "Squash gratin with Auvergne blue cheese and walnuts",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "8,90"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Ravioles du Dauphiné, fondue de poireaux",
+          "english": "Dauphiné ravioles with melted leeks",
+          "description": "Small cheese-filled ravioli.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "9,90"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Pavé de saumon, purée au cresson, beurre blanc",
+          "english": "Salmon fillet with watercress mash and beurre blanc",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12,90"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Andouillette, sauce moutarde à l'ancienne, frites",
+          "english": "Andouillette with wholegrain mustard sauce and fries",
+          "description": "A coarse sausage made from pork tripe.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "11,50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Bœuf bourguignon, lard fumé, coquillettes",
+          "english": "Beef bourguignon with smoked bacon and macaroni",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12,20"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Demi jarret de cochon caramélisé, frites",
+          "english": "Half caramelised pork knuckle with fries",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12,40"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Foie de veau persillade, purée",
+          "english": "Calf's liver with garlic and parsley, mashed potatoes",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "10,50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Filet de lieu noir, vierge câpres & anchois, chou-fleur rôti",
+          "english": "Coley fillet with caper and anchovy sauce vierge, roast cauliflower",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12,40"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Steak frites, sauce au poivre",
+          "english": "Steak and fries with pepper sauce",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12,60"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Confit de canard, frites",
+          "english": "Duck confit with fries",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12,80"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Cassoulet, canard & cochon",
+          "english": "Cassoulet with duck and pork",
+          "description": "Slow-cooked white bean stew.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "11,90"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "À CÔTÉ",
+      "english": "Sides",
+      "items": [
+        {
+          "original": "Salade verte",
+          "english": "Green salad",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "2,20"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Chou-fleur rôti",
+          "english": "Roast cauliflower",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "4,50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Purée au cresson",
+          "english": "Watercress mash",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "3"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Coquillettes au bouillon",
+          "english": "Macaroni in broth",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "2,50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Frites",
+          "english": "Fries",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "3"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Purée de pommes de terre",
+          "english": "Mashed potatoes",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "3"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Fromage",
+      "english": "Cheese",
+      "items": [
+        {
+          "original": "Fromage",
+          "english": "Cheese",
+          "description": "Your choice of Rocamadour, Comté or Auvergne blue, with salad and the chutney of the moment.",
+          "prices": [
+            {
+              "label": "1 cheese",
+              "amount": "4,40"
+            },
+            {
+              "label": "2 cheeses",
+              "amount": "5,30"
+            },
+            {
+              "label": "3 cheeses",
+              "amount": "6,20"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    }
+  ],
+  "notes": []
+}

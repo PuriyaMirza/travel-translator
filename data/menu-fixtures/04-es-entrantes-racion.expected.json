@@ -1,0 +1,232 @@
+{
+  "isMenu": true,
+  "sourceLanguage": "es",
+  "currency": "EUR",
+  "currencySource": "printed",
+  "sections": [
+    {
+      "original": "",
+      "english": "",
+      "items": [
+        {
+          "original": "Paella de Marisco",
+          "english": "Seafood paella",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "26,00"
+            }
+          ],
+          "legibility": "partial"
+        }
+      ]
+    },
+    {
+      "original": "Mariscos",
+      "english": "Seafood",
+      "items": [
+        {
+          "original": "Gambas Blanca a la Plancha",
+          "english": "Grilled white prawns",
+          "description": "",
+          "prices": [
+            {
+              "label": "Half portion",
+              "amount": "15,00"
+            },
+            {
+              "label": "Full portion",
+              "amount": "30,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Gamba Roja al Ajillo",
+          "english": "Red prawns in garlic",
+          "description": "",
+          "prices": [
+            {
+              "label": "Full portion",
+              "amount": "25,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Almejas a la Marinera",
+          "english": "Clams marinera",
+          "description": "Clams in a white wine, garlic and parsley sauce.",
+          "prices": [
+            {
+              "label": "Half portion",
+              "amount": "19,00"
+            },
+            {
+              "label": "Full portion",
+              "amount": "32,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Zamburiñas",
+          "english": "Queen scallops",
+          "description": "",
+          "prices": [
+            {
+              "label": "Half portion",
+              "amount": "15,00"
+            },
+            {
+              "label": "Full portion",
+              "amount": "26,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Langostinos Cocidos ó Plancha",
+          "english": "Prawns, boiled or grilled",
+          "description": "",
+          "prices": [
+            {
+              "label": "Half portion",
+              "amount": "12,00"
+            },
+            {
+              "label": "Full portion",
+              "amount": "23,00"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Fríos",
+      "english": "Cold",
+      "items": [
+        {
+          "original": "Jamón Ibérico",
+          "english": "Iberian ham",
+          "description": "",
+          "prices": [
+            {
+              "label": "Half portion",
+              "amount": "16,00"
+            },
+            {
+              "label": "Full portion",
+              "amount": "31,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Lomo Ibérico",
+          "english": "Iberian cured pork loin",
+          "description": "",
+          "prices": [
+            {
+              "label": "Full portion",
+              "amount": "26,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Queso Manchego",
+          "english": "Manchego cheese",
+          "description": "",
+          "prices": [
+            {
+              "label": "Half portion",
+              "amount": "10,00"
+            },
+            {
+              "label": "Full portion",
+              "amount": "17,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Paté de Perdíz",
+          "english": "Partridge pâté",
+          "description": "",
+          "prices": [
+            {
+              "label": "Half portion",
+              "amount": "8,00"
+            },
+            {
+              "label": "Full portion",
+              "amount": "15,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Mousse de Queso con Boletus",
+          "english": "Cheese mousse with porcini",
+          "description": "",
+          "prices": [
+            {
+              "label": "Half portion",
+              "amount": "9,00"
+            },
+            {
+              "label": "Full portion",
+              "amount": "16,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Pieza Sardina Ahumada (ud.)",
+          "english": "Smoked sardine (each)",
+          "description": "",
+          "prices": [
+            {
+              "label": "Full portion",
+              "amount": "4,50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Anchoas de Santoña",
+          "english": "Santoña anchovies",
+          "description": "",
+          "prices": [
+            {
+              "label": "Full portion",
+              "amount": "26,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Carpaccio de Buey",
+          "english": "Beef carpaccio",
+          "description": "",
+          "prices": [
+            {
+              "label": "Full portion",
+              "amount": "17,00"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Calientes",
+      "english": "Hot",
+      "items": []
+    }
+  ],
+  "notes": []
+}

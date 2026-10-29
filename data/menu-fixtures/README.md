@@ -28,6 +28,6 @@ Each photo gets a sibling `<name>.expected.json` (a `MenuScan`, per the plan's �
 
 | File | Expected JSON | Owner-verified prices |
 |---|---|---|
-| `01-ja-renoir-coffee.jpg` | drafted (Phase 0) | no |
-| `02`–`08` | to draft in Phase 1 | no |
-| `09-not-a-menu-settings.jpg` | to draft in Phase 1 (`isMenu: false`) | n/a |
+| `01-ja-renoir-coffee.jpg` | drafted (Phase 0; アメリカン partial per owner) | no |
+| `02`–`08` | drafted (Phase 1) | no |
+| `09-not-a-menu-settings.jpg` | drafted (`isMenu: false`) | n/a |

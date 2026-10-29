@@ -361,3 +361,19 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** Copy for too-large, not-an-image, throttled and upstream errors is my wording; not owner-reviewed.
 - **Open questions:** Eval scoring for アメリカン: if the model reads "870" and calls it clear, the strict hard gate ("a price on a partial item") counts it as invented, though 870 is probably right. Harness D will report it separately so the owner can judge in Phase 3.
+
+### [2026-10-29 18:40] M7 Phase 1 (partial): image prep (A), route + model call (B), ground truth 02–09
+- **Milestone:** M7
+- **Files:** created `src/lib/menuImage.ts` (agent A), `src/lib/menuScan.ts`, `src/app/api/menu-scan/route.ts` (agent B), `data/menu-fixtures/0{2..9}-*.expected.json` (me). Modified `src/lib/rateLimit.ts` (B: `menuScan` bucket, 10/hour/user), `SPEC.md` §14 (eval metric definitions), `data/menu-fixtures/README.md`, `BUILDLOG.md`. Agents C (UI) and D (eval harness) are still running; their files are deliberately NOT in this commit.
+- **Decisions:**
+  - A: downscale = largest size under both limits (e.g. 4032×3024 → 2212×1659, 4740 tokens; 9:16 hits exactly 4784). Canvas/encode failures map to `decode` (only two reasons exist). White background painted before drawing so transparent PNGs don't go black. Extra exports `fitMenuImage`, `MenuImageErrorReason`.
+  - B: `client.messages.parse` with `MODEL`, 16000 `max_tokens`, `output_config` format + `EFFORT`; rules in `system`, image block then "Read this menu." Accepts JPEG, PNG, WebP. 110 s timeout and `maxRetries: 0` so the call ends inside `maxDuration` 120. Log line written in `scanMenu` (also for `isMenu: false`, which costs tokens). Failure logs carry only stop_reason / error name, never response content (tripPack.ts logs the whole response; not copied).
+  - Eval metrics corrected in SPEC §14 after reading fixture 02: a partial item can have a clearly printed price (glare over the name only), so "invented price" now means a price where the ground truth has none, not any price on a partial item. Prices match on amount; labels are English translations, so label agreement is reported, not gated.
+  - Ground-truth calls: unclear lassi prices (08) and the HOT/ICE coffees at the cut-off bottom are partial with no price; "Tostadas desde" is item "Tostadas" with a "from" price; fixture 05 cheese is one item with three options; 04's cut-off paella keeps 26,00; 04's "Entrantes" super-heading is dropped (sections are flat).
+- **Deviations:** none from SPEC §14 as now written.
+- **Incomplete:**
+  - The model call is untested: Anthropic is unreachable from this sandbox. A's browser decode/encode paths are untested in a real browser.
+  - B leaves a price with an empty `amount` in place; it should be dropped (Phase 2). The 500 message is a literal in the route, not a `messages.ts` constant (Phase 2).
+  - Throttle runs before MIME/size (SPEC order), so a bad upload spends one of the 10 scans.
+  - Ground truth 02–09 is model-read; no price is owner-verified yet. English names/descriptions are my wording (not scored).
+- **Open questions:** Confirm the four judgment calls above during the Phase 3 price check.

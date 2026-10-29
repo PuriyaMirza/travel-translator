@@ -709,8 +709,8 @@ Fixtures live in `data/menu-fixtures/`: the owner's photos, each with a sibling 
 
 | Metric | Target |
 |---|---|
-| Invented prices: a price where the menu has none, or on a partial item | **0 across the set (hard gate)** |
-| Price exact match on clear items, per option | ≥ 98% |
+| Invented prices: a returned price on an invented item, or on an item whose ground truth has no price (a `partial` item whose price is cut off or unreadable included). A `partial` item whose price *is* printed (glare over the name only) keeps its price | **0 across the set (hard gate)** |
+| Price exact match on clear items, per option: same amount string (whitespace aside). Option labels are English translations, so label agreement is reported, not gated | ≥ 98% |
 | Item recall on clear items | ≥ 95% |
 | Invented items per menu | ≤ 1 |
 | Cut-off items flagged `partial`, with no completed text | ≥ 90% |

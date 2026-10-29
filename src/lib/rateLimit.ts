@@ -14,6 +14,8 @@
 const BUCKETS = {
   translate: { windowMs: 60_000, max: 10 },
   tripPack: { windowMs: 60 * 60_000, max: 3 },
+  // SPEC.md §14: 10 menu scans per user per hour, keyed on the verified user id.
+  menuScan: { windowMs: 60 * 60_000, max: 10 },
 } as const;
 
 export type RateLimitBucket = keyof typeof BUCKETS;
@@ -22,6 +24,7 @@ export type RateLimitBucket = keyof typeof BUCKETS;
 const hits: Record<RateLimitBucket, Map<string, number[]>> = {
   translate: new Map(),
   tripPack: new Map(),
+  menuScan: new Map(),
 };
 
 /** Bounds memory growth from keys that only ever make one request. */
