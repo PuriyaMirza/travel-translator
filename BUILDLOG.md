@@ -449,3 +449,22 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** English names and descriptions were not reviewed (not scored). The eval against the preview has not run yet.
 - **Open questions:** none.
+
+### [2026-10-30 12:05] M7 Phase 3: first live eval (FAIL) and prompt tuning round 1
+- **Milestone:** M7
+- **Files:** modified `src/lib/menuScan.ts` (prompt rules 1–3, 7, new 9; `cleanAmount()`, `cleanLanguageTag()` in post-processing), `src/lib/menuScanSchema.ts` (`.describe()` on `amount`, item `original`, `sourceLanguage`; shape unchanged), `SPEC.md` §14 (prompt rules + server guards), `BUILDLOG.md`.
+- **Eval run 1** (owner, against the preview, 2026-10-30 11:49 UTC, `claude-sonnet-5`, effort low): FAIL on every accuracy gate. Invented prices 21 (target 0), price exact 60.5% (≥98%), recall 87.4% (≥95%), worst invented items 7 (≤1), cut-off flagged 33% (≥90%). Not-a-menu 422: pass. Latency p50 9.4 s, p95 20.4 s. Currency right on 7/8 (08 said printed, expected estimated).
+- **Diagnosis from the raw results (no price was made up from nothing):**
+  1. Amounts carried the currency sign ("5,80€", "+5.00€", "12€") on 02, 03, 06: ~30 price misses. A real UI bug too (would render "€5,80€").
+  2. `original` included descriptions or notes (07 ×4 "(salsa shropshire…)", 08 ×5 "（赤ワイン＋ジンジャー）", "(HOT or ICE)", branch notes; 05 used the "Au choix" line instead of "Fromage"). Each counted as a missed item + an invented item + invented prices.
+  3. 06: supplements and "au choix" choices came back as their own rows instead of price entries/description on the dish (rule 7).
+  4. `sourceLanguage` was a name ("Japanese", "Spanish") instead of a BCP 47 code: breaks `lang` for screen readers.
+  5. Real accuracy misses: completed cut-off text twice (01 "カフェゼリー＆オーレ", 02 "jamón"); read three prices under glare (01 アメリカン 870, 08 milk/mango lassi); skipped the two photo captions on 01; added an accent ("Inglés"); kept "desde" in `original`; marked some glare/cut-off rows clear (02 Super nachos, 04 paella).
+- **Decisions:**
+  - Owner (2026-10-30): prices under glare stay "Price unclear from photo"; no credit for a probably-right guess. Rule 2 now says so explicitly.
+  - Tuning step 1 only (SPEC: prompt before effort, effort before model). Effort and model unchanged.
+  - Server guards so rules 2 and 9 hold regardless of the model: `cleanAmount()` strips `\p{Sc}`, 円, uppercase 3-letter codes and "euro(s)"; `cleanLanguageTag()` keeps only 2–3 letter BCP 47 tags (else ""). Checked on all 8 raw scans from run 1: every amount is now numeric; language names fall to "" (UI already handles ""). Unit cases pass for "5,80€", "+5.00€", "16 Euro", "¥870", "870円", "12 EUR", "es-419", "pt-br"→"pt-BR".
+  - Harness matching left strict on purpose (exact NFKC `original`): loosening it would hide completed text.
+- **Deviations:** SPEC §14 now has 9 prompt rules (was 8).
+- **Incomplete:** Not re-evaluated yet; needs the owner's second run after the preview redeploys. If amounts still pass but names don't, the next lever is `effort: "medium"` (SPEC tuning step 2).
+- **Open questions:** 08 currency: the model said "printed" JPY; I see no ¥ or 円 on that photo. Not gated; recheck after run 2.
