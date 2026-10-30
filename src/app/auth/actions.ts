@@ -7,10 +7,18 @@ export type AuthFormState = { error: string } | null;
 
 const NETWORK_ERROR = "Couldn't reach the sign-in service. Check your connection and try again.";
 
-/** Only same-site paths, so `?next=` can't bounce someone to another domain. */
+/**
+ * Only same-site paths, so `?next=` can't bounce someone to another domain.
+ * Browsers read "/\evil.com" (and tab or newline variants) as
+ * "//evil.com", so a prefix check alone isn't enough: resolve the value
+ * against a placeholder origin and keep it only if the origin didn't change.
+ */
 function safeNext(value: FormDataEntryValue | null): string {
   const next = typeof value === "string" ? value : "";
-  return next.startsWith("/") && !next.startsWith("//") ? next : "/vault";
+  if (!next.startsWith("/") || next.startsWith("//") || /[\\\s]/.test(next)) return "/vault";
+  const base = "https://same-site.invalid";
+  const url = new URL(next, base);
+  return url.origin === base ? `${url.pathname}${url.search}${url.hash}` : "/vault";
 }
 
 function readCredentials(formData: FormData) {
