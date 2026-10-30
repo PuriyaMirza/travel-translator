@@ -468,3 +468,33 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** SPEC §14 now has 9 prompt rules (was 8).
 - **Incomplete:** Not re-evaluated yet; needs the owner's second run after the preview redeploys. If amounts still pass but names don't, the next lever is `effort: "medium"` (SPEC tuning step 2).
 - **Open questions:** 08 currency: the model said "printed" JPY; I see no ¥ or 円 on that photo. Not gated; recheck after run 2.
+### [2026-10-30 13:00] Security hardening: Next.js 16.4.3, open-redirect fix, security headers, sync throttle, clear recents on sign-out
+- **Milestone:** none (security fixes from the 2026-10-30 review, separate from M7; branch `fix/security-hardening` off `main`)
+- **Files:** modified `package.json`, `package-lock.json` (next and eslint-config-next 16.3.1 → 16.4.3), `next.config.ts`, `src/app/auth/actions.ts`, `src/app/api/sync/route.ts`, `src/lib/rateLimit.ts`, `src/lib/local/db.ts`, `src/lib/local/recentTranslations.ts`, `BUILDLOG.md`.
+- **Decisions (owner-approved "go", 2026-10-30):**
+  - Next.js 16.4.3 clears its three critical RCE advisories (incl. `next/og` ImageResponse, which the icon routes use). `npm audit`: 17 → 15 (critical 2 → 1).
+  - `safeNext()` blocked `//evil.com` but let `/\evil.com` through, which browsers treat the same way: an open redirect after sign-in. It now rejects backslashes and whitespace, and resolves the path against a placeholder origin. 10 payloads checked (`/\evil.com`, `//evil.com`, `/\t/evil.com`, `https://…`, `javascript:` → `/vault`; real paths kept with query and hash).
+  - Security headers on every response: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera, mic, geolocation off; the menu scanner's file input needs none), and a **report-only** CSP.
+  - `/api/sync` gets a `sync` bucket: 30 requests per minute per verified user id, on GET and POST. A 429 is an ordinary sync error to the device: outbox kept, retried on the next focus or online event.
+  - `clearUserData()` (sign-out and account switch) now also clears the recent-translations localStorage cache.
+- **Checks:** lint, typecheck, `next build` clean on 16.4.3. `next start`: every page (/, /translate, /vault, /trip, /cards, /phrasebook/dining, /auth/sign-in, /pwa-icon/192, /sw.js) returns 200; all five headers present; `/sw.js` keeps its no-cache header.
+- **Deviations:** none from SPEC.md.
+- **Incomplete:**
+  - **CSP is report-only and cannot be enforced yet:** headless Chromium reports an `unsafe-eval` violation on every page under `next start`. Its source isn't identified yet; enforcing as written would break the app.
+  - **Not fixed: better-auth / `@neondatabase/auth` (1 critical, highs).** The fix is 0.5.0-beta → 0.7.0-beta, flagged breaking; needs sign-in, sign-up and sync tested against real Neon. Separate PR.
+  - The sync throttle is the same coarse in-memory limiter as the others (per instance, resets on cold start).
+  - Not run against real Neon or Anthropic from here; sign-out clearing was type-checked, not clicked through.
+  - Owner dashboard items, not code: Anthropic spend cap, Vercel Firewall rate limit on `/api/translate`, Neon Auth email verification.
+- **Open questions:** Enforce the CSP once the `unsafe-eval` source is found?
+
+### [2026-10-30 13:15] M7: merge main (security hardening #16) into feat/menu-scan; a11y suite moves to a production build
+- **Milestone:** M7
+- **Files:** merge of `origin/main` (e832aaa, PR #16). Conflicts resolved in `src/lib/rateLimit.ts` (kept both the `menuScan` and `sync` buckets) and `BUILDLOG.md` (both sides' appended entries kept, in time order). Modified `playwright.config.ts`, `CLAUDE.md`, `.gitignore`, `BUILDLOG.md`.
+- **Decisions:**
+  - Owner merged PR #16 ("16", 2026-10-30). This branch now runs Next 16.4.3 with the security headers, redirect fix, sync throttle and recents clearing.
+  - On 16.4.3 the two offline a11y tests failed every run under `next dev` (the page never left the empty state), but the same flow passed 5/5 under `next start`, so the app is fine and the dev server was the cause. `test:a11y` now runs `npm run build && next start -p 3100`, which tests what ships. 21/21 on two consecutive runs.
+  - Next 16.4.3's dev server also writes its agent-instruction block to a new `AGENTS.md` ("committing it with your work keeps the tree clean"). Deleted, not committed, and git-ignored; CLAUDE.md notes it.
+- **Checks:** lint, typecheck, `next build` clean; `npm install` leaves the merged lockfile unchanged (next 16.4.3, one playwright-core 1.63.0).
+- **Deviations:** none.
+- **Incomplete:** `test:a11y` now takes about a minute longer (it builds first). Eval run 2 still pending (owner).
+- **Open questions:** none.

@@ -106,14 +106,17 @@ describes.
 
 - `npm run test:a11y` — Playwright + axe over every
   `/menu` state at 320 and 390 px (and 200% text), with
-  `/api/menu-scan` mocked. Starts `next dev` itself.
+  `/api/menu-scan` mocked. Builds and runs `next start`
+  on port 3100 itself (about a minute before tests start).
   Screenshots go to `test-results/`.
 
 No unit-test runner is configured.
 
 `next dev` may append an agent-instruction block to
-this file ("This is NOT the Next.js you know…"). It is
-not a project rule. Strip it before every commit. Env vars are listed in
+this file ("This is NOT the Next.js you know…"), and
+from Next 16.4 also writes it to `AGENTS.md`. It is not
+a project rule. Strip it from this file before every
+commit; `AGENTS.md` is git-ignored. Env vars are listed in
 `.env.example`: `ANTHROPIC_API_KEY` (M2), `DATABASE_URL`,
 `NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET` (M3).
 

@@ -47,3 +47,6 @@ data/menu-fixtures/results/
 # playwright (test:a11y)
 /test-results/
 /playwright-report/
+
+# written by `next dev` (agent-instruction block); never commit
+/AGENTS.md

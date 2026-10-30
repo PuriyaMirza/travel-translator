@@ -99,6 +99,16 @@ export function storeRecentTranslation(
   }
 }
 
+/** Forget every cached result. Called on sign-out with the rest of the device's user data. */
+export function clearRecentTranslations() {
+  try {
+    localStorage.removeItem(STORAGE_KEY);
+    window.dispatchEvent(new Event(CHANGE_EVENT));
+  } catch {
+    // Unavailable storage holds nothing to clear.
+  }
+}
+
 function subscribe(onChange: () => void) {
   window.addEventListener(CHANGE_EVENT, onChange);
   window.addEventListener("storage", onChange);
