@@ -441,3 +441,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** Not tested with a real sign-in from the preview (this sandbox can't reach *.vercel.app). Whether Vercel Deployment Protection blocks the eval script on the preview is unknown.
 - **Open questions:** Remove this domain (and the older `git-claude-c-e1a932` one) once M7 ships?
+
+### [2026-10-30 08:40] M7 Phase 3: owner verified all ground-truth prices
+- **Milestone:** M7
+- **Files:** modified `data/menu-fixtures/README.md` (status table), `BUILDLOG.md`.
+- **Decisions (owner, 2026-10-30):** every price in `01`–`08` `.expected.json` confirmed "all correct" against the photos, using a side-by-side review page, including my four judgment calls (unreadable lassi prices in 08, "Tostadas desde" as a "from" price in 03, 05's cheese as one item with three options, 04's cut-off paella keeping 26,00).
+- **Deviations:** none.
+- **Incomplete:** English names and descriptions were not reviewed (not scored). The eval against the preview has not run yet.
+- **Open questions:** none.
