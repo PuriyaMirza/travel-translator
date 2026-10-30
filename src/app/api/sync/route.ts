@@ -1,16 +1,27 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireUser } from "@/lib/auth/requireUser";
+import { isRateLimited } from "@/lib/rateLimit";
 import { pullChanges, pushChanges, pushSchema } from "@/lib/sync/server";
 
 /**
  * /api/sync (SPEC.md §7 "Local-first sync"). POST pushes the device's outbox,
  * GET pulls rows changed on other devices. Both act only on the signed-in
  * user's rows. Network-only: the service worker never caches it.
+ *
+ * Throttled per user id. A 429 reads as an ordinary sync error on the device:
+ * the outbox is kept and retried on the next focus or online event.
  */
+
+const rateLimited = () =>
+  NextResponse.json(
+    { error: { code: "rate_limited", message: "Syncing too often. Your phrases are safe on this device." } },
+    { status: 429 },
+  );
 
 export async function POST(request: NextRequest) {
   const auth = await requireUser();
   if (auth.response) return auth.response;
+  if (isRateLimited(auth.userId, "sync")) return rateLimited();
 
   let body: unknown;
   try {
@@ -35,6 +46,7 @@ export async function POST(request: NextRequest) {
 export async function GET(request: NextRequest) {
   const auth = await requireUser();
   if (auth.response) return auth.response;
+  if (isRateLimited(auth.userId, "sync")) return rateLimited();
 
   const since = request.nextUrl.searchParams.get("since");
   if (since !== null && Number.isNaN(Date.parse(since))) {

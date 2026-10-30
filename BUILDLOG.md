@@ -330,3 +330,22 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** (1) Essentials ("When you're stuck") is not in the Figma frame; placed above the daily phrase, styled as an outlined list. (2) Daily phrase card has no save button (Figma has none). (3) Category tiles no longer show phrase counts (Figma has none). (4) The translate result frame shows no submit button; a "Translate" indigo pill is kept under the input because the form needs one. (5) Translate page lead paragraph removed (not in the frame). (6) --text-muted is indigo, not a grey — the design has no grey; muted text is less distinct from ink than before. (7) --border-light is solid navy, so every hairline in un-redesigned screens is now a full-strength outline. (8) No shadows anywhere (--shadow-soft: none).
 - **Incomplete:** Category, vault, cards, show mode, trip, auth and the translate loading/error states are recolored only — no Figma frames exist for them in Stamp blues. Lodging icon in Figma looks like it may be lucide `Sofa`, not `BedDouble` — unverified. Fonts were NOT seen locally (Google Fonts unreachable; screenshots used fallbacks); confirm on the Vercel preview. Speak buttons were not visible in screenshots (headless Chromium has no voices). App icons keep their existing letterform; only colours changed. No dark-mode work (Figma's "B Dark poster" variant not built).
 - **Open questions:** Sofa vs BedDouble for lodging? Should the daily card regain a save button? Build the B Dark poster variant as a dark theme later?
+
+### [2026-10-30 13:00] Security hardening: Next.js 16.4.3, open-redirect fix, security headers, sync throttle, clear recents on sign-out
+- **Milestone:** none (security fixes from the 2026-10-30 review, separate from M7; branch `fix/security-hardening` off `main`)
+- **Files:** modified `package.json`, `package-lock.json` (next and eslint-config-next 16.3.1 → 16.4.3), `next.config.ts`, `src/app/auth/actions.ts`, `src/app/api/sync/route.ts`, `src/lib/rateLimit.ts`, `src/lib/local/db.ts`, `src/lib/local/recentTranslations.ts`, `BUILDLOG.md`.
+- **Decisions (owner-approved "go", 2026-10-30):**
+  - Next.js 16.4.3 clears its three critical RCE advisories (incl. `next/og` ImageResponse, which the icon routes use). `npm audit`: 17 → 15 (critical 2 → 1).
+  - `safeNext()` blocked `//evil.com` but let `/\evil.com` through, which browsers treat the same way: an open redirect after sign-in. It now rejects backslashes and whitespace, and resolves the path against a placeholder origin. 10 payloads checked (`/\evil.com`, `//evil.com`, `/\t/evil.com`, `https://…`, `javascript:` → `/vault`; real paths kept with query and hash).
+  - Security headers on every response: `X-Frame-Options: DENY`, `X-Content-Type-Options: nosniff`, `Referrer-Policy: strict-origin-when-cross-origin`, `Permissions-Policy` (camera, mic, geolocation off; the menu scanner's file input needs none), and a **report-only** CSP.
+  - `/api/sync` gets a `sync` bucket: 30 requests per minute per verified user id, on GET and POST. A 429 is an ordinary sync error to the device: outbox kept, retried on the next focus or online event.
+  - `clearUserData()` (sign-out and account switch) now also clears the recent-translations localStorage cache.
+- **Checks:** lint, typecheck, `next build` clean on 16.4.3. `next start`: every page (/, /translate, /vault, /trip, /cards, /phrasebook/dining, /auth/sign-in, /pwa-icon/192, /sw.js) returns 200; all five headers present; `/sw.js` keeps its no-cache header.
+- **Deviations:** none from SPEC.md.
+- **Incomplete:**
+  - **CSP is report-only and cannot be enforced yet:** headless Chromium reports an `unsafe-eval` violation on every page under `next start`. Its source isn't identified yet; enforcing as written would break the app.
+  - **Not fixed: better-auth / `@neondatabase/auth` (1 critical, highs).** The fix is 0.5.0-beta → 0.7.0-beta, flagged breaking; needs sign-in, sign-up and sync tested against real Neon. Separate PR.
+  - The sync throttle is the same coarse in-memory limiter as the others (per instance, resets on cold start).
+  - Not run against real Neon or Anthropic from here; sign-out clearing was type-checked, not clicked through.
+  - Owner dashboard items, not code: Anthropic spend cap, Vercel Firewall rate limit on `/api/translate`, Neon Auth email verification.
+- **Open questions:** Enforce the CSP once the `unsafe-eval` source is found?

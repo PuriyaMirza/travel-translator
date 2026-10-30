@@ -1,6 +1,7 @@
 "use client";
 
 import { openDB, type DBSchema, type IDBPDatabase } from "idb";
+import { clearRecentTranslations } from "./recentTranslations";
 import type { SavedPhrase, ShowCard, TripPack, UserSettings } from "@/lib/types";
 
 /**
@@ -80,6 +81,9 @@ export async function writeSynced<T extends SyncedTable>(table: T, row: SyncedRo
  * rows, and the next person to pick up the phone shouldn't see them.
  */
 export async function clearUserData() {
+  // The recent-translations cache lives in localStorage, not IndexedDB, but
+  // it is just as personal.
+  clearRecentTranslations();
   const db = await localDb();
   const stores = ["savedPhrases", "showCards", "tripPacks", "settings", "outbox", "meta"] as const;
   const tx = db.transaction(stores, "readwrite");
