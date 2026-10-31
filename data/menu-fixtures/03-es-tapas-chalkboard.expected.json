@@ -1,0 +1,207 @@
+{
+  "isMenu": true,
+  "sourceLanguage": "es",
+  "currency": "EUR",
+  "currencySource": "printed",
+  "sections": [
+    {
+      "original": "Tapas y algo más",
+      "english": "Tapas and more",
+      "items": [
+        {
+          "original": "Gilda boquerón o Anchoa",
+          "english": "Gilda skewer with white or cured anchovy",
+          "description": "Pickled pepper, olive and anchovy on a skewer.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "2,2"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Patatas Bravas",
+          "english": "Patatas bravas",
+          "description": "Fried potatoes with a spicy sauce.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "4,9"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Huevos rotos",
+          "english": "Broken eggs",
+          "description": "Fried eggs broken over chips.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "6,9"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Alitas de Pollo",
+          "english": "Chicken wings",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "6,2"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Fingers de Pollo",
+          "english": "Chicken fingers",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "7,9"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Croquetas 3u",
+          "english": "Croquettes (3 pieces)",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "6,5"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Pimientos del Padrón",
+          "english": "Padrón peppers",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "6,2"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Tabla Embutidos",
+          "english": "Cured meats board",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Tabla Queso",
+          "english": "Cheese board",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Tabla Jamón Serrano",
+          "english": "Serrano ham board",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "12"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Rabas (Calamares)",
+          "english": "Fried squid strips",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "6,9"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Aros de Cebolla",
+          "english": "Onion rings",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "5,5"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Tequeños",
+          "english": "Tequeños",
+          "description": "Fried cheese sticks wrapped in dough.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "7,5"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Desayuno Ingles",
+          "english": "English breakfast",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "10,80"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Tostadas",
+          "english": "Toast",
+          "description": "",
+          "prices": [
+            {
+              "label": "from",
+              "amount": "7,00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Nachos",
+          "english": "Nachos",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "7,8"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    }
+  ],
+  "notes": []
+}

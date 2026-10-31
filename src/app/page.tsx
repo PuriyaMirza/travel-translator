@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, Languages } from "lucide-react";
+import { ArrowRight, Languages, ScanText } from "lucide-react";
 import { brand } from "@/lib/brand";
 import { dailyPhrase } from "@/lib/dailyPhrase";
 import { ESSENTIAL_PHRASES } from "@/lib/essentials";
@@ -43,6 +43,15 @@ export default function Home() {
       >
         <Languages aria-hidden className="size-[18px] shrink-0" />
         <span className="min-w-0 flex-1 text-[15px]">Type anything to translate…</span>
+        <ArrowRight aria-hidden className="size-[18px] shrink-0" />
+      </Link>
+
+      <Link
+        href="/menu"
+        className="flex items-center gap-3 rounded-full border border-ink px-[18px] py-[15px] text-ink transition hover:bg-sand/60 motion-reduce:transition-none"
+      >
+        <ScanText aria-hidden className="size-[18px] shrink-0" />
+        <span className="min-w-0 flex-1 text-[15px]">Scan a menu</span>
         <ArrowRight aria-hidden className="size-[18px] shrink-0" />
       </Link>
 

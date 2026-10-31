@@ -331,6 +331,143 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Incomplete:** Category, vault, cards, show mode, trip, auth and the translate loading/error states are recolored only — no Figma frames exist for them in Stamp blues. Lodging icon in Figma looks like it may be lucide `Sofa`, not `BedDouble` — unverified. Fonts were NOT seen locally (Google Fonts unreachable; screenshots used fallbacks); confirm on the Vercel preview. Speak buttons were not visible in screenshots (headless Chromium has no voices). App icons keep their existing letterform; only colours changed. No dark-mode work (Figma's "B Dark poster" variant not built).
 - **Open questions:** Sofa vs BedDouble for lodging? Should the daily card regain a save button? Build the B Dark poster variant as a dark theme later?
 
+### [2026-10-29 17:40] M7 Phase 0: SPEC §14, menu-scan contract, Renoir ground truth, a11y rules, agent refresh
+- **Milestone:** M7 (Phase 0 of `docs/proposals/menu-scan.md` only; no feature code)
+- **Files:** created `src/lib/menuScanSchema.ts`, `data/menu-fixtures/01-ja-renoir-coffee.expected.json`. Modified `SPEC.md` (§1, §3, §6, §10, new §14), `CLAUDE.md` (new Accessibility section; `test:a11y` and the `next dev` CLAUDE.md-injection footgun under Commands), `.claude/agents/implementer.md`, `.claude/agents/reviewer.md`, `docs/proposals/menu-scan.md` (status line, fixture filename, photos received), `data/menu-fixtures/README.md` (ground-truth status table), `src/lib/translate.ts` (comment only: coding agents are now Opus orchestrator + Sonnet subagents), `BUILDLOG.md`. Branch `feat/menu-scan`.
+- **Decisions:**
+  - Fixture JSON is named `01-ja-renoir-coffee.expected.json`, not the proposal's `renoir-coffee.expected.json`: harness D looks for a sibling of each `.jpg`. Proposal updated to match.
+  - SPEC §14 copies the proposal's product content (scope, D1–D7 outcomes, contract, route, prompt rules, UI, states, a11y, eval targets) but not the orchestration plan (§4) or estimates; those stay in the proposal. §14 says it wins where the two differ.
+  - SPEC §3 now also lists `zod` (already a dependency since M2, never listed) and the two approved M7 devDependencies. They are NOT installed yet; that is Phase 2.
+  - Contract file adds exported `MenuPrice`, `MenuItem`, `MenuSection` types beyond the proposal's `MenuScan`, so C doesn't re-derive them. Schemas themselves are unchanged from proposal §3.2. Checked: the Renoir fixture parses with `MenuScanSchema`, and `zodOutputFormat(MenuScanSchema)` produces a `json_schema` format.
+  - Renoir ground truth: 7 clear Coffee items (Vienna coffee and café au lait each Hot + Iced); the "Premiu…" and "Renoir e…" sections are kept as cut-off headings with visible text only; 黒蜜ミルク is `partial` with no price because its name is whole but its price is off the right edge; the two photo captions are clear, unpriced items in a heading-less section (per the proposal's worked example). The cut-off "Reco…" label on the right edge is treated as decoration, not an item.
+  - Agent files: replaced Voyage-era rules (crimson, 32px cards, Firestore) with Stamp blues; added file-ownership, a11y, `cn()` pixel-size footgun, no-`dangerouslySetInnerHTML`, no-content-logging; reviewer's model-call checks generalised to per-route `max_tokens` (4096 / 16000 / 16000) so it doesn't flag menu-scan's 16000.
+- **Deviations:** none from the proposal's Phase 0 list. SPEC §3 previously said coding agents run on Opus; changed per the proposal (subagents on Sonnet, orchestrator on Opus).
+- **Incomplete:**
+  - **Renoir prices are model-read, not owner-verified.** アメリカン's "870" sits under glare; I read it as clear 870. If the owner disagrees, it becomes `partial` with `prices: []`.
+  - Expected JSON for fixtures 02–09 is not drafted (Phase 1, per plan).
+  - English for cut-off items ("Coffee jelly &…") and descriptions are my wording; the eval matches on `original`, so wording isn't scored.
+  - SPEC §5 is still headed "Voyage" and §9 still says `#B91C1C` theme / `#FAF8F5` background; both predate Stamp blues and were left alone (out of Phase 0 scope).
+  - Not pushed; no PR yet.
+- **Open questions:**
+  - Should photo captions that duplicate a menu item (カフェゼリー＆バニラ is probably the cut-off カフェゼリー＆バ…) be rows at all? Ground truth follows the proposal and includes them; it means the table shows the same dish twice.
+  - Is "American coffee" 870 legible enough to count as `clear`?
+  - Fixture 05 currency: EUR (estimated) assumes France; the owner should confirm the country.
+
+### [2026-10-29 18:05] M7 Phase 0 gate: owner answers applied; shared copy added to the contract
+- **Milestone:** M7 (end of Phase 0; owner approved Phase 1)
+- **Files:** modified `SPEC.md` (§14 errors and Price cell), `src/lib/messages.ts` (`MENU_*` and `OFFLINE_MENU_MESSAGE`), `data/menu-fixtures/01-ja-renoir-coffee.expected.json`, `data/menu-fixtures/README.md`, `BUILDLOG.md`.
+- **Decisions (owner, 2026-10-29):** アメリカン is `partial` with no price, and any partial row with no price shows "Price unclear from photo" in the Price cell (clear rows with no price keep "—"). Photo captions stay as rows. Fixture 05 is France → EUR estimated.
+- **Decisions (mine):** Error codes for `/api/menu-scan` fixed in SPEC §14 (`unauthorized`, `too_large`, `unsupported_type`, `not_a_menu`, `rate_limited`, `upstream`, `unknown`) and all user-facing copy put in `messages.ts` now, so agents B (server) and C (UI) import the same constants instead of each inventing copy. "Price unclear from photo" applies to every partial row with no price, including cut-off names, not just glare; the schema can't tell those cases apart.
+- **Deviations:** none.
+- **Incomplete:** Copy for too-large, not-an-image, throttled and upstream errors is my wording; not owner-reviewed.
+- **Open questions:** Eval scoring for アメリカン: if the model reads "870" and calls it clear, the strict hard gate ("a price on a partial item") counts it as invented, though 870 is probably right. Harness D will report it separately so the owner can judge in Phase 3.
+
+### [2026-10-29 18:40] M7 Phase 1 (partial): image prep (A), route + model call (B), ground truth 02–09
+- **Milestone:** M7
+- **Files:** created `src/lib/menuImage.ts` (agent A), `src/lib/menuScan.ts`, `src/app/api/menu-scan/route.ts` (agent B), `data/menu-fixtures/0{2..9}-*.expected.json` (me). Modified `src/lib/rateLimit.ts` (B: `menuScan` bucket, 10/hour/user), `SPEC.md` §14 (eval metric definitions), `data/menu-fixtures/README.md`, `BUILDLOG.md`. Agents C (UI) and D (eval harness) are still running; their files are deliberately NOT in this commit.
+- **Decisions:**
+  - A: downscale = largest size under both limits (e.g. 4032×3024 → 2212×1659, 4740 tokens; 9:16 hits exactly 4784). Canvas/encode failures map to `decode` (only two reasons exist). White background painted before drawing so transparent PNGs don't go black. Extra exports `fitMenuImage`, `MenuImageErrorReason`.
+  - B: `client.messages.parse` with `MODEL`, 16000 `max_tokens`, `output_config` format + `EFFORT`; rules in `system`, image block then "Read this menu." Accepts JPEG, PNG, WebP. 110 s timeout and `maxRetries: 0` so the call ends inside `maxDuration` 120. Log line written in `scanMenu` (also for `isMenu: false`, which costs tokens). Failure logs carry only stop_reason / error name, never response content (tripPack.ts logs the whole response; not copied).
+  - Eval metrics corrected in SPEC §14 after reading fixture 02: a partial item can have a clearly printed price (glare over the name only), so "invented price" now means a price where the ground truth has none, not any price on a partial item. Prices match on amount; labels are English translations, so label agreement is reported, not gated.
+  - Ground-truth calls: unclear lassi prices (08) and the HOT/ICE coffees at the cut-off bottom are partial with no price; "Tostadas desde" is item "Tostadas" with a "from" price; fixture 05 cheese is one item with three options; 04's cut-off paella keeps 26,00; 04's "Entrantes" super-heading is dropped (sections are flat).
+- **Deviations:** none from SPEC §14 as now written.
+- **Incomplete:**
+  - The model call is untested: Anthropic is unreachable from this sandbox. A's browser decode/encode paths are untested in a real browser.
+  - B leaves a price with an empty `amount` in place; it should be dropped (Phase 2). The 500 message is a literal in the route, not a `messages.ts` constant (Phase 2).
+  - Throttle runs before MIME/size (SPEC order), so a bad upload spends one of the 10 scans.
+  - Ground truth 02–09 is model-read; no price is owner-verified yet. English names/descriptions are my wording (not scored).
+- **Open questions:** Confirm the four judgment calls above during the Phase 3 price check.
+
+### [2026-10-29 18:55] M7 Phase 1: eval harness (D)
+- **Milestone:** M7
+- **Files:** created `scripts/eval-menu-scan.mjs`, `scripts/menu-scan-stub-server.mjs` (agent D). Modified `.gitignore` (`data/menu-fixtures/results/`), `BUILDLOG.md`.
+- **Decisions:** Sign-in is `POST /api/auth/sign-in/email` `{email, password}` with an `Origin` header, cookies replayed as a plain `Cookie` header (D traced it through `/api/auth/[...path]` to Neon Auth's route table). Runs sequentially and stops at the first 429 (INCOMPLETE, exit 1). Non-200/422 or network errors exclude that fixture and mark the run INCOMPLETE. Fixture 09's 422 is gated. "Invented items per menu" gates on the worst menu. Ratios are summed across the set. Extra `--fixtures <dir>` option for testing. Verified by me: the harness against the `--clean` stub over all 9 real fixtures gives PASS on every gate (129/129 clear prices, 111/111 clear items, 12/12 partial), confirming every ground-truth file loads and scores.
+- **Deviations:** none.
+- **Incomplete:** Never run against the real route. Whether Neon Auth accepts `Origin: http://localhost:3000` is unverified; if not, sign-in fails with exit 2. The cut-off metric's "not longer than expected" clause can never fail on an exact-normalised match; completed text shows up as an invented item plus an unflagged partial instead (named in the JSON's `completedBy`).
+- **Open questions:** none new.
+
+### [2026-10-29 19:10] M7 Phase 2 (part): B follow-ups, English option labels, nav + home entry
+- **Milestone:** M7
+- **Files:** modified `src/lib/menuScan.ts`, `src/app/api/menu-scan/route.ts`, `src/lib/messages.ts` (`MENU_UNKNOWN_MESSAGE`), `src/lib/nav.ts`, `src/app/page.tsx`, `SPEC.md` §14, `BUILDLOG.md`.
+- **Decisions:**
+  - Post-processing now drops a price whose amount is empty after trimming (B flagged it would render as a blank price instead of "—").
+  - The route's 500 copy is `MENU_UNKNOWN_MESSAGE` instead of a literal.
+  - Prompt rule 7 (and SPEC §14 rule 7) now says option labels are written in English ("1/2 Ración" → "Half portion"). The old example kept "1/2 Ración" verbatim, which contradicted the schema's "label in English" and would put Spanish in the Option column. Ground truth already uses English labels; the eval matches on amount only, so this doesn't move any metric.
+  - `/menu` added to `NAV_LINKS` as "Menu scan", which also puts it in `warmUrls()` (shell works offline). Home gets a "Scan a menu" pill under the translate entry, same style, lucide `ScanText`.
+- **Deviations:** none.
+- **Incomplete:** Not yet done in Phase 2: swapping C's fixture stub for the real `POST /api/menu-scan`, wiring C to A's `prepareMenuImage`, the D5 devDependencies and `test:a11y`, `npm run build`, axe and screenshots. The home pill and nav link were not looked at in a browser yet.
+- **Open questions:** none new.
+
+### [2026-10-29 19:20] M7 Phase 1 done: menu-scan UI (C)
+- **Milestone:** M7
+- **Files:** created `src/app/menu/page.tsx`, `src/components/MenuScanner.tsx`, `src/components/MenuTable.tsx` (agent C), `BUILDLOG.md`.
+- **Decisions (C's, accepted unless noted):**
+  - Capture: two real file inputs, `sr-only` inside labels styled as buttons, `min-h-11`, focus ring via `has-[:focus-visible]`.
+  - Table per SPEC §14 (caption, scoped `th`, English as row header, rowgroup headings, no `rowSpan`, sr-only names on continuation rows, `lang` on cells, sr-only "940 Japanese yen"). A section heading shows its original line only when it differs from the English.
+  - **Column widths 28/34/16/22 with Option** (SPEC says 30/34/16/20): at 320 px the 20% Price column broke "¥1,000" mid-number. Without Option, 36/44/20 as specified. SPEC to be updated.
+  - Not-a-menu, too-large, not-an-image and decode errors offer the capture buttons instead of "Try again" (resending the same photo can't succeed). Network, offline, 429 and 502 get "Try again".
+  - A scan with zero items is treated as not-a-menu. Item-less sections are skipped in the table.
+  - Currency names come from `Intl.DisplayNames`, which capitalises "Japanese Yen"; sr-only prices (NumberFormat) read "Japanese yen". Left as-is.
+  - `ErrorCard` not reused: it has no `role="alert"` or focus target. Its style is copied inline.
+  - Page title `Menu · {brand.name}`; no page-level eyebrow because the result has its own.
+- **Deviations:** column widths (above). The currency picker sits under the "Your menu" heading on the left, not in the header's top-right corner as SPEC §14 says — to fix in Phase 2.
+- **Incomplete:** `fetchMenuScan` still returns the Renoir fixture after 1.8 s; dev-only `?force=401|413|…` forces each error. Unknown statuses (incl. 500) reuse `MENU_UPSTREAM_MESSAGE`. Not run: `npm run build`, axe. C checked result/loading/empty/error/offline at 390 and 320 px in Playwright (no page scroll; focus moves verified for forced 401/413/422/429/502/network; Cancel returns focus to Take photo); I viewed the 320 px result screenshot.
+- **Open questions:** none for the owner yet; widths and picker placement are mine to settle in Phase 2.
+
+### [2026-10-29 19:55] M7 Phase 2 done: real scan call, a11y test suite, scanner hang fix
+- **Milestone:** M7
+- **Files:** created `playwright.config.ts`, `tests/a11y/menu.spec.ts`. Modified `src/components/MenuScanner.tsx`, `src/components/MenuTable.tsx`, `package.json` (`test:a11y` script; devDependencies `@playwright/test` 1.63.0 and `@axe-core/playwright` ^4.14.0, approved D5; `overrides.playwright-core` 1.63.0), `package-lock.json`, `.gitignore` (`/test-results/`, `/playwright-report/`), `CLAUDE.md` (Commands: `test:a11y`), `SPEC.md` §14 (column widths, scroll region), `BUILDLOG.md`.
+- **Decisions:**
+  - `fetchMenuScan` now does the real multipart `POST /api/menu-scan`; non-200 → `MenuScanFetchError(status, code, message)`; the 200 body is re-validated with `MenuScanSchema` (malformed → 502 path). Fixture import and dev `?force=` switches deleted. 500/unknown statuses now show `MENU_UNKNOWN_MESSAGE`, 502 shows `MENU_UPSTREAM_MESSAGE`.
+  - Currency picker held in the top-right corner (header row no longer wraps; the eyebrow wraps beside it), per SPEC §14.
+  - `@playwright/test` pinned to 1.63.0 to match the preinstalled browser. `@axe-core/playwright` pulled `playwright-core` 1.64.1, whose `Page` type didn't match; an npm `overrides` entry pins it to 1.63.0 so there is one Playwright in the tree.
+  - Suite: axe with WCAG 2.0/2.1/2.2 A+AA tags, no page-level horizontal scroll, and focus assertions, for empty, loading, result (with and without Option), 422, 413, 429, 502, 401 and offline at 320 and 390 px, plus the Renoir result at 320 px with 200% root font size. `/api/menu-scan` is mocked; the real client image prep runs on the Renoir photo.
+- **Bugs found and fixed by the suite:**
+  1. **Scanner could hang forever on "Reading your menu…"** (about 1 run in 7). `MenuScanner` had `useEffect(() => () => abortRef.current?.abort(), [])`. React re-runs effect cleanups while keeping state (StrictMode / Fast Refresh in dev), which aborted the live scan; `start()` treats any abort as intentional and returned silently. Confirmed with temporary logging (cleanup fired, then "prepared, aborted: true"), then removed the effect: 0/20 hangs in the same loop, and the full suite passed 4 runs in a row. Aborting never stopped the server-side model call anyway. I did not prove whether production can hit the same path, but the fix removes the mechanism.
+  2. **At 200% text the table scrolled horizontally inside a box keyboard users couldn't reach** (axe `scrollable-region-focusable`). The wrapper is now a focusable, labelled region with a focus ring.
+- **Checks:** `npm run lint`, `npm run typecheck`, `npm run build` all clean. `npm run test:a11y`: 21/21. The client bundle contains no `ANTHROPIC_API_KEY`, no `@anthropic-ai` and no fixture menu text.
+- **Deviations:** column widths 28/34/16/22 (SPEC updated to match).
+- **Incomplete:**
+  - Nothing has hit the real model, Neon Auth or the deployed route (Phase 3 runs that, on the owner's environment or the Vercel preview).
+  - The scroll region is always a tab stop, even when nothing overflows.
+  - The dev server logs a 500 from `/api/auth/get-session` (Neon env vars aren't set in this sandbox); harmless here.
+  - The 200% check doubles the root font size; it is not Safari's text-size setting. Real-iPhone checks stay in the Phase 4 phone test.
+- **Open questions:** none for the owner from Phase 2.
+
+### [2026-10-29 20:00] M7 Phase 3 prep: Neon Auth trusted domain for the feat/menu-scan preview
+- **Milestone:** M7
+- **Files:** modified `BUILDLOG.md`. External: Neon project `wild-queen-99254638`, branch `production` (`br-summer-cloud-b8bf9vq4`), Neon Auth trusted domains.
+- **Decisions (owner-approved, 2026-10-29):** added `https://travel-translator-git-feat-menu-scan-puriyas-projects-c08df284.vercel.app` (better_auth), the stable branch alias, so sign-in works on the preview for the eval run and the Phase 4 phone test. Verified by listing the domains afterwards (4 entries; the 3 existing ones unchanged).
+- **Deviations:** none.
+- **Incomplete:** Not tested with a real sign-in from the preview (this sandbox can't reach *.vercel.app). Whether Vercel Deployment Protection blocks the eval script on the preview is unknown.
+- **Open questions:** Remove this domain (and the older `git-claude-c-e1a932` one) once M7 ships?
+
+### [2026-10-30 08:40] M7 Phase 3: owner verified all ground-truth prices
+- **Milestone:** M7
+- **Files:** modified `data/menu-fixtures/README.md` (status table), `BUILDLOG.md`.
+- **Decisions (owner, 2026-10-30):** every price in `01`–`08` `.expected.json` confirmed "all correct" against the photos, using a side-by-side review page, including my four judgment calls (unreadable lassi prices in 08, "Tostadas desde" as a "from" price in 03, 05's cheese as one item with three options, 04's cut-off paella keeping 26,00).
+- **Deviations:** none.
+- **Incomplete:** English names and descriptions were not reviewed (not scored). The eval against the preview has not run yet.
+- **Open questions:** none.
+
+### [2026-10-30 12:05] M7 Phase 3: first live eval (FAIL) and prompt tuning round 1
+- **Milestone:** M7
+- **Files:** modified `src/lib/menuScan.ts` (prompt rules 1–3, 7, new 9; `cleanAmount()`, `cleanLanguageTag()` in post-processing), `src/lib/menuScanSchema.ts` (`.describe()` on `amount`, item `original`, `sourceLanguage`; shape unchanged), `SPEC.md` §14 (prompt rules + server guards), `BUILDLOG.md`.
+- **Eval run 1** (owner, against the preview, 2026-10-30 11:49 UTC, `claude-sonnet-5`, effort low): FAIL on every accuracy gate. Invented prices 21 (target 0), price exact 60.5% (≥98%), recall 87.4% (≥95%), worst invented items 7 (≤1), cut-off flagged 33% (≥90%). Not-a-menu 422: pass. Latency p50 9.4 s, p95 20.4 s. Currency right on 7/8 (08 said printed, expected estimated).
+- **Diagnosis from the raw results (no price was made up from nothing):**
+  1. Amounts carried the currency sign ("5,80€", "+5.00€", "12€") on 02, 03, 06: ~30 price misses. A real UI bug too (would render "€5,80€").
+  2. `original` included descriptions or notes (07 ×4 "(salsa shropshire…)", 08 ×5 "（赤ワイン＋ジンジャー）", "(HOT or ICE)", branch notes; 05 used the "Au choix" line instead of "Fromage"). Each counted as a missed item + an invented item + invented prices.
+  3. 06: supplements and "au choix" choices came back as their own rows instead of price entries/description on the dish (rule 7).
+  4. `sourceLanguage` was a name ("Japanese", "Spanish") instead of a BCP 47 code: breaks `lang` for screen readers.
+  5. Real accuracy misses: completed cut-off text twice (01 "カフェゼリー＆オーレ", 02 "jamón"); read three prices under glare (01 アメリカン 870, 08 milk/mango lassi); skipped the two photo captions on 01; added an accent ("Inglés"); kept "desde" in `original`; marked some glare/cut-off rows clear (02 Super nachos, 04 paella).
+- **Decisions:**
+  - Owner (2026-10-30): prices under glare stay "Price unclear from photo"; no credit for a probably-right guess. Rule 2 now says so explicitly.
+  - Tuning step 1 only (SPEC: prompt before effort, effort before model). Effort and model unchanged.
+  - Server guards so rules 2 and 9 hold regardless of the model: `cleanAmount()` strips `\p{Sc}`, 円, uppercase 3-letter codes and "euro(s)"; `cleanLanguageTag()` keeps only 2–3 letter BCP 47 tags (else ""). Checked on all 8 raw scans from run 1: every amount is now numeric; language names fall to "" (UI already handles ""). Unit cases pass for "5,80€", "+5.00€", "16 Euro", "¥870", "870円", "12 EUR", "es-419", "pt-br"→"pt-BR".
+  - Harness matching left strict on purpose (exact NFKC `original`): loosening it would hide completed text.
+- **Deviations:** SPEC §14 now has 9 prompt rules (was 8).
+- **Incomplete:** Not re-evaluated yet; needs the owner's second run after the preview redeploys. If amounts still pass but names don't, the next lever is `effort: "medium"` (SPEC tuning step 2).
+- **Open questions:** 08 currency: the model said "printed" JPY; I see no ¥ or 円 on that photo. Not gated; recheck after run 2.
 ### [2026-10-30 13:00] Security hardening: Next.js 16.4.3, open-redirect fix, security headers, sync throttle, clear recents on sign-out
 - **Milestone:** none (security fixes from the 2026-10-30 review, separate from M7; branch `fix/security-hardening` off `main`)
 - **Files:** modified `package.json`, `package-lock.json` (next and eslint-config-next 16.3.1 → 16.4.3), `next.config.ts`, `src/app/auth/actions.ts`, `src/app/api/sync/route.ts`, `src/lib/rateLimit.ts`, `src/lib/local/db.ts`, `src/lib/local/recentTranslations.ts`, `BUILDLOG.md`.
@@ -349,3 +486,30 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Not run against real Neon or Anthropic from here; sign-out clearing was type-checked, not clicked through.
   - Owner dashboard items, not code: Anthropic spend cap, Vercel Firewall rate limit on `/api/translate`, Neon Auth email verification.
 - **Open questions:** Enforce the CSP once the `unsafe-eval` source is found?
+
+### [2026-10-30 13:15] M7: merge main (security hardening #16) into feat/menu-scan; a11y suite moves to a production build
+- **Milestone:** M7
+- **Files:** merge of `origin/main` (e832aaa, PR #16). Conflicts resolved in `src/lib/rateLimit.ts` (kept both the `menuScan` and `sync` buckets) and `BUILDLOG.md` (both sides' appended entries kept, in time order). Modified `playwright.config.ts`, `CLAUDE.md`, `.gitignore`, `BUILDLOG.md`.
+- **Decisions:**
+  - Owner merged PR #16 ("16", 2026-10-30). This branch now runs Next 16.4.3 with the security headers, redirect fix, sync throttle and recents clearing.
+  - On 16.4.3 the two offline a11y tests failed every run under `next dev` (the page never left the empty state), but the same flow passed 5/5 under `next start`, so the app is fine and the dev server was the cause. `test:a11y` now runs `npm run build && next start -p 3100`, which tests what ships. 21/21 on two consecutive runs.
+  - Next 16.4.3's dev server also writes its agent-instruction block to a new `AGENTS.md` ("committing it with your work keeps the tree clean"). Deleted, not committed, and git-ignored; CLAUDE.md notes it.
+- **Checks:** lint, typecheck, `next build` clean; `npm install` leaves the merged lockfile unchanged (next 16.4.3, one playwright-core 1.63.0).
+- **Deviations:** none.
+- **Incomplete:** `test:a11y` now takes about a minute longer (it builds first). Eval run 2 still pending (owner).
+- **Open questions:** none.
+
+### [2026-10-31 07:45] M7 Phase 3: eval run 2 (FAIL, much closer) and prompt tuning round 2
+- **Milestone:** M7
+- **Files:** modified `src/lib/menuScan.ts` (prompt rules 2, 3, 8), `SPEC.md` §14 (same rules), `data/menu-fixtures/07-it-primi.expected.json` (lasagne), `BUILDLOG.md`.
+- **Eval run 2** (owner, preview at 517d89e, 2026-10-31 07:26 Eastern, `claude-sonnet-5`, effort low): invented prices 21 → **4** (gate 0, FAIL); price exact 60.5% → **99.2%** (PASS); recall 87.4% → **97.3%** (PASS); worst invented items 7 → **1** (PASS); cut-off flagged 33% → **58%** (gate 90%, FAIL); not-a-menu PASS. Latency p50 9.2 s, p95 26.2 s (08).
+- **Diagnosis:**
+  1. 01 アメリカン ¥870 and 08 milk lassi ¥572: the model read prices under glare and called the rows clear. Real miss against the owner's rule.
+  2. 07 lasagne: **ground-truth error, mine.** The model followed rule 1 and moved "(20 min)" to the description; my expected `original` still had it. Fixed the fixture (`original` "Le Lasagne espresse, alla Bolognese", description "Takes 20 minutes."). Prices unchanged; nothing the owner verified moved.
+  3. 02 Huevos rotos: the model read "jamó…" under the glare where the ground truth has "jam". Price 9,50 is correct. Left the ground truth as is; it still counts against the gate. **Owner call** if it is the last failure.
+  4. Cut-off misses are all price-only: アメリカン, 黒蜜ミルク (price off the right edge), Super nachos, milk lassi. The model flags `partial` when a name is cut, not when only the price is.
+  5. Not gated: currencySource "printed" on 01, 05, 08 where no symbol is visible (hides the UI's "est."); 01's two photo captions came back as notes instead of rows (recall still passes); 05 cheese labels left in French ("1 fromage").
+- **Decisions:** prompt-only round (effort stays low) so the effect of each lever is attributable. Rule 2: glare, reflection, shadow, smudge or the image edge touching any digit makes a price unreadable; when in doubt, leave it out. Rule 3: a hidden or cut-off price makes the item `partial` even with a complete name. Rule 8: "printed" only when a symbol or word is visible in the photo.
+- **Deviations:** none.
+- **Incomplete:** not re-evaluated. If the cut-off gate still fails, next is `effort: "medium"` (SPEC tuning step 2). Best case after this round is 1 invented price (Huevos, a one-letter glare reading).
+- **Open questions:** Huevos "jam" vs "jamó": keep strict, or accept the model's reading?

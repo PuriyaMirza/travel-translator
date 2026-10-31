@@ -1,0 +1,141 @@
+{
+  "isMenu": true,
+  "sourceLanguage": "fr",
+  "currency": "EUR",
+  "currencySource": "printed",
+  "sections": [
+    {
+      "original": "PLATS",
+      "english": "Mains",
+      "items": [
+        {
+          "original": "LA SHOUK SHOUK",
+          "english": "La Shouk Shouk",
+          "description": "Falafel, mechouia, hummus, white and red cabbage, tomato, cucumber, confit aubergine and fresh herbs with tahini sauce, served with warm pita.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "16.90"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "PITA KIFF ARAYES",
+          "english": "Pita Kiff Arayes",
+          "description": "Pita stuffed with spiced beef, with sautéed potatoes and caramelised onions.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "18.50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "DÉLI PASTRAMI",
+          "english": "Deli Pastrami",
+          "description": "Sliced pastrami, gherkins, white and red cabbage, sautéed potatoes with caramelised onions, honey mustard.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "19.50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "ASSIETTE DE SAUMON",
+          "english": "Smoked salmon plate",
+          "description": "Smoked salmon served with warm blinis.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "22.00"
+            },
+            {
+              "label": "+ dill herring",
+              "amount": "+5.00"
+            },
+            {
+              "label": "+ taramasalata",
+              "amount": "+5.00"
+            },
+            {
+              "label": "+ tuna cream",
+              "amount": "+5.00"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "MARIANNE CHAKCHOUKA",
+          "english": "Marianne Shakshuka",
+          "description": "Eggs simmered in a stew of peppers, tomatoes and sweet onions, with your choice of merguez, or feta with olive oil and za'atar.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "17.50"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "PAINS",
+      "english": "Breads",
+      "items": [
+        {
+          "original": "Pita fraîche",
+          "english": "Fresh pita",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "1.50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Pain Frena à l'huile d'olive",
+          "english": "Frena bread with olive oil",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "2.30"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Blinis (2 pièces)",
+          "english": "Blinis (2 pieces)",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "2.50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Pain à l'oignon maison",
+          "english": "Homemade onion bread",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "2.50"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    }
+  ],
+  "notes": []
+}

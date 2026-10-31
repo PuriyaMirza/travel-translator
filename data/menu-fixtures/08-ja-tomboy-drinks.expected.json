@@ -1,0 +1,423 @@
+{
+  "isMenu": true,
+  "sourceLanguage": "ja",
+  "currency": "JPY",
+  "currencySource": "estimated",
+  "sections": [
+    {
+      "original": "Glass Wine",
+      "english": "Wine by the glass",
+      "items": [
+        {
+          "original": "赤ワイン",
+          "english": "Red wine",
+          "description": "",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "528"
+            },
+            {
+              "label": "Carafe",
+              "amount": "1,320"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "白ワイン",
+          "english": "White wine",
+          "description": "",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "528"
+            },
+            {
+              "label": "Carafe",
+              "amount": "1,320"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Sparkling Wine",
+      "english": "Sparkling wine",
+      "items": [
+        {
+          "original": "樽出しスパークリング",
+          "english": "Draught sparkling wine",
+          "description": "",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "638"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "スパークリングライチ",
+          "english": "Sparkling lychee",
+          "description": "",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "スパークリングピーチ",
+          "english": "Sparkling peach",
+          "description": "",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Wine Cocktail",
+      "english": "Wine cocktails",
+      "items": [
+        {
+          "original": "キティ",
+          "english": "Kitty",
+          "description": "Red wine and ginger ale.",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "605"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "キール",
+          "english": "Kir",
+          "description": "White wine with cassis liqueur.",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "605"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Sangria",
+      "english": "Sangria",
+      "items": [
+        {
+          "original": "自家製サングリア",
+          "english": "Homemade sangria",
+          "description": "Rich wine with bright fruit aromas; fruity and fragrant.",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "660"
+            },
+            {
+              "label": "Carafe",
+              "amount": "1,386"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Lemonade",
+      "english": "Lemonade",
+      "items": [
+        {
+          "original": "アメリカンレモネード",
+          "english": "American lemonade",
+          "description": "A layered cocktail of lemonade and red wine.",
+          "prices": [
+            {
+              "label": "Glass",
+              "amount": "660"
+            },
+            {
+              "label": "Carafe",
+              "amount": "1,397"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Bottle Wine",
+      "english": "Wine by the bottle",
+      "items": [
+        {
+          "original": "グローバーインディア(白)",
+          "english": "Grover India (white)",
+          "description": "Dry Sauvignon Blanc from India. Only at the Tomtai and Ikebukuro No. 2 branches.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "3,080"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "グローバーインディア(赤)",
+          "english": "Grover India (red)",
+          "description": "Full-bodied Cabernet and Shiraz from India. Only at the Tomtai and Ikebukuro No. 2 branches.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "3,080"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Beer",
+      "english": "Beer",
+      "items": [
+        {
+          "original": "ザ・プレミアム・モルツ",
+          "english": "The Premium Malt's",
+          "description": "Bright, aromatic, with a deep body.",
+          "prices": [
+            {
+              "label": "Mug",
+              "amount": "660"
+            },
+            {
+              "label": "Pitcher",
+              "amount": "2,420"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Non-alcoholic Beer",
+      "english": "Non-alcoholic beer",
+      "items": [
+        {
+          "original": "オールフリー",
+          "english": "All-Free",
+          "description": "Non-alcoholic beer-taste drink.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "528"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Beer Cocktail",
+      "english": "Beer cocktails",
+      "items": [
+        {
+          "original": "シャンディガフ",
+          "english": "Shandy gaff",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "ライチビア",
+          "english": "Lychee beer",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "アマレットビア",
+          "english": "Amaretto beer",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "マンゴービール",
+          "english": "Mango beer",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "ピーチビア",
+          "english": "Peach beer",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "ココナッツビア",
+          "english": "Coconut beer",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "カシスビア",
+          "english": "Cassis beer",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "パッションフルーツビア",
+          "english": "Passion fruit beer",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "660"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "TOM Lassie",
+      "english": "Tom lassi",
+      "items": [
+        {
+          "original": "ミルクラッシー",
+          "english": "Milk lassi",
+          "description": "",
+          "prices": [],
+          "legibility": "partial"
+        },
+        {
+          "original": "マンゴーラッシー",
+          "english": "Mango lassi",
+          "description": "",
+          "prices": [],
+          "legibility": "partial"
+        },
+        {
+          "original": "グァバラッシー",
+          "english": "Guava lassi",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "583"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "パインラッシー",
+          "english": "Pineapple lassi",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "583"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "ベリーラッシー",
+          "english": "Berry lassi",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "583"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "ソフトドリンク",
+      "english": "Soft drinks",
+      "items": [
+        {
+          "original": "復刻！エスキモー",
+          "english": "Eskimo (revival)",
+          "description": "A soft drink created at the original Tomboy 40 years ago: Calpis milk drink topped with vanilla ice cream.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "605"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "ブレンドコーヒー",
+          "english": "Blend coffee",
+          "description": "Hot or iced.",
+          "prices": [],
+          "legibility": "partial"
+        },
+        {
+          "original": "カフェオレ",
+          "english": "Café au lait",
+          "description": "Hot or iced.",
+          "prices": [],
+          "legibility": "partial"
+        }
+      ]
+    }
+  ],
+  "notes": []
+}
