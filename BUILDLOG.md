@@ -498,3 +498,18 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** `test:a11y` now takes about a minute longer (it builds first). Eval run 2 still pending (owner).
 - **Open questions:** none.
+
+### [2026-10-31 07:45] M7 Phase 3: eval run 2 (FAIL, much closer) and prompt tuning round 2
+- **Milestone:** M7
+- **Files:** modified `src/lib/menuScan.ts` (prompt rules 2, 3, 8), `SPEC.md` §14 (same rules), `data/menu-fixtures/07-it-primi.expected.json` (lasagne), `BUILDLOG.md`.
+- **Eval run 2** (owner, preview at 517d89e, 2026-10-31 07:26 Eastern, `claude-sonnet-5`, effort low): invented prices 21 → **4** (gate 0, FAIL); price exact 60.5% → **99.2%** (PASS); recall 87.4% → **97.3%** (PASS); worst invented items 7 → **1** (PASS); cut-off flagged 33% → **58%** (gate 90%, FAIL); not-a-menu PASS. Latency p50 9.2 s, p95 26.2 s (08).
+- **Diagnosis:**
+  1. 01 アメリカン ¥870 and 08 milk lassi ¥572: the model read prices under glare and called the rows clear. Real miss against the owner's rule.
+  2. 07 lasagne: **ground-truth error, mine.** The model followed rule 1 and moved "(20 min)" to the description; my expected `original` still had it. Fixed the fixture (`original` "Le Lasagne espresse, alla Bolognese", description "Takes 20 minutes."). Prices unchanged; nothing the owner verified moved.
+  3. 02 Huevos rotos: the model read "jamó…" under the glare where the ground truth has "jam". Price 9,50 is correct. Left the ground truth as is; it still counts against the gate. **Owner call** if it is the last failure.
+  4. Cut-off misses are all price-only: アメリカン, 黒蜜ミルク (price off the right edge), Super nachos, milk lassi. The model flags `partial` when a name is cut, not when only the price is.
+  5. Not gated: currencySource "printed" on 01, 05, 08 where no symbol is visible (hides the UI's "est."); 01's two photo captions came back as notes instead of rows (recall still passes); 05 cheese labels left in French ("1 fromage").
+- **Decisions:** prompt-only round (effort stays low) so the effect of each lever is attributable. Rule 2: glare, reflection, shadow, smudge or the image edge touching any digit makes a price unreadable; when in doubt, leave it out. Rule 3: a hidden or cut-off price makes the item `partial` even with a complete name. Rule 8: "printed" only when a symbol or word is visible in the photo.
+- **Deviations:** none.
+- **Incomplete:** not re-evaluated. If the cut-off gate still fails, next is `effort: "medium"` (SPEC tuning step 2). Best case after this round is 1 invented price (Huevos, a one-letter glare reading).
+- **Open questions:** Huevos "jam" vs "jamó": keep strict, or accept the model's reading?

@@ -45,9 +45,9 @@
           "legibility": "clear"
         },
         {
-          "original": "Le Lasagne espresse, alla Bolognese (20 min)",
-          "english": "Lasagne Bolognese, made to order (20 min)",
-          "description": "",
+          "original": "Le Lasagne espresse, alla Bolognese",
+          "english": "Lasagne Bolognese, made to order",
+          "description": "Takes 20 minutes.",
           "prices": [
             {
               "label": "",
