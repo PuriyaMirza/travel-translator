@@ -7,6 +7,7 @@ export const NAV_LINKS = [
   { href: "/vault", label: "Vault" },
   { href: "/trip", label: "Trip" },
   { href: "/cards", label: "Cards" },
+  { href: "/menu", label: "Menu scan" },
 ] as const;
 
 /**

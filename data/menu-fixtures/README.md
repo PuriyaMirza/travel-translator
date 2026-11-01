@@ -21,5 +21,13 @@ Each photo gets a sibling `<name>.expected.json` (a `MenuScan`, per the plan's �
 1. **Bilingual menus (02):** `original` is the first or primary language line. The parallel translation line creates no row.
 2. **Shared group prices (08, "All 660"):** a price printed for a named group applies to every item in it.
 3. **Options, add-ons and "from" prices (04, 06, 03):** these go in `prices[].label` with the amount verbatim, sign included. A "…" under a column-header option means it isn't offered, so no entry.
-4. **Currency (all):** if a symbol or word is printed, use it (`currencySource: "printed"`). Otherwise estimate from the menu's language and the size of its prices (`"estimated"`), never from location. Expected values: 01 JPY (estimated), 02 EUR (printed), 03 EUR (printed), 04 EUR (printed), 05 EUR (estimated; the owner should confirm the country, since French is also used in CHF and CAD countries), 06 EUR (printed), 07 EUR (printed, "Euro"), 08 JPY (estimated), 09 n/a.
+4. **Currency (all):** if a symbol or word is printed, use it (`currencySource: "printed"`). Otherwise estimate from the menu's language and the size of its prices (`"estimated"`), never from location. Expected values: 01 JPY (estimated), 02 EUR (printed), 03 EUR (printed), 04 EUR (printed), 05 EUR (estimated; owner confirmed France, 2026-10-29), 06 EUR (printed), 07 EUR (printed, "Euro"), 08 JPY (estimated), 09 n/a.
 5. **These are cropped photos (500–2,500 px),** smaller than a phone camera's 12+ MP originals. They test reading accuracy, not the client resize path. That path is covered by the owner's real-iPhone test in Phase 4.
+
+## Ground-truth status
+
+| File | Expected JSON | Owner-verified prices |
+|---|---|---|
+| `01-ja-renoir-coffee.jpg` | drafted (Phase 0; アメリカン partial per owner) | yes (2026-10-30) |
+| `02`–`08` | drafted (Phase 1) | yes (2026-10-30) |
+| `09-not-a-menu-settings.jpg` | drafted (`isMenu: false`) | n/a |

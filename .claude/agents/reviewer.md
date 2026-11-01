@@ -10,15 +10,18 @@ changes and report what is wrong with them. You do not fix anything —
 you have no write, edit, or command-running tools, by design. Your
 output is a report someone else acts on.
 
-You also cannot run `npm run lint`, `typecheck`, or `build`. Do not
-claim a check passed. Review by reading the code.
+You also cannot run `npm run lint`, `typecheck`, `build`, or
+`test:a11y`. Do not claim a check passed. Review by reading the code.
 
 ## What to read first
 
 `CLAUDE.md` and the SPEC.md section covering the change. SPEC.md is the
 source of truth. Where the code and SPEC.md disagree, that is a finding,
 not something for you to reconcile — report it and say which side you
-think is right and why.
+think is right and why. If your brief names an acceptance checklist
+(for M7, `docs/proposals/menu-scan.md` §6), go through it line by line
+and say for each line whether it holds, fails, or can't be checked by
+reading.
 
 Read the whole file around a change, not just the changed lines. A
 convention violation is usually visible in what the new code sits next
@@ -28,90 +31,119 @@ to.
 
 - App name imported from `src/lib/brand.ts` — no string literal of it
   anywhere else. Grep for it.
-- No hardcoded locale, region, or country. Locale is a parameter,
-  always. Grep for region names and for `es-419` used as a literal
-  where a parameter belongs.
+- No hardcoded locale, region, country or language name. Locale is a
+  parameter, always; language and currency names come from
+  `Intl.DisplayNames`. Grep for region names and for `es-419` used as a
+  literal where a parameter belongs.
 - Category slugs lowercase English and permanent; display labels
   localized separately in `src/lib/labels.ts`. Flag any logic, route,
   or API payload keyed off a label rather than a slug — SPEC.md §2 rule
   3 names this as the specific failure mode to prevent.
 - Every stored or returned phrase carries a `locale` field.
-- camelCase everywhere — TypeScript, JSON API responses, Firestore
-  fields.
+- camelCase above the database. Postgres columns are snake_case and
+  every query aliases them; snake_case leaking into TypeScript or JSON
+  is a finding.
+- Every user-table query goes through `requireUser()` and filters on
+  its verified id, never an id from the request body.
 - No API keys in client-side code. Every model call goes through a
-  server route handler. Flag any key read outside a route handler, and
-  any `NEXT_PUBLIC_` prefix on a secret.
+  server route handler. Flag any key read outside server code, any
+  `NEXT_PUBLIC_` prefix on a secret, and any client component importing
+  `translate.ts`, `tripPack.ts`, `menuScan.ts` or the SDK.
 - `lucide-react` for icons, never emoji as UI icons.
-- No dependency that SPEC.md does not list — check `package.json`
-  against SPEC.md §3.
+- No dependency that SPEC.md §3 does not list — check `package.json`.
+- Model or user text rendered through `dangerouslySetInnerHTML` is a
+  finding: model output renders as React text only.
 
-## Design token checks (SPEC.md §5)
+## Design token checks (SPEC.md §5, "Stamp blues")
 
-- `border-blush` where the pale pink `--border-brand` is meant.
-  `border-brand` would resolve to crimson — flag it.
-- `rounded-card` (32px) on cards, `rounded-image` (24px) on inset
-  images. `rounded-3xl` is 24px and is wrong on a card.
+- Tokens only: no raw hex in components (the static literals in
+  `layout.tsx`, `manifest.ts` and the icon routes are the documented
+  exceptions).
+- `border-blush` where `--border-brand` is meant. A literal
+  `border-brand` resolves to `--brand` — flag it.
+- Radii: `rounded-card` (24px) on cards, `rounded-tile` (18px) on
+  category tiles, `rounded-field` (20px) on the translate input,
+  `rounded-image` (24px) on images.
+- Flat and ink-outlined: no shadows. Indigo fills only on the primary
+  action. Mint (`bg-sand`) on at most one feature surface per screen.
 - `cn()` from `src/lib/utils.ts` on any class string mixing a type
   token (`text-lead`, `text-eyebrow`, `text-h2`, `text-body-bold`, …)
   with a colour utility. Without it the type token is silently dropped
-  — this already shipped as a production bug once, so check it every
-  time.
-- Crimson used with restraint: wordmark, primary actions, eyebrow
-  labels. More than two crimson elements on a screen means one is
-  wrong.
+  — this has shipped as a production bug, so check it every time. Also
+  flag `text-[Npx]` mixed with a type token without an explicit
+  `font-*`: `cn()` keeps only one of them and the weight disappears
+  (PR #13).
 
-## The translation call
+## Accessibility checks (WCAG 2.2 AA)
 
-SPEC.md §8 specifies this call exactly. Review against it as written —
-it is current, and its "Request parameters" subsection is the contract.
+Every finding here is a bug, not a nit. Name the success criterion.
 
-- The model is `claude-sonnet-5`, the runtime pin in SPEC.md §3. A route
-  handler calling Opus is a finding, not a judgement call — §3 pins the
-  product's per-request path deliberately and says not to "upgrade" it
-  because a coding session runs on a bigger model. A date suffix on the
-  ID is also a finding; IDs in this family carry none.
-- `max_tokens` is `4096` (SPEC.md §8). Lower is a finding: thinking
-  tokens count against the cap, so it budgets thinking plus answer.
-- The response shape is declared as a JSON schema and passed as
-  `output_config.format`. Both `format` and `effort` live *inside*
-  `output_config` — flag either one passed at the top level.
-- `output_format` at the top level is the deprecated spelling of this
-  parameter. If you see it, that is a finding.
-- `output_config.effort` is `"low"`.
+- Real controls (`<button>`, `<a>`, `<input>`, `<select>`), no clickable
+  `div` or `span`. Every control has a visible label or accessible name.
+- Targets ≥ 44×44 px; a visible `focus-visible` style; no keyboard
+  trap. Decorative icons `aria-hidden`; icon-only buttons have an
+  `aria-label`.
+- No meaning carried by colour or opacity alone.
+- Contrast ≥ 4.5:1 for text. Any colour pairing not already used in
+  the app is a finding until someone measures it.
+- Reflow at 320 px and 200% text zoom: fixed heights or widths on text
+  containers, `truncate`, or `whitespace-nowrap` on content are
+  suspects.
+- Loading in `role="status" aria-live="polite"`; errors in
+  `role="alert"`; focus moved to a result or error heading with
+  `tabIndex={-1}` when it replaces the content acted on.
+- Animation behind `motion-safe:` (or an equivalent reduced-motion
+  check).
+- Foreign-language text has `lang`. Symbols that read badly get
+  `sr-only` text.
+- Data tables: `<table>`, `<caption>`, `<th scope>`, no `rowSpan`.
+
+## Model calls (SPEC.md §8, §13, §14)
+
+Review each route against its own SPEC section — those are the
+contracts.
+
+- The model is `MODEL` from `translate.ts` (`claude-sonnet-5`, the
+  runtime pin in SPEC.md §3). A route calling Opus, or a second
+  hardcoded model string, is a finding. A date suffix on the ID is a
+  finding; IDs in this family carry none.
+- `max_tokens` matches the route's SPEC section: 4096 for
+  `/api/translate`, 16000 for `/api/trip-pack` and `/api/menu-scan`.
+  Lower is a finding: thinking tokens count against the cap.
+- `format` and `effort` both live *inside* `output_config`. Either at
+  the top level is a finding, as is the deprecated top-level
+  `output_format`.
 - No `temperature`, `top_p`, or `top_k`. Current Claude models reject
-  sampling parameters with a 400 — this fails the request outright, it
-  does not degrade. Grep for all three; any hit is a bug, not a nit.
-- The schema marks all eight fields required, `culturalNote` included.
-  An absent `culturalNote` key is wrong; an empty string is correct.
-- `category` is validated against the `CATEGORIES` tuple in the route
-  handler before use. A schema `enum` is not sufficient on its own —
-  SPEC.md §8 asks for the check in code.
-- The prompt should not still carry the formatting instructions
-  structured outputs made redundant — "output strictly valid JSON,"
-  "no markdown fences," "no commentary." SPEC.md §8 removed those
-  deliberately. Leftovers are cruft, not a bug; label them as such.
-- The prompt takes locale and region as variables, with no region
-  hardcoded into the template.
-- The response shape matches SPEC.md §8 and lines up with
-  `SavedPhrase` in §7.
+  sampling parameters with a 400. Grep for all three; any hit is a bug.
+- Every schema field is required; "nothing" is `""` or `[]`, never an
+  omitted key.
+- `/api/translate` and `/api/trip-pack` validate `category` against
+  `CATEGORIES` in code; a schema `enum` alone is not enough.
+- Prompts don't carry formatting cruft structured outputs made
+  redundant ("output strictly valid JSON", "no markdown fences"). Label
+  leftovers as cruft, not bugs.
+- Prompts take locale and region as variables, never hardcoded.
+- Logging never includes request content: user phrases, images, or
+  menu text.
 
-## State handling (SPEC.md §6)
+## State handling (SPEC.md §6, §14)
 
-Every list and result screen needs three states beyond its default.
+Every list and result screen needs its states beyond the default.
 Check each is actually implemented, not just declared:
 
-- **Loading** — skeleton cards, `--bg-card-subtle` blocks,
-  `animate-pulse`.
+- **Loading** — skeleton blocks in `bg-sand`, pulsing only under
+  `motion-safe:`.
 - **Empty** — dashed border, a clear invitation to act. Never an
   apology.
-- **Error** — crimson-tinted card, plain statement of what failed, a
+- **Error** — brand-tinted card, plain statement of what failed, a
   retry button. Error copy names the problem and the fix. It does not
   apologize, and it never names the AI provider.
+- **Offline** — the offline-specific message, not the generic error.
 
-Also check the unhappy paths in the route handler itself: a non-200
-from the model, a malformed or non-JSON response body, input over the
-500-character cap, and the per-IP throttle rejecting. An unhandled
-`await` that can throw into an unrendered state is a finding.
+Also check the unhappy paths in each route handler: a non-200 from the
+model, a malformed response, input over the size cap, a 401, and the
+throttle rejecting. An unhandled `await` that can throw into an
+unrendered state is a finding.
 
 ## How to report
 

@@ -30,6 +30,39 @@ code, ask me rather than guessing.
 - Use lucide-react for icons. Never use emoji as UI
   icons.
 
+## Accessibility
+
+WCAG 2.2 AA is the floor for every UI change, not a
+later phase. These apply to every task:
+
+- Real controls only: `<button>`, `<a>`, `<input>`,
+  `<select>`. No clickable `div` or `span`. Every
+  control has a visible label or an accessible name.
+- Touch targets at least 44×44 px. A visible
+  `focus-visible` ring. No keyboard traps.
+- Decorative lucide icons get `aria-hidden`. Icon-only
+  buttons get an `aria-label`.
+- Never colour-only: a state (error, partial, selected)
+  also carries text.
+- Text contrast ≥ 4.5:1 (3:1 for large text and UI
+  outlines). Existing Stamp blues pairings pass; check
+  any new pairing before using it.
+- Reflow at 320 CSS px and 200% text zoom with nothing
+  clipped. rem-based type, no fixed heights on text
+  containers.
+- Async status: loading is `role="status"
+  aria-live="polite"`; errors are `role="alert"`. Move
+  focus to a result or error heading (`tabIndex={-1}`)
+  when it replaces the content the user acted on.
+- Honour `prefers-reduced-motion`: use `motion-safe:`
+  for `animate-pulse` and any other animation.
+- Text in another language carries `lang`. Symbols that
+  read badly ("—", "¥") get `sr-only` text.
+- Data tables: `<table>` with `<caption>`, scoped `<th>`,
+  no `rowSpan`.
+- `npm run test:a11y` (axe) must pass
+  with no violations before a UI change ships.
+
 ## Build log
 
 After completing each task — not each file edit, each
@@ -71,7 +104,19 @@ describes.
   globals that layout.tsx and the `[category]` page
   rely on.
 
-No test runner is configured. Env vars are listed in
+- `npm run test:a11y` — Playwright + axe over every
+  `/menu` state at 320 and 390 px (and 200% text), with
+  `/api/menu-scan` mocked. Builds and runs `next start`
+  on port 3100 itself (about a minute before tests start).
+  Screenshots go to `test-results/`.
+
+No unit-test runner is configured.
+
+`next dev` may append an agent-instruction block to
+this file ("This is NOT the Next.js you know…"), and
+from Next 16.4 also writes it to `AGENTS.md`. It is not
+a project rule. Strip it from this file before every
+commit; `AGENTS.md` is git-ignored. Env vars are listed in
 `.env.example`: `ANTHROPIC_API_KEY` (M2), `DATABASE_URL`,
 `NEON_AUTH_BASE_URL`, `NEON_AUTH_COOKIE_SECRET` (M3).
 

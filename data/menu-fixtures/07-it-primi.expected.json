@@ -1,0 +1,111 @@
+{
+  "isMenu": true,
+  "sourceLanguage": "it",
+  "currency": "EUR",
+  "currencySource": "printed",
+  "sections": [
+    {
+      "original": "Primi",
+      "english": "First courses",
+      "items": [
+        {
+          "original": "I veri Tortellini di Bologna al buon brodo di cappone e manzo",
+          "english": "Traditional Bologna tortellini in capon and beef broth",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "16"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "I Tortellini di San Petronio",
+          "english": "San Petronio tortellini",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "16"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Rosetta con ragù d'anatra",
+          "english": "Rosetta pasta with duck ragù",
+          "description": "With Shropshire sauce, hazelnuts and raspberries.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "17"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Le Lasagne espresse, alla Bolognese",
+          "english": "Lasagne Bolognese, made to order",
+          "description": "Takes 20 minutes.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "18"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Le Tagliatelle della nostra sfoglina con ragù del buon ricordo",
+          "english": "Our handmade tagliatelle with traditional ragù",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "16"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Tortelli di ricotta 4.0",
+          "english": "Ricotta tortelli 4.0",
+          "description": "With pear and mustard cream, saffron ricotta salata, redcurrants and a hint of mint.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "16"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Cannelloni ripieni di polpo, pomodoro e olive",
+          "english": "Cannelloni filled with octopus, tomato and olives",
+          "description": "With sweet potato and orange cream, fried leek and a hint of capers.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "19"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Spaghettone “Friggione”",
+          "english": "Spaghettone “Friggione”",
+          "description": "Cavalieri spaghetti with fresh tomato, buttery white onion cream, porcini powder and almonds (20 min).",
+          "prices": [
+            {
+              "label": "",
+              "amount": "18"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    }
+  ],
+  "notes": []
+}

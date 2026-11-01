@@ -1,0 +1,132 @@
+{
+  "isMenu": true,
+  "sourceLanguage": "ja",
+  "currency": "JPY",
+  "currencySource": "estimated",
+  "sections": [
+    {
+      "original": "Coffee",
+      "english": "Coffee",
+      "items": [
+        {
+          "original": "ルノアールブレンド",
+          "english": "Renoir Blend",
+          "description": "A rich house blend balancing sweetness and acidity: smooth Brazilian and Colombian beans with mellow Ethiopian, finished mild.",
+          "prices": [{ "label": "Hot", "amount": "870" }],
+          "legibility": "clear"
+        },
+        {
+          "original": "アメリカン",
+          "english": "American coffee",
+          "description": "",
+          "prices": [],
+          "legibility": "partial"
+        },
+        {
+          "original": "ウインナーコーヒー",
+          "english": "Vienna coffee",
+          "description": "Coffee topped with whipped cream.",
+          "prices": [
+            { "label": "Hot", "amount": "940" },
+            { "label": "Iced", "amount": "970" }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "カフェ・オーレ",
+          "english": "Café au lait",
+          "description": "",
+          "prices": [
+            { "label": "Hot", "amount": "1,000" },
+            { "label": "Iced", "amount": "1,030" }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "ドリップアイスコーヒー",
+          "english": "Drip iced coffee",
+          "description": "",
+          "prices": [{ "label": "Iced", "amount": "900" }],
+          "legibility": "clear"
+        },
+        {
+          "original": "水出しアイスコーヒー",
+          "english": "Cold brew iced coffee",
+          "description": "",
+          "prices": [{ "label": "Iced", "amount": "920" }],
+          "legibility": "clear"
+        },
+        {
+          "original": "コーヒーフロート",
+          "english": "Coffee float",
+          "description": "Iced coffee topped with ice cream.",
+          "prices": [{ "label": "Iced", "amount": "1,040" }],
+          "legibility": "clear"
+        }
+      ]
+    },
+    {
+      "original": "Premiu",
+      "english": "Premiu…",
+      "items": [
+        {
+          "original": "カフェゼリー＆バ",
+          "english": "Coffee jelly &…",
+          "description": "",
+          "prices": [],
+          "legibility": "partial"
+        },
+        {
+          "original": "カフェゼリー＆オー",
+          "english": "Coffee jelly &…",
+          "description": "",
+          "prices": [],
+          "legibility": "partial"
+        }
+      ]
+    },
+    {
+      "original": "Renoir e",
+      "english": "Renoir e…",
+      "items": [
+        {
+          "original": "黒蜜ミルク",
+          "english": "Brown sugar syrup milk",
+          "description": "Milk sweetened with kuromitsu, a dark Japanese sugar syrup.",
+          "prices": [],
+          "legibility": "partial"
+        },
+        {
+          "original": "黒蜜カフェ・オー",
+          "english": "Brown sugar syrup café au…",
+          "description": "",
+          "prices": [],
+          "legibility": "partial"
+        }
+      ]
+    },
+    {
+      "original": "",
+      "english": "",
+      "items": [
+        {
+          "original": "カフェゼリー＆バニラ",
+          "english": "Coffee jelly & vanilla",
+          "description": "",
+          "prices": [],
+          "legibility": "clear"
+        },
+        {
+          "original": "アイス黒蜜カフェ・オーレ",
+          "english": "Iced brown sugar syrup café au lait",
+          "description": "",
+          "prices": [],
+          "legibility": "clear"
+        }
+      ]
+    }
+  ],
+  "notes": [
+    { "original": "※価格は全て税込価格です。", "english": "All prices include tax." }
+  ]
+}

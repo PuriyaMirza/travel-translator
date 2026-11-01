@@ -1,6 +1,6 @@
 # Proposal: M7 — Menu scan (photo → menu table)
 
-Status: **decisions recorded 2026-10-29 (§2); awaiting plan approval.** Nothing in here is SPEC.md until Phase 0 copies it into SPEC §14.
+Status: **Phase 0 done 2026-10-29: SPEC §14, the contract and the Renoir ground truth are written; awaiting owner approval to start Phase 1.** SPEC §14 is now the source of truth; this file keeps the rationale and the orchestration plan.
 
 A traveller photographs a menu. The app returns a plain table with columns **Original** (as printed), **English**, **Option** and **Price**. There's one row per item, or one row per option when an item has several prices (Hot/Iced, S/M/L). The Option column only appears when at least one item on the scan has a labelled option; otherwise the table has three columns. It's built for reading at the table, not for learning the language.
 
@@ -60,7 +60,7 @@ Footnote: ※価格は全て税込価格です → "All prices include tax."
 | D7 | Menu-reading edge cases (bilingual lines, group prices, add-ons and "from" prices) | **Suggested defaults accepted** | Now prompt rules 2, 6 and 7 (§3.4) and the fixture README |
 | — | Accuracy targets (§5) | **Accepted as proposed** | They're the Phase 3 gate |
 
-Still needed from the owner: **6–10 menu photos** (JPEG, ≤4 MB each), saved in `data/menu-fixtures/`. Aim for variety: Japanese (this one), Spanish, French, a handwritten chalkboard, two columns, glare, a cut-off edge, and one photo that isn't a menu.
+Fixture photos: **received** (9 files in `data/menu-fixtures/`, see its README).
 
 ---
 
@@ -270,7 +270,7 @@ Every brief also includes this line: *Repo rules: CLAUDE.md conventions apply. N
 - **Goal:** build `/menu`, `MenuScanner` and `MenuTable` to §3.5 and §3.6, with every state. That includes the one-row-per-option table with visual grouping, `sr-only` repeats and no `rowSpan`, and hiding the Option column when it isn't needed.
 - **You own:** `src/app/menu/page.tsx`, `src/components/MenuScanner.tsx` and `src/components/MenuTable.tsx`.
 - **Contract:**
-  - Develop against `data/menu-fixtures/renoir-coffee.expected.json` behind one `fetchMenuScan()` function, which Opus swaps for the real call in Phase 2.
+  - Develop against `data/menu-fixtures/01-ja-renoir-coffee.expected.json` behind one `fetchMenuScan()` function, which Opus swaps for the real call in Phase 2.
   - Import `prepareMenuImage` by its signature only.
 - **Don't touch:** `nav.ts`, `page.tsx` (home) and `sw.js`. Those belong to Opus.
 - **Accessibility:** every item in §3.1, §3.5 and §3.6 is a requirement, not a nice-to-have.

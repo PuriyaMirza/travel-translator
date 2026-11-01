@@ -1,0 +1,171 @@
+{
+  "isMenu": true,
+  "sourceLanguage": "es",
+  "currency": "EUR",
+  "currencySource": "printed",
+  "sections": [
+    {
+      "original": "PARA EMPEZAR",
+      "english": "To start",
+      "items": [
+        {
+          "original": "Patatas bravas",
+          "english": "Patatas bravas",
+          "description": "Fried potatoes with a spicy sauce.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "5,80"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Croquetas caseras",
+          "english": "Homemade croquettes",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "2,20"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Crujiente de queso con miel",
+          "english": "Crispy cheese with honey",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "5,80"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Tortilla hecha al momento",
+          "english": "Freshly made Spanish omelette",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "7,20"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Morcilla de burgos con cebolla",
+          "english": "Burgos black pudding with onion",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "6,80"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Provoleta con orégano y pimentón de la Vera",
+          "english": "Grilled provolone with oregano and smoked paprika",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "7,80"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Risotto de la semana",
+          "english": "Risotto of the week",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "8,75"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Huevos rotos con jam",
+          "english": "Broken eggs with…",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "9,50"
+            }
+          ],
+          "legibility": "partial"
+        },
+        {
+          "original": "Super nachos",
+          "english": "Super nachos",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "8,75"
+            }
+          ],
+          "legibility": "partial"
+        },
+        {
+          "original": "Jamón ibérico",
+          "english": "Iberian ham",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "16,50"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Fuet de Vic",
+          "english": "Fuet de Vic",
+          "description": "Thin cured pork sausage from Vic.",
+          "prices": [
+            {
+              "label": "",
+              "amount": "6,80"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Chorizo picante de León",
+          "english": "Spicy chorizo from León",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "6,80"
+            }
+          ],
+          "legibility": "clear"
+        },
+        {
+          "original": "Queso Manchego",
+          "english": "Manchego cheese",
+          "description": "",
+          "prices": [
+            {
+              "label": "",
+              "amount": "7,25"
+            }
+          ],
+          "legibility": "clear"
+        }
+      ]
+    }
+  ],
+  "notes": []
+}
