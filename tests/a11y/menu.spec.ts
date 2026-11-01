@@ -78,6 +78,8 @@ for (const width of WIDTHS) {
       await choosePhoto(page);
       await expect(page.getByRole("heading", { name: "Your menu" })).toBeFocused();
       await expect(page.getByRole("columnheader", { name: "Option" })).toBeVisible();
+      // Renoir has cut-off and glare rows, so the retake note shows.
+      await expect(page.getByText("hard to read in this photo")).toBeVisible();
       await expectNoViolations(page);
       await expectNoHorizontalScroll(page);
       await page.screenshot({ path: `test-results/menu-result-${width}.png`, fullPage: true });
@@ -89,6 +91,8 @@ for (const width of WIDTHS) {
       await choosePhoto(page);
       await expect(page.getByRole("heading", { name: "Your menu" })).toBeFocused();
       await expect(page.getByRole("columnheader", { name: "Option" })).toHaveCount(0);
+      // Every row is clear, so no retake note.
+      await expect(page.getByText("hard to read in this photo")).toHaveCount(0);
       await expectNoViolations(page);
       await expectNoHorizontalScroll(page);
     });

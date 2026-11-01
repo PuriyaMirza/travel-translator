@@ -27,5 +27,7 @@ export const MENU_RATE_LIMITED_MESSAGE =
   "You've scanned 10 menus in the last hour. Try again later.";
 export const MENU_UPSTREAM_MESSAGE = "Couldn't read the menu right now. Try again in a moment.";
 export const MENU_UNKNOWN_MESSAGE = "Something went wrong. Try again.";
+export const MENU_UNCLEAR_RETAKE_MESSAGE =
+  "Some items or prices were hard to read in this photo. For a clearer result, scan again closer to the menu, without glare.";
 export const OFFLINE_MENU_MESSAGE =
   "You're offline. Reading a menu needs a connection — the phrasebook and your vault still work.";

@@ -2,11 +2,11 @@ import Anthropic from "@anthropic-ai/sdk";
 import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { MenuScanSchema, type MenuScan, type MenuSection } from "./menuScanSchema";
 import { MENU_UPSTREAM_MESSAGE } from "./messages";
-import { client, EFFORT, MODEL } from "./translate";
+import { client, MODEL } from "./translate";
 
 /**
  * The menu-scan backend (SPEC.md §14). Server-only, like `translate.ts`, whose
- * client, model and effort it shares; only `src/app/api/menu-scan/route.ts`
+ * client and model it shares (effort is its own, below); only `src/app/api/menu-scan/route.ts`
  * imports it. Never log or store the image or any menu text.
  */
 
@@ -33,6 +33,11 @@ const MAX_TOKENS = 16000;
 // The SDK default is two retries on a ten-minute timeout, which would blow
 // past the route's maxDuration (120s). One attempt, cut off before it.
 const REQUEST_OPTIONS = { timeout: 110_000, maxRetries: 0 };
+
+// SPEC.md §14 tuning step 2. "low" (shared with translate.ts) kept reading
+// prices under glare after two prompt rounds (eval runs 2–3), so this call
+// looks harder; translation stays at "low".
+const MENU_SCAN_EFFORT = "medium";
 
 /** SPEC.md §14: items beyond this are dropped, across all sections. */
 export const MAX_MENU_ITEMS = 200;
@@ -169,7 +174,7 @@ export async function scanMenu(
         ],
         output_config: {
           format: zodOutputFormat(MenuScanSchema),
-          effort: EFFORT,
+          effort: MENU_SCAN_EFFORT,
         },
       },
       REQUEST_OPTIONS,

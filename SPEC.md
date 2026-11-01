@@ -644,7 +644,7 @@ Prices are strings: the model copies the digits as printed and the client only a
 
 - `src/lib/menuScan.ts` is server-only, like `translate.ts`, and exports `scanMenu(bytes, mediaType)`.
 - Model: `MODEL` from `translate.ts` (`claude-sonnet-5`, section 3). Changing it needs eval evidence and the owner's approval.
-- `output_config: { format: zodOutputFormat(MenuScanSchema), effort: "low" }`. Effort is raised to `"medium"` only if the eval needs it.
+- `output_config: { format: zodOutputFormat(MenuScanSchema), effort: "medium" }`. Started at `"low"`; raised to `"medium"` (tuning step 2) on 2026-11-01 because `low` kept reading prices under glare after two prompt rounds. `/api/translate` stays at `"low"`.
 - `max_tokens: 16000` (thinking counts toward it; a long menu is 60+ items). No `temperature`, `top_p` or `top_k`.
 - Content order: image block first, then the text instruction. No tools.
 - Route check order: `requireUser()`, then throttle, then MIME type, then size. `export const maxDuration = 120`.
@@ -679,6 +679,7 @@ Rule 5, the schema-constrained output, rendering as escaped React text, and a ca
   - Each section is its own `<tbody>` with a heading row: English name, original underneath.
   - The description is a smaller second line in the English cell.
   - Partial rows show "(partly cut off)" as text beside an icon.
+- When any row is `partial`, a note above the table asks for a retake: `MENU_UNCLEAR_RETAKE_MESSAGE` ("Some items or prices were hard to read in this photo. For a clearer result, scan again closer to the menu, without glare.") with a "Scan again" button. Plain text, not an alert; the live region adds "Some were hard to read." to "Found N items". Owner request, 2026-11-01.
 - Under the table: notes, then a "Scan another" button and a quiet "Check prices against the menu."
 - Stamp blues tokens only (section 5).
 

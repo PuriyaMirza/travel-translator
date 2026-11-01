@@ -513,3 +513,15 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** not re-evaluated. If the cut-off gate still fails, next is `effort: "medium"` (SPEC tuning step 2). Best case after this round is 1 invented price (Huevos, a one-letter glare reading).
 - **Open questions:** Huevos "jam" vs "jamó": keep strict, or accept the model's reading?
+
+### [2026-11-01 12:20] M7 Phase 3: eval run 3 (incomplete), medium effort, retake note
+- **Milestone:** M7
+- **Files:** modified `src/lib/menuScan.ts` (own `MENU_SCAN_EFFORT = "medium"`), `src/components/MenuScanner.tsx` (retake note, announcement), `src/lib/messages.ts` (`MENU_UNCLEAR_RETAKE_MESSAGE`), `tests/a11y/menu.spec.ts` (note shown on Renoir, absent on 07), `SPEC.md` §14, `BUILDLOG.md`.
+- **Eval run 3** (owner, preview at 22aad17, 2026-10-31 10:47 Eastern, effort low): **incomplete**. The route's 10/hour limit returned 429 at 07, so 07–09 didn't run (the limiter working as designed; likely an earlier partial attempt in the same hour). On 01–06: invented prices 2 (FAIL), price exact 100% (91/91), recall 97.4%, worst invented items 1, cut-off flagged 62.5% (5/8, FAIL). 05 currency now correct ("estimated"); 01 cut-off 4/5. Remaining failures as reported in the totals (raw JSON not reviewed): 01 アメリカン still read as ¥870 and clear despite the strengthened glare rule; 02 Huevos "jamó…" and Super nachos still not flagged partial.
+- **Decisions:**
+  - Owner (2026-11-01): keep "Price unclear from photo" for glare (option B declined), and ask the traveler to retake the photo. Two prompt rounds did not stop `low` effort reading glare-covered prices, so menu scan moves to `effort: "medium"` (SPEC tuning step 2). It gets its own constant; `/api/translate` and trip packs stay at `low` via `EFFORT`.
+  - When any row is `partial`, the result shows a plain-text note above the table ("Some items or prices were hard to read in this photo. For a clearer result, scan again closer to the menu, without glare.") with a "Scan again" button (same reset as "Scan another"), and the live region adds "Some were hard to read." Not `role="alert"`: it's part of the result, not an error.
+- **Checks:** lint, typecheck clean; `test:a11y` 21/21 (incl. the note on Renoir, none on 07); 320 px screenshot viewed.
+- **Deviations:** none (SPEC §14 updated for effort and the note).
+- **Incomplete:** Medium effort is unmeasured: expect slower scans (08 was 26 s at low) and higher output cost; `maxDuration` 120 s and the 110 s model timeout should still hold, unverified. The retake note depends on the model flagging rows `partial`, which is exactly what the eval is testing.
+- **Open questions:** if medium still reads アメリカン, the next step per SPEC is a comparison on other models, brought to the owner.

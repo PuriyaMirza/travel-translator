@@ -22,6 +22,7 @@ import {
   MENU_RATE_LIMITED_MESSAGE,
   MENU_SIGN_IN_MESSAGE,
   MENU_TOO_LARGE_MESSAGE,
+  MENU_UNCLEAR_RETAKE_MESSAGE,
   MENU_UNKNOWN_MESSAGE,
   MENU_UPSTREAM_MESSAGE,
   NETWORK_MESSAGE,
@@ -350,6 +351,11 @@ function CurrencyPicker({
   );
 }
 
+/** Any row cut off or under glare: the result shows the retake note. */
+function hasUnclearItems(scan: MenuScan): boolean {
+  return scan.sections.some((section) => section.items.some((item) => item.legibility === "partial"));
+}
+
 function MenuResult({ scan, onReset }: { scan: MenuScan; onReset: () => void }) {
   // The picker relabels prices for this scan only; it never touches an amount.
   const [currency, setCurrency] = useState(scan.currency);
@@ -400,6 +406,19 @@ function MenuResult({ scan, onReset }: { scan: MenuScan; onReset: () => void }) 
         </div>
         <CurrencyPicker scan={scan} value={currency} chosen={chosen} onChange={pick} />
       </div>
+
+      {hasUnclearItems(scan) && (
+        // Plain text, not an alert: it is part of the result the user asked for.
+        <div className="flex flex-wrap items-center gap-x-4 gap-y-3 rounded-card border border-hairline bg-card p-4">
+          <p className="text-small flex min-w-0 flex-1 basis-60 items-start gap-2 text-ink">
+            <Camera aria-hidden className="mt-0.5 size-4 shrink-0" />
+            <span>{MENU_UNCLEAR_RETAKE_MESSAGE}</span>
+          </p>
+          <button type="button" onClick={onReset} className={cn(outlineButton, focusRing)}>
+            Scan again
+          </button>
+        </div>
+      )}
 
       <MenuTable scan={scan} currency={currency} />
 
@@ -524,7 +543,10 @@ export function MenuScanner() {
       }
       const count = countItems(scan);
       setThumbUrl(null);
-      setAnnouncement(`Found ${count} ${count === 1 ? "item" : "items"}`);
+      setAnnouncement(
+        `Found ${count} ${count === 1 ? "item" : "items"}` +
+          (hasUnclearItems(scan) ? ". Some were hard to read." : ""),
+      );
       setStage({ status: "result", scan });
     } catch (error) {
       if (controller.signal.aborted) return;
