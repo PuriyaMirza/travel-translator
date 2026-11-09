@@ -400,3 +400,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Not verified: the route against real Neon or a real signed-in session (no auth env in this sandbox; `/api/settings` returns 500 locally because `NEON_AUTH_*` are unset, which predates this change).
   - Merge is "server wins when set", not last-write-wins by timestamp: an answer changed on a signed-out device is overwritten by the server's older answer at next sign-in.
 - **Open questions:** Apply 002 to Neon production now? Is "server wins when set" acceptable, or should answers use last-write-wins on `updatedAt` like saved phrases?
+
+### [2026-11-09 14:50] Applied migration 002 to Neon production
+- **Milestone:** none (follow-up to the onboarding sync change; owner said "apply it")
+- **Files:** modified `BUILDLOG.md` only.
+- **Decisions:** Applied `002_onboarding_settings` to the production branch of Neon project `wild-queen-99254638` as one transaction (the `alter table` + the `schema_migrations` row), via the Neon MCP. Not tested on a temporary branch first; it was tested on PGlite, and it only adds nullable columns.
+- **Deviations:** none.
+- **Incomplete:** Verified after applying: `schema_migrations` = `001_init, 002_onboarding_settings`; `user_settings` has `destination`, `travel_month`, `spanish_comfort` (text) and the three new check constraints; the one existing row kept its `speaker_gender` and has nulls in the new columns. The API was not exercised against it with a real signed-in session. The earlier entry's "Migration 002 is NOT applied" item is now resolved.
+- **Open questions:** none new.
