@@ -349,3 +349,29 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Not run against real Neon or Anthropic from here; sign-out clearing was type-checked, not clicked through.
   - Owner dashboard items, not code: Anthropic spend cap, Vercel Firewall rate limit on `/api/translate`, Neon Auth email verification.
 - **Open questions:** Enforce the CSP once the `unsafe-eval` source is found?
+
+### [2026-11-09 03:04] Onboarding (version A: one question per screen)
+- **Milestone:** none (not a SPEC.md milestone; requested directly in chat after the owner picked version A of two mockups)
+- **Files:** created `src/app/welcome/page.tsx`, `src/components/OnboardingFlow.tsx`, `src/components/OnboardingGate.tsx`, `src/components/TripRow.tsx`, `src/lib/destinations.ts`, `src/lib/onboarding.ts`. Modified `src/app/page.tsx`, `src/components/ChromeGate.tsx`, `src/components/NavDrawer.tsx`, `src/lib/labels.ts`, `src/lib/local/settings.ts`, `src/lib/nav.ts`, `src/lib/types.ts`, `CLAUDE.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - Flow: welcome → trip (destination + month) → speaker gender → Spanish level → optional account → Home. Every question has Skip; skipping keeps the current value. Each answer is written to IndexedDB on Next, so quitting halfway keeps what was answered. The account step is skipped when already signed in.
+  - Route `/welcome`, one client component with step state (not one route per step). Header hidden there via `isChromelessPath()`. Added to `warmUrls()` so it's cached offline.
+  - Trigger: `OnboardingGate` on Home only. It skips (and marks done) anyone signed in, and any device that already has saved phrases or a settings row, so existing users are not sent through it. The done flag is in localStorage (`onboarding-done-v1`), not IndexedDB, because `clearUserData()` wipes IndexedDB on sign-out.
+  - New permanent slugs: `SPANISH_COMFORT_LEVELS` = `none` / `basic` / `conversational`. Destination stored as an ISO 3166-1 alpha-2 code, month as `YYYY-MM`. All three are optional fields on `UserSettings`.
+  - Countries: `src/lib/destinations.ts`, keyed by locale (18 es-419 countries; Spain excluded as not es-419; territories with a planned dialect pack excluded). Data, not logic; nothing branches on a country.
+  - Gender step shows one es-419 example per option (`SPEAKER_GENDER_EXAMPLES` in labels.ts, keyed by target locale): "No como carne." / "Soy vegetariana." / "Soy vegetariano." Uses the existing "Neutral" label, not the mockup's "No preference", to match the nav drawer.
+  - Home: `TripRow` ("Mexico · March 2027 → Build a trip pack") under the translate entry, linking to `/trip`; renders nothing without a destination. The mockup put it at the very top; I kept the translate entry first.
+  - Nav drawer: a "Change trip and Spanish level" link reopens `/welcome` with current answers preloaded.
+- **Deviations:**
+  - SPEC.md has no onboarding, no `/welcome` route, and no destination/month/comfort fields. SPEC.md was NOT updated; it should be if this stays.
+  - Month chips show the next 6 months + "Later"; "Later" stores nothing (same as no answer).
+- **Incomplete:**
+  - **Destination, travel month and Spanish level are device-only.** No migration and no `/api/settings` change: they do not sync, and they are wiped on sign-out like other local data. Speaker gender does sync (existing path).
+  - **Spanish level changes nothing yet.** It is stored and never read.
+  - **The trip row doesn't pre-fill the trip-pack builder**; the user retypes the destination there.
+  - The optional comfort quiz is not built, and no placeholder link is shown.
+  - First visit renders Home briefly before the client redirect to `/welcome` (the gate waits for the session and an IndexedDB read). No server-side redirect.
+  - Radio groups use buttons with `role="radio"` like `SpeakerGenderControl`; arrow-key navigation inside a group is not implemented.
+  - Verified with Playwright against `next dev` (iPhone 13 emulation): first visit redirects to `/welcome`; the full flow stores `{destination:"MX", travelMonth:"2027-03", speakerGender:"feminine", spanishComfort:"none"}`; Home shows "Mexico · March 2027"; reload stays on Home; a device with an existing settings row is not redirected; no console errors. Not tested: the "Create account" path, the signed-in skip, offline, a real phone. `npm run build` not run. lint + typecheck pass.
+  - `next dev` auto-generated an untracked `AGENTS.md` at the repo root; not committed, left in the working tree.
+- **Open questions:** What should Spanish level change? Add `destination`, `travel_month`, `spanish_comfort` columns to `user_settings` and sync them? Pre-fill the trip-pack title from the trip? Update SPEC.md with an onboarding section?

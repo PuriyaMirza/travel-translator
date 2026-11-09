@@ -121,6 +121,15 @@ worker yet — that is M4.
   goes through `requireUser()` and filters on its id.
   Postgres column `natural_text` aliases to `natural`
   (`natural` is a reserved word).
+- **Onboarding:** `/welcome` (`OnboardingFlow.tsx`), one
+  question per screen: trip (destination + month),
+  speaker gender, Spanish level, optional account.
+  `OnboardingGate` on Home redirects first-time visitors;
+  the done flag is in localStorage (`src/lib/onboarding.ts`)
+  so sign-out doesn't re-trigger it. Destination, month and
+  comfort live in IndexedDB settings only — no Postgres
+  columns yet, so they don't sync. Countries come from
+  `src/lib/destinations.ts`, keyed by locale.
 - `src/lib/categoryMeta.ts` — icon + gradient wash +
   lead copy per category. Banners are CSS gradients,
   not photography (SPEC.md §5 wants photos — still a

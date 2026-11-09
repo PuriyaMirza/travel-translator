@@ -6,7 +6,7 @@ import { usePathname } from "next/navigation";
 import { Menu, X } from "lucide-react";
 import { VISIBLE_CATEGORIES } from "@/lib/categories";
 import { categoryLabel } from "@/lib/labels";
-import { NAV_LINKS } from "@/lib/nav";
+import { NAV_LINKS, ONBOARDING_PATH } from "@/lib/nav";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "./Eyebrow";
 import { SpeakerGenderControl } from "./SpeakerGenderControl";
@@ -114,6 +114,13 @@ export function NavDrawer() {
               </ul>
 
               <SpeakerGenderControl />
+
+              <Link
+                href={ONBOARDING_PATH}
+                className="text-small mt-6 inline-block text-ink underline underline-offset-2 transition hover:text-brand motion-reduce:transition-none"
+              >
+                Change trip and Spanish level
+              </Link>
             </div>
           </nav>
         </div>

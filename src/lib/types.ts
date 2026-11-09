@@ -36,6 +36,13 @@ export interface Phrase {
 export const SPEAKER_GENDERS = ["neutral", "feminine", "masculine"] as const;
 export type SpeakerGender = (typeof SPEAKER_GENDERS)[number];
 
+/**
+ * How much Spanish the traveller says they have, asked during onboarding.
+ * Permanent slugs (SPEC.md §2 rule 3); labels live in `labels.ts`.
+ */
+export const SPANISH_COMFORT_LEVELS = ["none", "basic", "conversational"] as const;
+export type SpanishComfort = (typeof SPANISH_COMFORT_LEVELS)[number];
+
 export const SHOW_CARD_KINDS = ["allergy", "diet", "medical", "address", "custom"] as const;
 export type ShowCardKind = (typeof SHOW_CARD_KINDS)[number];
 
@@ -48,6 +55,15 @@ export type ShowCardKind = (typeof SHOW_CARD_KINDS)[number];
 export interface UserSettings {
   preferredLocale: string;
   speakerGender: SpeakerGender;
+  /*
+   * Onboarding answers. Device-only for now: there are no user_settings
+   * columns for them yet, so they do not sync. Absent until answered.
+   */
+  /** ISO 3166-1 alpha-2 code from `destinations.ts`, e.g. "MX". */
+  destination?: string;
+  /** "YYYY-MM". */
+  travelMonth?: string;
+  spanishComfort?: SpanishComfort;
   updatedAt: string;
 }
 

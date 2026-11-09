@@ -17,6 +17,14 @@ export function isShowModePath(pathname: string): boolean {
   return /^\/cards\/(?!new$|edit$)[^/]+$/.test(pathname);
 }
 
+/** First-run setup. Full screen, so the app header is hidden like show mode. */
+export const ONBOARDING_PATH = "/welcome";
+
+/** Routes that render without the app header and offline banner. */
+export function isChromelessPath(pathname: string): boolean {
+  return isShowModePath(pathname) || pathname === ONBOARDING_PATH;
+}
+
 /**
  * The one pre-rendered show-mode page. The worker serves it for any
  * `/cards/<id>` it hasn't cached, and the page reads the real id from the URL.
@@ -34,6 +42,7 @@ export function warmUrls(): string[] {
     "/cards/new",
     "/cards/edit",
     SHOW_SHELL_PATH,
+    ONBOARDING_PATH,
     ...VISIBLE_CATEGORIES.map((category) => `/phrasebook/${category}`),
   ];
 }

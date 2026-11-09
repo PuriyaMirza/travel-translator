@@ -20,7 +20,9 @@ export async function getLocalSettings(): Promise<UserSettings> {
   return (await db.get("settings", "settings")) ?? defaultSettings();
 }
 
-export async function setLocalSettings(patch: Partial<Pick<UserSettings, "speakerGender" | "preferredLocale">>) {
+export type SettingsPatch = Partial<Omit<UserSettings, "updatedAt">>;
+
+export async function setLocalSettings(patch: SettingsPatch) {
   const db = await localDb();
   const current = (await db.get("settings", "settings")) ?? defaultSettings();
   await db.put("settings", { ...current, ...patch, updatedAt: new Date().toISOString() }, "settings");
@@ -46,4 +48,19 @@ export function useSpeakerGender() {
     speakerGender,
     setSpeakerGender: (next: SpeakerGender) => setLocalSettings({ speakerGender: next }),
   };
+}
+
+/** All local settings, re-read whenever local data changes. Null until the first read. */
+export function useLocalSettings(): UserSettings | null {
+  const [settings, setSettings] = useState<UserSettings | null>(null);
+
+  useEffect(() => {
+    const load = () => {
+      getLocalSettings().then(setSettings, () => setSettings(defaultSettings()));
+    };
+    load();
+    return onLocalChange(load);
+  }, []);
+
+  return settings;
 }
