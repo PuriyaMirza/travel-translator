@@ -408,3 +408,17 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** Verified after applying: `schema_migrations` = `001_init, 002_onboarding_settings`; `user_settings` has `destination`, `travel_month`, `spanish_comfort` (text) and the three new check constraints; the one existing row kept its `speaker_gender` and has nulls in the new columns. The API was not exercised against it with a real signed-in session. The earlier entry's "Migration 002 is NOT applied" item is now resolved.
 - **Open questions:** none new.
+
+### [2026-11-09 15:30] Onboarding design feedback (owner review of screens 1–4)
+- **Milestone:** none (follow-up to onboarding, #17)
+- **Files:** modified `src/components/OnboardingFlow.tsx`, `src/lib/onboarding.ts`, `BUILDLOG.md`.
+- **Decisions:**
+  - Screen 1: heading upright and larger (44px / 1.05, Fraunces light). It needs `not-italic!` because `.font-display` (globals.css `@layer utilities`) sets italic and wins over a plain `not-italic`. Checked in the browser: computed `font-style: normal`, 44px.
+  - Screen 2: country and month are native `<select>`s styled like the app's fields (rounded-field, ink outline, lucide MapPin/Calendar + ChevronDown). Native so phones open their own picker. Both default to "Not sure yet" (= no answer). Months: all twelve, full names, calendar order; each maps to its *next occurrence* (`monthOptions()` replaces `upcomingMonths()`), so picking March in November stores next year's March. The "Later" option is gone. The country search field is gone (a select replaces it).
+  - Screens 3 and 4: gap between options 8px → 16px; option label `text-h2` (20px/600, was 16px); example/hint `text-body` italic in curly quotes (was 14px; gender examples were bold). Radio nudged down to align with the larger label.
+- **Deviations:** none from SPEC.md (onboarding isn't in SPEC.md).
+- **Incomplete:**
+  - A saved month that is no longer a next occurrence (e.g. a trip month now in the past) shows as "Not sure yet" in the dropdown; the stored value stays until changed.
+  - Native selects ignore most styling of the opened list; only the closed control matches the design.
+  - Verified with Playwright against `next dev` (iPhone 13): screenshots of all four screens, 13 month options (placeholder + 12), 19 country options (placeholder + 18), full flow still stores the answers and shows "Mexico · March 2027" on Home. lint + typecheck pass. The only console error is `/api/auth/get-session` 500 from unset `NEON_AUTH_*` locally (pre-existing).
+- **Open questions:** Should screens 2–4 headings also go upright to match screen 1?
