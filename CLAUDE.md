@@ -127,9 +127,12 @@ worker yet — that is M4.
   `OnboardingGate` on Home redirects first-time visitors;
   the done flag is in localStorage (`src/lib/onboarding.ts`)
   so sign-out doesn't re-trigger it. Destination, month and
-  comfort live in IndexedDB settings only — no Postgres
-  columns yet, so they don't sync. Countries come from
-  `src/lib/destinations.ts`, keyed by locale.
+  comfort are written to IndexedDB settings and synced to
+  `user_settings` (migration 002) by
+  `src/lib/sync/settings.ts`: on sign-in, server wins per
+  field when set, else the device's value is uploaded.
+  Countries come from `src/lib/destinations.ts`, keyed by
+  locale.
 - `src/lib/categoryMeta.ts` — icon + gradient wash +
   lead copy per category. Banners are CSS gradients,
   not photography (SPEC.md §5 wants photos — still a

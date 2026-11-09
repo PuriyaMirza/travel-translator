@@ -5,8 +5,13 @@ import { authClient } from "@/lib/auth/client";
 import { clearUserData, onLocalChange } from "@/lib/local/db";
 import { getLocalSettings } from "@/lib/local/settings";
 import { claimLocalData, syncNow } from "@/lib/sync/engine";
-import { pushSpeakerGender, reconcileSettings } from "@/lib/sync/settings";
-import type { SpeakerGender } from "@/lib/types";
+import {
+  changedFields,
+  pushSettings,
+  reconcileSettings,
+  syncedFromLocal,
+  type SyncedSettings,
+} from "@/lib/sync/settings";
 
 /**
  * Runs sync in the background (SPEC.md §7): on sign-in, when the connection
@@ -17,9 +22,10 @@ export function SyncProvider() {
   const { data: session, isPending } = authClient.useSession();
   const userId = session?.user?.id ?? null;
   const previousUserId = useRef<string | null | undefined>(undefined);
-  // The speaker gender last known to be on the server, so a local change
-  // while signed in is PUT once. Null until sign-in has reconciled.
-  const knownGender = useRef<SpeakerGender | null>(null);
+  // The settings last known to be on the server, so a local change while
+  // signed in PUTs only the fields that changed. Null until sign-in has
+  // reconciled.
+  const knownSettings = useRef<SyncedSettings | null>(null);
 
   // Sign-in claims local data for this account, then syncs. Sign-out clears
   // this device's copy of the account's data; the server keeps it.
@@ -31,11 +37,11 @@ export function SyncProvider() {
     if (userId) {
       void claimLocalData(userId)
         .then(async () => {
-          knownGender.current = await reconcileSettings();
+          knownSettings.current = await reconcileSettings();
         })
         .then(() => syncNow());
     } else {
-      knownGender.current = null;
+      knownSettings.current = null;
       if (previous) void clearUserData();
     }
   }, [userId, isPending]);
@@ -54,18 +60,21 @@ export function SyncProvider() {
 
     window.addEventListener("online", onOnline);
     document.addEventListener("visibilitychange", onVisible);
-    // Best effort: if the PUT fails (offline), the next sign-in reconciles.
-    const pushGender = () => {
-      if (knownGender.current === null) return;
-      void getLocalSettings().then(async ({ speakerGender }) => {
-        if (speakerGender === knownGender.current) return;
-        knownGender.current = speakerGender;
-        await pushSpeakerGender(speakerGender);
+    // Best effort. `knownSettings` only advances when a PUT lands, so a
+    // failed field is re-sent with the next local change (or at next sign-in).
+    const pushChangedSettings = () => {
+      const known = knownSettings.current;
+      if (known === null) return;
+      void getLocalSettings().then(async (local) => {
+        const next = syncedFromLocal(local);
+        const patch = changedFields(known, next);
+        if (Object.keys(patch).length === 0) return;
+        if (await pushSettings(patch)) knownSettings.current = { ...known, ...patch };
       });
     };
     const offLocal = onLocalChange(() => {
       soon();
-      pushGender();
+      pushChangedSettings();
     });
     return () => {
       clearTimeout(timer);

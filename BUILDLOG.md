@@ -383,3 +383,20 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Deviations:** none.
 - **Incomplete:** none.
 - **Open questions:** Keep it, or opt out with `agentRules: false` in next.config and delete the file? It is agent-facing text that future sessions will read alongside CLAUDE.md.
+
+### [2026-11-09 13:47] Sync onboarding answers to user_settings
+- **Milestone:** none (follow-up to onboarding, #17; owner said "yes" to adding the columns)
+- **Files:** created `db/migrations/002_onboarding_settings.sql`. Modified `src/app/api/settings/route.ts`, `src/lib/sync/settings.ts`, `src/components/SyncProvider.tsx`, `src/lib/types.ts` (comment), `SPEC.md` §7 (table + sync rule), `CLAUDE.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - Three nullable columns on `user_settings`: `destination` (check `^[A-Z]{2}$`), `travel_month` (check `YYYY-MM`), `spanish_comfort` (check against the three slugs). Null = not answered. `add column if not exists` + `on conflict do nothing` on the migrations row, so re-running is harmless.
+  - `PUT /api/settings` is now a partial update: any subset of `speakerGender`, `destination`, `travelMonth`, `spanishComfort`; null clears an answer; unknown keys and empty bodies are 400. Column names come from a fixed map; values are parameters.
+  - Sign-in merge, per field: speaker gender keeps the M5 rule (server `neutral`/missing → device wins). Each onboarding answer: server null → device value uploads; server set → server wins and is written locally. Sign-out → sign-in now restores the trip row, and a new device gets the answers.
+  - While signed in, `SyncProvider` PUTs only changed fields. The last-known server state only advances when a PUT lands, so a failed field is retried with the next local change (previously gender was marked known before the PUT, and a failure was only fixed at next sign-in). If the sign-in upload fails, `reconcileSettings()` returns the server's view for the same reason.
+  - The branch was restarted from main after #17 merged; the old remote branch (same tree as main) was merged in rather than force-pushed over.
+- **Deviations:** none from SPEC.md; §7 was updated in the same change to describe the columns and merge rule.
+- **Incomplete:**
+  - **Migration 002 is NOT applied to Neon.** Until it is, GET/PUT `/api/settings` fail on production (they select the new columns). Sync is best effort so the app keeps working, but speaker gender stops syncing too. Apply before or with the merge.
+  - Verified: migrations 001+002 (and 002 twice) on PGlite 0.2.17 (embedded Postgres, scratchpad only, not a repo dependency); the route's SQL construction for insert, partial update, null clear, and the three check-constraint rejections. Merge rules: 5 cases run against the real `src/lib/sync/settings.ts`, transpiled with stubbed fetch/IndexedDB, all pass. Signed-out onboarding Playwright run still passes. lint + typecheck pass.
+  - Not verified: the route against real Neon or a real signed-in session (no auth env in this sandbox; `/api/settings` returns 500 locally because `NEON_AUTH_*` are unset, which predates this change).
+  - Merge is "server wins when set", not last-write-wins by timestamp: an answer changed on a signed-out device is overwritten by the server's older answer at next sign-in.
+- **Open questions:** Apply 002 to Neon production now? Is "server wins when set" acceptable, or should answers use last-write-wins on `updatedAt` like saved phrases?

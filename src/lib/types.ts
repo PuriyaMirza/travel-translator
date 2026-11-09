@@ -56,8 +56,8 @@ export interface UserSettings {
   preferredLocale: string;
   speakerGender: SpeakerGender;
   /*
-   * Onboarding answers. Device-only for now: there are no user_settings
-   * columns for them yet, so they do not sync. Absent until answered.
+   * Onboarding answers. Absent until answered. Synced to user_settings
+   * (migration 002) by src/lib/sync/settings.ts.
    */
   /** ISO 3166-1 alpha-2 code from `destinations.ts`, e.g. "MX". */
   destination?: string;
