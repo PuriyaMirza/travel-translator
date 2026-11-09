@@ -1,15 +1,15 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useState, type ComponentType } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowRight, Check, ChevronLeft, Search } from "lucide-react";
+import { ArrowRight, Calendar, Check, ChevronDown, ChevronLeft, MapPin } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { brand } from "@/lib/brand";
 import { destinationsFor } from "@/lib/destinations";
 import { SPANISH_COMFORT_LABELS, SPEAKER_GENDER_EXAMPLES, SPEAKER_GENDER_LABELS } from "@/lib/labels";
 import { getLocalSettings, setLocalSettings } from "@/lib/local/settings";
-import { markOnboardingComplete, upcomingMonths } from "@/lib/onboarding";
+import { markOnboardingComplete, monthOptions } from "@/lib/onboarding";
 import { SPANISH_COMFORT_LEVELS, SPEAKER_GENDERS, type SpanishComfort, type SpeakerGender } from "@/lib/types";
 import { cn } from "@/lib/utils";
 import { Eyebrow } from "./Eyebrow";
@@ -25,10 +25,6 @@ const STEPS = ["welcome", "trip", "voice", "spanish", "account"] as const;
 type Step = (typeof STEPS)[number];
 const QUESTION_STEPS: readonly Step[] = ["trip", "voice", "spanish"];
 
-/** "Later" in the month row: travelling, but not in the next six months. */
-const LATER = "later";
-const MONTHS_SHOWN = 6;
-
 const primaryButton =
   "text-body-bold flex w-full items-center justify-center gap-2 rounded-full bg-brand px-6 py-3 text-inverse transition hover:bg-brand-hover active:scale-[0.98] disabled:opacity-40 motion-reduce:transition-none motion-reduce:active:scale-100";
 const secondaryButton =
@@ -36,10 +32,49 @@ const secondaryButton =
 const textButton =
   "text-small rounded-full px-3 py-2 font-semibold text-ink transition hover:bg-sand/60 motion-reduce:transition-none";
 
-function chipClass(selected: boolean) {
-  return cn(
-    "text-small inline-flex items-center gap-1.5 rounded-full border px-3.5 py-2 font-semibold transition motion-reduce:transition-none",
-    selected ? "border-charcoal bg-charcoal text-inverse" : "border-hairline bg-card text-ink hover:bg-sand/60",
+/**
+ * A native select styled like the app's text fields (rounded-field, ink
+ * outline). Native, so phones open their own picker. Empty value = not answered.
+ */
+function Dropdown({
+  id,
+  labelledBy,
+  icon: Icon,
+  placeholder,
+  value,
+  options,
+  onChange,
+}: {
+  id: string;
+  labelledBy: string;
+  icon: ComponentType<{ className?: string; "aria-hidden"?: boolean }>;
+  placeholder: string;
+  value: string | null;
+  options: readonly { value: string; label: string }[];
+  onChange: (value: string | null) => void;
+}) {
+  return (
+    <div className="relative text-ink">
+      <Icon aria-hidden className="pointer-events-none absolute top-1/2 left-4 size-4 -translate-y-1/2" />
+      <select
+        id={id}
+        aria-labelledby={labelledBy}
+        value={value ?? ""}
+        onChange={(e) => onChange(e.target.value || null)}
+        className={cn(
+          "text-body w-full appearance-none rounded-field border border-hairline bg-card py-3 pr-11 pl-11 focus:border-blush focus:outline-none",
+          value ? "text-ink" : "text-muted",
+        )}
+      >
+        <option value="">{placeholder}</option>
+        {options.map((o) => (
+          <option key={o.value} value={o.value}>
+            {o.label}
+          </option>
+        ))}
+      </select>
+      <ChevronDown aria-hidden className="pointer-events-none absolute top-1/2 right-4 size-[18px] -translate-y-1/2" />
+    </div>
   );
 }
 
@@ -52,7 +87,7 @@ function optionClass(selected: boolean) {
 
 function Radio({ selected }: { selected: boolean }) {
   return (
-    <span aria-hidden className="mt-0.5 flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 border-hairline">
+    <span aria-hidden className="mt-[5px] flex size-[18px] shrink-0 items-center justify-center rounded-full border-2 border-hairline">
       {selected && <span className="size-2 rounded-full bg-charcoal" />}
     </span>
   );
@@ -64,10 +99,9 @@ export function OnboardingFlow() {
   const signedIn = Boolean(session?.user);
   const locale = brand.defaultLocale;
   const destinations = destinationsFor(locale);
-  const months = useMemo(() => upcomingMonths(new Date(), MONTHS_SHOWN), []);
+  const months = useMemo(() => monthOptions(new Date()), []);
 
   const [step, setStep] = useState<Step>("welcome");
-  const [query, setQuery] = useState("");
   const [destination, setDestination] = useState<string | null>(null);
   const [travelMonth, setTravelMonth] = useState<string | null>(null);
   const [speakerGender, setSpeakerGender] = useState<SpeakerGender>("neutral");
@@ -113,7 +147,7 @@ export function OnboardingFlow() {
       if (step === "trip") {
         await setLocalSettings({
           destination: destination ?? undefined,
-          travelMonth: travelMonth && travelMonth !== LATER ? travelMonth : undefined,
+          travelMonth: travelMonth ?? undefined,
         });
       } else if (step === "voice") {
         await setLocalSettings({ speakerGender });
@@ -125,10 +159,6 @@ export function OnboardingFlow() {
     }
     goNext();
   };
-
-  const filtered = query.trim()
-    ? destinations.filter((d) => d.name.toLowerCase().includes(query.trim().toLowerCase()))
-    : destinations;
 
   return (
     <main className="mx-auto flex min-h-dvh w-full max-w-md flex-col px-5 pt-[calc(env(safe-area-inset-top)+12px)] pb-[calc(env(safe-area-inset-bottom)+24px)]">
@@ -183,7 +213,10 @@ export function OnboardingFlow() {
         <section className="flex flex-1 flex-col">
           <div className="flex flex-1 flex-col justify-center gap-4">
             <Eyebrow>Before you go</Eyebrow>
-            <h1 className="text-display font-display text-ink">Let&rsquo;s tune {brand.name} to your trip.</h1>
+            {/* Upright on purpose (owner feedback): the one non-italic Fraunces title. */}
+            <h1 className="font-display text-[44px] leading-[1.05] font-light text-balance text-ink not-italic!">
+              Let&rsquo;s tune {brand.name} to your trip.
+            </h1>
             <p className="text-lead text-muted">
               Three quick questions so the phrases fit where you&rsquo;re going and who&rsquo;s speaking.
             </p>
@@ -204,68 +237,28 @@ export function OnboardingFlow() {
           <Eyebrow>1 of 3 · Your trip</Eyebrow>
           <h1 id="q-trip" className="text-h1 font-display text-ink">Where are you headed?</h1>
 
-          <label className="flex items-center gap-2 rounded-field border border-hairline bg-card px-4 py-3 text-ink focus-within:border-blush">
-            <Search aria-hidden className="size-4 shrink-0" />
-            <span className="sr-only">Search countries</span>
-            <input
-              id="destination-search"
-              type="search"
-              value={query}
-              onChange={(e) => setQuery(e.target.value)}
-              placeholder="Search countries"
-              autoComplete="off"
-              className="text-body min-w-0 flex-1 bg-transparent placeholder:text-muted focus:outline-none"
-            />
-          </label>
+          <Dropdown
+            id="destination"
+            labelledBy="q-trip"
+            icon={MapPin}
+            placeholder="Not sure yet"
+            value={destination}
+            options={destinations.map((d) => ({ value: d.code, label: d.name }))}
+            onChange={setDestination}
+          />
 
-          <div role="radiogroup" aria-labelledby="q-trip" className="flex flex-wrap gap-1.5">
-            {filtered.map((d) => {
-              const selected = destination === d.code;
-              return (
-                <button
-                  key={d.code}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  onClick={() => setDestination(selected ? null : d.code)}
-                  className={chipClass(selected)}
-                >
-                  {selected && <Check aria-hidden className="size-3.5" />}
-                  {d.name}
-                </button>
-              );
-            })}
-            <button
-              type="button"
-              role="radio"
-              aria-checked={destination === null}
-              onClick={() => setDestination(null)}
-              className={chipClass(destination === null)}
-            >
-              Not sure yet
-            </button>
-          </div>
-
-          <p id="q-month" className="text-small font-bold tracking-wide text-ink uppercase">
+          <p id="q-month" className="text-small pt-2 font-bold tracking-wide text-ink uppercase">
             When?
           </p>
-          <div role="radiogroup" aria-labelledby="q-month" className="flex flex-wrap gap-1.5">
-            {[...months, { value: LATER, label: "Later" }].map((m) => {
-              const selected = travelMonth === m.value;
-              return (
-                <button
-                  key={m.value}
-                  type="button"
-                  role="radio"
-                  aria-checked={selected}
-                  onClick={() => setTravelMonth(selected ? null : m.value)}
-                  className={chipClass(selected)}
-                >
-                  {m.label}
-                </button>
-              );
-            })}
-          </div>
+          <Dropdown
+            id="travel-month"
+            labelledBy="q-month"
+            icon={Calendar}
+            placeholder="Not sure yet"
+            value={months.some((m) => m.value === travelMonth) ? travelMonth : null}
+            options={months}
+            onChange={setTravelMonth}
+          />
 
           <div className="flex-1" />
           <button type="button" onClick={() => void saveAndNext()} className={primaryButton}>
@@ -279,7 +272,7 @@ export function OnboardingFlow() {
           <Eyebrow>2 of 3 · Your voice</Eyebrow>
           <h1 id="q-voice" className="text-h1 font-display text-ink">How should Spanish refer to you?</h1>
           <p className="text-small text-muted">Some words change with who&rsquo;s speaking. We never guess.</p>
-          <div role="radiogroup" aria-labelledby="q-voice" className="flex flex-col gap-2">
+          <div role="radiogroup" aria-labelledby="q-voice" className="flex flex-col gap-4">
             {SPEAKER_GENDERS.map((gender) => {
               const selected = speakerGender === gender;
               return (
@@ -293,9 +286,9 @@ export function OnboardingFlow() {
                 >
                   <Radio selected={selected} />
                   <span className="min-w-0">
-                    <span className="text-body-bold block text-ink">{SPEAKER_GENDER_LABELS.en[gender]}</span>
-                    <span lang={locale} className="text-small block font-bold text-ink">
-                      {SPEAKER_GENDER_EXAMPLES[locale]?.[gender]}
+                    <span className="text-h2 block text-ink">{SPEAKER_GENDER_LABELS.en[gender]}</span>
+                    <span lang={locale} className="text-body block text-ink italic">
+                      &ldquo;{SPEAKER_GENDER_EXAMPLES[locale]?.[gender]}&rdquo;
                     </span>
                   </span>
                 </button>
@@ -313,7 +306,7 @@ export function OnboardingFlow() {
         <section aria-labelledby="q-spanish" className="flex flex-1 flex-col gap-4 pt-4">
           <Eyebrow>3 of 3 · Your Spanish</Eyebrow>
           <h1 id="q-spanish" className="text-h1 font-display text-ink">How much Spanish do you have?</h1>
-          <div role="radiogroup" aria-labelledby="q-spanish" className="flex flex-col gap-2">
+          <div role="radiogroup" aria-labelledby="q-spanish" className="flex flex-col gap-4">
             {SPANISH_COMFORT_LEVELS.map((level) => {
               const selected = spanishComfort === level;
               const { label, hint } = SPANISH_COMFORT_LABELS.en[level];
@@ -328,8 +321,8 @@ export function OnboardingFlow() {
                 >
                   <Radio selected={selected} />
                   <span className="min-w-0">
-                    <span className="text-body-bold block text-ink">{label}</span>
-                    <span className="text-small block text-muted">{hint}</span>
+                    <span className="text-h2 block text-ink">{label}</span>
+                    <span className="text-body block text-muted italic">&ldquo;{hint}&rdquo;</span>
                   </span>
                 </button>
               );

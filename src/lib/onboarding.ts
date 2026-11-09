@@ -39,11 +39,17 @@ function parseMonth(value: string): Date | null {
   return match ? new Date(Date.UTC(Number(match[1]), Number(match[2]) - 1, 1)) : null;
 }
 
-/** This month and the next `count - 1`, as values with short labels ("Mar"). */
-export function upcomingMonths(now: Date, count: number): { value: string; label: string }[] {
-  const format = new Intl.DateTimeFormat(UI_LANGUAGE, { month: "short", timeZone: "UTC" });
-  return Array.from({ length: count }, (_, i) => {
-    const date = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() + i, 1));
+/**
+ * All twelve months in calendar order, each pointing at its next occurrence:
+ * this month and later months are this year, earlier months are next year.
+ * Labels are full names ("March"); the year is implied.
+ */
+export function monthOptions(now: Date): { value: string; label: string }[] {
+  const format = new Intl.DateTimeFormat(UI_LANGUAGE, { month: "long", timeZone: "UTC" });
+  const thisMonth = now.getUTCMonth();
+  const thisYear = now.getUTCFullYear();
+  return Array.from({ length: 12 }, (_, month) => {
+    const date = new Date(Date.UTC(month < thisMonth ? thisYear + 1 : thisYear, month, 1));
     return { value: monthValue(date), label: format.format(date) };
   });
 }
