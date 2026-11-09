@@ -8,6 +8,8 @@ import { CategoryGrid } from "@/components/CategoryGrid";
 import { DailyPhraseCard } from "@/components/DailyPhraseCard";
 import { EssentialPhrases } from "@/components/EssentialPhrases";
 import { Eyebrow } from "@/components/Eyebrow";
+import { OnboardingGate } from "@/components/OnboardingGate";
+import { TripRow } from "@/components/TripRow";
 
 /**
  * Regenerate hourly so the phrase of the day rolls over without a redeploy.
@@ -26,13 +28,16 @@ function formatDailyDate(now: Date): string {
  * Home (Figma: Language App › "Stamp blues palette · A Light editorial · Home").
  * Order: eyebrow, title, translate entry, essentials, daily phrase, situations.
  * The essentials list is not in the Figma frame; it sits above the daily phrase
- * because it is what someone mid-conversation needs first.
+ * because it is what someone mid-conversation needs first. The trip row (from
+ * onboarding) sits under the translate entry and renders nothing until a
+ * destination is set.
  */
 export default function Home() {
   const now = new Date();
 
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-[18px] px-5 pt-[22px] pb-8">
+      <OnboardingGate />
       <Eyebrow>Phrasebook · {localeLabel(brand.defaultLocale)}</Eyebrow>
 
       <h1 className="text-display font-display text-ink">{brand.tagline}</h1>
@@ -45,6 +50,8 @@ export default function Home() {
         <span className="min-w-0 flex-1 text-[15px]">Type anything to translate…</span>
         <ArrowRight aria-hidden className="size-[18px] shrink-0" />
       </Link>
+
+      <TripRow locale={brand.defaultLocale} />
 
       <EssentialPhrases phrases={ESSENTIAL_PHRASES} />
 

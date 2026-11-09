@@ -1,13 +1,14 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import { isShowModePath } from "@/lib/nav";
+import { isChromelessPath } from "@/lib/nav";
 
 /**
  * Hides the app chrome (header, offline banner) in show mode, which is a
- * full-screen dark reading surface (SPEC.md §12). The children stay server
+ * full-screen dark reading surface (SPEC.md §12), and on the full-screen
+ * onboarding flow. The children stay server
  * components; this only decides whether to render them.
  */
 export function ChromeGate({ children }: { children: React.ReactNode }) {
-  return isShowModePath(usePathname()) ? null : <>{children}</>;
+  return isChromelessPath(usePathname()) ? null : <>{children}</>;
 }

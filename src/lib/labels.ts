@@ -1,5 +1,5 @@
 import type { Category } from "./categories";
-import type { ShowCardKind, SpeakerGender } from "./types";
+import type { ShowCardKind, SpanishComfort, SpeakerGender } from "./types";
 
 /**
  * Display labels for category slugs, keyed by language (SPEC.md §4).
@@ -38,6 +38,28 @@ export const SPEAKER_GENDER_LABELS: Record<"en", Record<SpeakerGender, string>> 
     neutral: "Neutral",
     feminine: "Feminine",
     masculine: "Masculine",
+  },
+};
+
+/**
+ * One phrase per speaker-gender option, keyed by *target* locale, so the
+ * onboarding step can show what the choice changes. Neutral uses a
+ * construction that avoids gendered agreement (SPEC.md §12).
+ */
+export const SPEAKER_GENDER_EXAMPLES: Record<string, Record<SpeakerGender, string>> = {
+  "es-419": {
+    neutral: "No como carne.",
+    feminine: "Soy vegetariana.",
+    masculine: "Soy vegetariano.",
+  },
+};
+
+/** Labels for the Spanish comfort level (onboarding). Never key logic off these. */
+export const SPANISH_COMFORT_LABELS: Record<"en", Record<SpanishComfort, { label: string; hint: string }>> = {
+  en: {
+    none: { label: "None yet", hint: "Hola and gracias, that\u2019s it" },
+    basic: { label: "A little", hint: "I can order food and ask prices" },
+    conversational: { label: "Some", hint: "I can follow a slow conversation" },
   },
 };
 
