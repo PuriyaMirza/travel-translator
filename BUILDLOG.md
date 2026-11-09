@@ -375,3 +375,11 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Verified with Playwright against `next dev` (iPhone 13 emulation): first visit redirects to `/welcome`; the full flow stores `{destination:"MX", travelMonth:"2027-03", speakerGender:"feminine", spanishComfort:"none"}`; Home shows "Mexico · March 2027"; reload stays on Home; a device with an existing settings row is not redirected; no console errors. Not tested: the "Create account" path, the signed-in skip, offline, a real phone. `npm run build` not run. lint + typecheck pass.
   - `next dev` auto-generated an untracked `AGENTS.md` at the repo root; not committed, left in the working tree.
 - **Open questions:** What should Spanish level change? Add `destination`, `travel_month`, `spanish_comfort` columns to `user_settings` and sync them? Pre-fill the trip-pack title from the trip? Update SPEC.md with an onboarding section?
+
+### [2026-11-09 03:15] Commit Next.js-generated AGENTS.md
+- **Milestone:** none (housekeeping)
+- **Files:** created `AGENTS.md` (generated, not hand-written). Modified `BUILDLOG.md`.
+- **Decisions:** `next dev` (16.4.3, `node_modules/next/dist/server/lib/generate-agent-files.js`) writes a managed block into `AGENTS.md` and re-creates it if deleted, leaving the tree dirty after every dev run. Verified the source before committing; the block only tells agents to read `node_modules/next/dist/docs/` before writing code. Committed as-is, per Next's own guidance.
+- **Deviations:** none.
+- **Incomplete:** none.
+- **Open questions:** Keep it, or opt out with `agentRules: false` in next.config and delete the file? It is agent-facing text that future sessions will read alongside CLAUDE.md.
