@@ -215,6 +215,10 @@ create table user_settings (
   preferred_locale text not null default 'es-419',
   speaker_gender   text not null default 'neutral'
                      check (speaker_gender in ('neutral','feminine','masculine')),
+  -- Onboarding answers (migration 002). Null = not answered.
+  destination      text check (destination ~ '^[A-Z]{2}$'),          -- ISO 3166-1 alpha-2
+  travel_month     text check (travel_month ~ '^[0-9]{4}-(0[1-9]|1[0-2])$'),  -- YYYY-MM
+  spanish_comfort  text check (spanish_comfort in ('none','basic','conversational')),
   updated_at       timestamptz not null default now()
 );
 
@@ -353,6 +357,7 @@ There are no database-side rules to lean on, so the server enforces ownership:
 - Build the sync as one helper parameterised by table, dedupe key, and timestamp field, not code specific to saved phrases. M3 uses it for `saved_phrases` (dedupe on `locale + normalized sourceText`). M5 reuses it for `show_cards` (dedupe on `kind + locale + normalized sourceText`).
 - Trip packs are created online only (they need the model call) and are cached into IndexedDB after creation.
 - Logged out, `speakerGender` lives in IndexedDB and is written to `user_settings` on sign-in if the server row still has the default.
+- The onboarding answers (`destination`, `travelMonth`, `spanishComfort`) live in IndexedDB too. On sign-in each is merged on its own: if the server has no value, the device's is uploaded; if the server has one, it wins. While signed in, a local change PUTs only the changed fields to `/api/settings`.
 - The service worker never caches `/api/sync`. Sync runs on the `online` event and on app focus.
 
 ---
