@@ -422,3 +422,13 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Native selects ignore most styling of the opened list; only the closed control matches the design.
   - Verified with Playwright against `next dev` (iPhone 13): screenshots of all four screens, 13 month options (placeholder + 12), 19 country options (placeholder + 18), full flow still stores the answers and shows "Mexico · March 2027" on Home. lint + typecheck pass. The only console error is `/api/auth/get-session` 500 from unset `NEON_AUTH_*` locally (pre-existing).
 - **Open questions:** Should screens 2–4 headings also go upright to match screen 1?
+
+### [2026-11-10 01:25] Onboarding design feedback, round 2 (screens 2–4)
+- **Milestone:** none (follow-up to onboarding, #17 / #19)
+- **Files:** modified `src/components/OnboardingFlow.tsx`, `BUILDLOG.md`.
+- **Decisions:**
+  - Screen 2: the "WHEN?" caps label is now "What time of year?", styled exactly like "Where are you headed?" (`text-h1 font-display`: Fraunces 24px light italic; verified computed styles match). It became an `h2` (was a `p`); still labels the month dropdown (accessible name checked). Spacing above it raised to 16px so the second heading doesn't crowd the first dropdown.
+  - Screens 3 and 4: "double the space" between label and example interpreted as adding a 10px gap between the two lines (they previously touched, with only line-height leading between them, roughly 10px of visible whitespace). Measured in the browser: 10px layout gap on all six cards. Compared before/after screenshots: visible gap roughly doubled.
+- **Deviations:** none from SPEC.md (onboarding isn't in SPEC.md).
+- **Incomplete:** "Double" is approximate: it doubles the visible whitespace by eye, not an exact pixel measurement of glyph edges. Verified on `next dev` with Playwright (iPhone 13) only; lint + typecheck pass.
+- **Open questions:** none new.

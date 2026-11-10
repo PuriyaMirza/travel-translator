@@ -247,9 +247,9 @@ export function OnboardingFlow() {
             onChange={setDestination}
           />
 
-          <p id="q-month" className="text-small pt-2 font-bold tracking-wide text-ink uppercase">
-            When?
-          </p>
+          <h2 id="q-month" className="text-h1 pt-4 font-display text-ink">
+            What time of year?
+          </h2>
           <Dropdown
             id="travel-month"
             labelledBy="q-month"
@@ -285,7 +285,7 @@ export function OnboardingFlow() {
                   className={optionClass(selected)}
                 >
                   <Radio selected={selected} />
-                  <span className="min-w-0">
+                  <span className="flex min-w-0 flex-col gap-2.5">
                     <span className="text-h2 block text-ink">{SPEAKER_GENDER_LABELS.en[gender]}</span>
                     <span lang={locale} className="text-body block text-ink italic">
                       &ldquo;{SPEAKER_GENDER_EXAMPLES[locale]?.[gender]}&rdquo;
@@ -320,7 +320,7 @@ export function OnboardingFlow() {
                   className={optionClass(selected)}
                 >
                   <Radio selected={selected} />
-                  <span className="min-w-0">
+                  <span className="flex min-w-0 flex-col gap-2.5">
                     <span className="text-h2 block text-ink">{label}</span>
                     <span className="text-body block text-muted italic">&ldquo;{hint}&rdquo;</span>
                   </span>
