@@ -435,3 +435,22 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Docs only. No code or UI copy was changed to match; `brand.tagline`, README and the rest of SPEC.md (which still says "phrasebook" throughout, e.g. §8's prompt "travel phrasebook app") were not reviewed against the new wording.
 - **Open questions:**
   - The Daily Phrase card on Home is a learning-app pattern rather than a situational one. Keep, change or remove?
+
+### [2026-11-12 21:45] Draft proposal: companion pass (six improvements to existing features)
+- **Milestone:** none yet (proposed as M8, built before M7 menu scan; owner to confirm)
+- **Files:** created `docs/proposals/companion-pass.md`; modified `BUILDLOG.md`.
+- **Decisions:**
+  - Plan only, no feature code and no SPEC.md change. The six features are the owner's pick: use onboarding answers, replace the Daily Phrase card, likely replies, situations within categories, fill-in-the-blank phrases, show any phrase full-screen.
+  - The sub-grouping inside a category is called a "moment" in code, because the CSV column that holds the category is already named `situation` and Home labels the category grid "Situations".
+  - Fill-in-the-blank never assembles Spanish at runtime: every option is authored as a whole fragment per template, so article and contraction agreement can't break.
+  - Show-any-phrase is a client overlay, not a route, so it needs no id lookup and no service-worker change.
+  - Phase order puts the pure-client feature first and the three data-shape changes last.
+- **Deviations:** none.
+- **Incomplete:**
+  - Seven owner decisions are open (proposal §2). Three block the start.
+  - Time estimates are guesses from how long M3–M6 took.
+  - The proposed moment slugs are a first cut; they were not checked against the 100 phrases one by one.
+  - Bundle-size and trip-pack latency effects are estimated, not measured.
+- **Open questions:**
+  - Who reviews the roughly 300 lines of Spanish this plan has me author?
+  - Correction to an earlier chat answer: 50 es-419 phrases are hidden for lack of a pronunciation guide, not 58.
