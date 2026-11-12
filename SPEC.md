@@ -6,9 +6,15 @@
 
 ## 1. What this is
 
-A travel phrasebook and contextual translator for English speakers traveling in Spanish-speaking countries. It is not a general-purpose translator. Google Translate already does word-for-word; this does *what you would actually say at the counter*, with pronunciation you can read aloud without knowing Spanish.
+A travel companion for someone who doesn't speak the local language. Pulled out in a specific situation, it gives exactly the words needed to get through it. Every feature is judged by one question: *does this hand someone the exact words for the moment they're in?*
 
-**v1 scope:** neutral Latin American Spanish (`es-419`). Minimal slang. Latin American pronunciation throughout — seseo (*gracias* = "grah-SEE-ahs," never "grah-THEE-ahs"), soft *y* for *ll*, no *vosotros* anywhere, ever.
+**What it is not:**
+
+- **Not a language-learning app.** No lessons, streaks, drills or progress tracking. The user is not trying to learn the language; they are trying to get through the next two minutes.
+- **Not a stock phrasebook.** A fixed list of phrases is a starting point, not the product. The words should fit the situation and the traveller.
+- **Not a general-purpose translator.** Google Translate already does word-for-word; this does *what you would actually say at the counter*, with pronunciation you can read aloud without knowing the language.
+
+**v1 scope:** English speakers traveling in Spanish-speaking countries; neutral Latin American Spanish (`es-419`). Minimal slang. Latin American pronunciation throughout — seseo (*gracias* = "grah-SEE-ahs," never "grah-THEE-ahs"), soft *y* for *ll*, no *vosotros* anywhere, ever.
 
 **Planned but explicitly not v1:** country-specific dialect packs (Puerto Rico first), additional languages, camera/OCR menu translation.
 

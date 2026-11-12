@@ -422,3 +422,16 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Native selects ignore most styling of the opened list; only the closed control matches the design.
   - Verified with Playwright against `next dev` (iPhone 13): screenshots of all four screens, 13 month options (placeholder + 12), 19 country options (placeholder + 18), full flow still stores the answers and shows "Mexico · March 2027" on Home. lint + typecheck pass. The only console error is `/api/auth/get-session` 500 from unset `NEON_AUTH_*` locally (pre-existing).
 - **Open questions:** Should screens 2–4 headings also go upright to match screen 1?
+
+### [2026-11-12 21:26] State the mission in SPEC.md §1 and CLAUDE.md
+- **Milestone:** none (docs)
+- **Files:** modified `SPEC.md`, `CLAUDE.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - SPEC.md §1 now opens with the owner's mission (a situational travel companion) and a "What it is not" list: not a language-learning app, not a stock phrasebook, not a general-purpose translator. The old opening line ("a travel phrasebook and contextual translator") is gone; "English speakers in Spanish-speaking countries" moved into the v1 scope line, so it reads as scope, not identity.
+  - CLAUDE.md gains a "Mission" section above "Source of truth" with the same statement and a test question for any feature.
+  - The test question's wording and the "no lessons, streaks, drills, progress" examples are mine, approved by the owner in outline, not dictated word for word.
+- **Deviations:** none.
+- **Incomplete:**
+  - Docs only. No code or UI copy was changed to match; `brand.tagline`, README and the rest of SPEC.md (which still says "phrasebook" throughout, e.g. §8's prompt "travel phrasebook app") were not reviewed against the new wording.
+- **Open questions:**
+  - The Daily Phrase card on Home is a learning-app pattern rather than a situational one. Keep, change or remove?

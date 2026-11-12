@@ -3,6 +3,20 @@
 Project working rules. Read this at the start of every
 session.
 
+## Mission
+
+A travel companion for someone who doesn't speak the
+local language. Pulled out in a specific situation, it
+gives exactly the words needed to get through it.
+
+- Not a way to learn the language (no lessons, streaks,
+  drills, progress).
+- Not a stock phrasebook.
+
+Test for any feature or change: does this hand someone
+the exact words for the moment they're in? If not,
+raise it with me before building.
+
 ## Source of truth
 
 SPEC.md is the source of truth for this project. Read
