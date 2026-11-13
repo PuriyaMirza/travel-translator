@@ -1,12 +1,15 @@
 "use client";
 
+import { useMemo, useState } from "react";
 import { showsDraftNotice } from "@/lib/review";
+import { resolveSlot } from "@/lib/slot";
 import type { Phrase } from "@/lib/types";
 import { useSpeech } from "@/lib/useSpeech";
 import { DraftNotice } from "./DraftNotice";
 import { LikelyReplies } from "./LikelyReplies";
 import { SaveButton } from "./SaveButton";
 import { ShowTrigger } from "./ShowTrigger";
+import { SlotSentence } from "./SlotSentence";
 import { SpeakButton } from "./SpeakButton";
 
 /**
@@ -17,16 +20,25 @@ import { SpeakButton } from "./SpeakButton";
  * `literal` only appears when it differs, so the card does not repeat itself.
  */
 export function PhraseCard({
-  phrase,
-  draftNotice = showsDraftNotice(phrase),
+  phrase: given,
+  draftNotice = showsDraftNotice(given),
 }: {
   phrase: Phrase;
   /** Show the "still a draft" marker. Defaults to the phrase's own flag; the vault passes it for saved copies. */
   draftNotice?: boolean;
 }) {
   const { speak, speakingId, supported } = useSpeech();
+
+  // A fill-in-the-blank template (SPEC.md §14) renders as the sentence with
+  // the chosen option filled in. Everything below — speak, show, save — works
+  // on that finished sentence, so none of it needs to know about templates.
+  const options = given.slot?.options;
+  const [optionId, setOptionId] = useState(options?.[0]?.id);
+  const option = options?.find((o) => o.id === optionId) ?? options?.[0];
+  const phrase = useMemo(() => (option ? resolveSlot(given, option) : given), [given, option]);
+
   const showLiteral = phrase.literal !== phrase.natural;
-  // Absent on all 42 presets (always Spanish); translation results are
+  // Absent on presets (always Spanish); translation results are
   // bidirectional, so an es->en result must not be read or marked as Spanish.
   const language = phrase.targetLanguage ?? "es";
 
@@ -35,7 +47,16 @@ export function PhraseCard({
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <div className="flex items-center gap-1">
-            <p className="text-small min-w-0 text-muted">{phrase.sourceText}</p>
+            {options && option ? (
+              <SlotSentence
+                template={given.sourceText}
+                options={options}
+                value={option.id}
+                onChange={setOptionId}
+              />
+            ) : (
+              <p className="text-small min-w-0 text-muted">{phrase.sourceText}</p>
+            )}
             {/* High-stakes text no fluent speaker has checked yet (SPEC.md §14). */}
             {draftNotice && <DraftNotice className="-my-1.5" />}
           </div>

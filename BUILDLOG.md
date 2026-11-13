@@ -562,3 +562,29 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Open questions:**
   - Apply migrations 003 and 004 and both seeds to Neon production?
 - Verified with Playwright (iPhone 13 emulation): 16 collapsed blocks on the dining page, one opens with its replies; a mocked translate result shows replies open; saving it keeps the replies in IndexedDB and in the outbox row; the vault shows them and does not mark a model translation as draft. lint, typecheck and build pass; the snapshot is in no client chunk.
+
+### [2026-11-13 08:26] M8 phase 6: fill-in-the-blank phrases
+- **Milestone:** M8
+- **Files:** created `data/slots/es-419.csv`, `src/lib/slot.ts`, `src/components/SlotSentence.tsx`, `db/migrations/005_phrase_slot_options.sql`, `db/seed/phrase_slot_options.sql`; modified `data/phrases/es-419.csv`, `data/replies/es-419.csv`, `scripts/phraseCsv.mjs`, `export-phrase-snapshot.mjs`, `build-phrase-seed.mjs`, `build-review-doc.mjs`, `src/lib/phrases.snapshot.json`, `src/lib/types.ts`, `tripPack.ts`, `reviewPresets.ts`, `src/components/PhraseCard.tsx`, `TranslateForm.tsx`, `src/app/translate/page.tsx`, `docs/review/spanish-review.md`, `db/seed/*.sql`, `SPEC.md`, `CLAUDE.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - Nine templates with 66 options, not the "about twelve" the plan guessed: Where is ___, How do I get to ___, I'd like ___, I'm allergic to ___, I don't eat ___, Do you have ___, Could I have ___, I need ___, My ___ hurts. All draft.
+  - Three existing phrases became templates and keep their ids: `dining-allergy` (was the open-ended "I have an allergy to..."), `dining-no-pork` (now "I don't eat ___", pork first) and `lodging-another-towel` (now "Could I have ___", towel first). Six templates are new rows, so es-419 has 106 phrases.
+  - `dining-allergy` changed from "Soy alérgico a..." to "Tengo alergia ___", which is the same whoever is speaking, so it no longer needs a note about gender.
+  - Peanuts are offered twice, as "peanuts (maní)" and "peanuts (cacahuate)", because the word differs by country and this is an allergy. The cultural note says which is which.
+  - Each option stores its whole fragment per field, preposition and article included ("al maní", "a los mariscos"). Filling the blank is a text replacement. `resolveSlot()` returns an ordinary phrase, so speak, show, save, the vault and sync needed no template logic.
+  - The blank is a native `<select>` styled as a chip. "Something else…" opens `/translate?text=Where is ___?`; `TranslateForm` reads the parameter and is wrapped in `<Suspense>`.
+  - The data scripts refuse a template without the marker in all four fields, a template with fewer than two options, and options on a phrase that is not a template.
+  - The vault's draft-marker list now includes every filling of a draft high-stakes template, so a saved "Tengo alergia a los mariscos" is marked.
+  - Replies for the three converted phrases were rewritten to fit any filling (15 more replies overall; 223 total).
+- **Deviations:** none.
+- **Incomplete:**
+  - **Migration 005 is not applied to Neon**, nor are 003 and 004 or the three seed files. The app does not read those tables at runtime.
+  - No fluent speaker has read any of it. The review document now lists 49 phrases, 223 replies and 66 options.
+  - The translate box is prefilled with "Where is ___?" including the blank; nothing stops the user submitting it unedited.
+  - One blank per phrase; no typed blanks, numbers or times, as planned.
+  - The picker was tested through Playwright's `selectOption`, not by opening the native iOS or Android picker.
+  - The fr-FR and de-DE files have no templates, replies or options.
+- **Open questions:**
+  - Apply migrations 003–005 and the seeds to Neon production?
+  - Is the `ANTHROPIC_API_KEY` on Vercel valid? The preview's was rejected on 2026-11-13 (see phase 2).
+- Verified with Playwright (iPhone 13 emulation): 98 cards across the six pages, 9 of them templates, no leftover markers; choosing "shellfish" changes the Spanish and the pronunciation; the overlay shows the filled sentence; saving stores the filled sentence with no template fields; switching option shows it as not yet saved; the vault marks the saved allergy sentence as draft; "Something else…" lands on `/translate` prefilled. lint, typecheck and build pass; the snapshot is in no client chunk.

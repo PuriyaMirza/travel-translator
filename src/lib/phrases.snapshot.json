@@ -1153,17 +1153,13 @@
     "id": "dining-allergy",
     "locale": "es-419",
     "category": "dining",
-    "sourceText": "I have an allergy to...",
-    "literal": "Tengo una alergia a...",
-    "natural": "Soy alérgico a...",
-    "culturalNote": "Alérgica if you are a woman. The g in alérgico is a throaty h sound.",
-    "pronunciation": "soy ah-LEHR-hee-koh ah",
+    "sourceText": "I'm allergic to {slot}",
+    "literal": "Tengo alergia {slot}",
+    "natural": "Tengo alergia {slot}",
+    "culturalNote": "Said this way, it is the same whoever is speaking. Peanuts are cacahuate in Mexico and maní in most other countries.",
+    "pronunciation": "TEHN-goh ah-LEHR-hee-ah {slot}",
     "moment": "dietary",
     "replies": [
-      {
-        "text": "¿A qué tiene alergia?",
-        "meaning": "What are you allergic to?"
-      },
       {
         "text": "Voy a preguntar en la cocina.",
         "meaning": "I'll ask in the kitchen."
@@ -1171,8 +1167,79 @@
       {
         "text": "Este plato no lleva.",
         "meaning": "This dish doesn't have any."
+      },
+      {
+        "text": "¿Es grave?",
+        "meaning": "Is it serious?"
       }
     ],
+    "slot": {
+      "options": [
+        {
+          "id": "peanuts",
+          "sourceText": "peanuts (maní)",
+          "natural": "al maní",
+          "literal": "al maní",
+          "pronunciation": "ahl mah-NEE"
+        },
+        {
+          "id": "peanuts-cacahuate",
+          "sourceText": "peanuts (cacahuate)",
+          "natural": "al cacahuate",
+          "literal": "al cacahuate",
+          "pronunciation": "ahl kah-kah-WAH-teh"
+        },
+        {
+          "id": "nuts",
+          "sourceText": "nuts",
+          "natural": "a las nueces",
+          "literal": "a las nueces",
+          "pronunciation": "ah lahs NWEH-sehs"
+        },
+        {
+          "id": "shellfish",
+          "sourceText": "shellfish",
+          "natural": "a los mariscos",
+          "literal": "a los mariscos",
+          "pronunciation": "ah lohs mah-REES-kohs"
+        },
+        {
+          "id": "fish",
+          "sourceText": "fish",
+          "natural": "al pescado",
+          "literal": "al pescado",
+          "pronunciation": "ahl pehs-KAH-doh"
+        },
+        {
+          "id": "gluten",
+          "sourceText": "gluten",
+          "natural": "al gluten",
+          "literal": "al gluten",
+          "pronunciation": "ahl GLOO-tehn"
+        },
+        {
+          "id": "dairy",
+          "sourceText": "dairy",
+          "natural": "a los lácteos",
+          "literal": "a los lácteos",
+          "pronunciation": "ah lohs LAHK-teh-ohs"
+        },
+        {
+          "id": "eggs",
+          "sourceText": "eggs",
+          "natural": "al huevo",
+          "literal": "al huevo",
+          "pronunciation": "ahl WEH-voh"
+        },
+        {
+          "id": "soy",
+          "sourceText": "soy",
+          "natural": "a la soya",
+          "literal": "a la soya",
+          "pronunciation": "ah lah SOH-yah"
+        }
+      ]
+    },
     "review": "draft"
   },
   {
@@ -1656,10 +1723,10 @@
     "id": "lodging-another-towel",
     "locale": "es-419",
     "category": "lodging",
-    "sourceText": "Could I have another towel?",
-    "literal": "¿Podría darme otra toalla?",
-    "natural": "¿Me puede traer otra toalla?",
-    "pronunciation": "meh PWEH-deh trah-EHR OH-trah toh-AH-yah",
+    "sourceText": "Could I have {slot}?",
+    "literal": "¿Podría darme {slot}?",
+    "natural": "¿Me puede traer {slot}?",
+    "pronunciation": "meh PWEH-deh trah-EHR {slot}",
     "moment": "room-problems",
     "replies": [
       {
@@ -1667,10 +1734,63 @@
         "meaning": "Which room are you in?"
       },
       {
-        "text": "Enseguida se la llevan.",
-        "meaning": "They'll bring it up right away."
+        "text": "Enseguida.",
+        "meaning": "Right away."
       }
     ],
+    "slot": {
+      "options": [
+        {
+          "id": "towel",
+          "sourceText": "another towel",
+          "natural": "otra toalla",
+          "literal": "otra toalla",
+          "pronunciation": "OH-trah toh-AH-yah"
+        },
+        {
+          "id": "pillow",
+          "sourceText": "another pillow",
+          "natural": "otra almohada",
+          "literal": "otra almohada",
+          "pronunciation": "OH-trah ahl-moh-AH-dah"
+        },
+        {
+          "id": "blanket",
+          "sourceText": "a blanket",
+          "natural": "una manta",
+          "literal": "una manta",
+          "pronunciation": "OO-nah MAHN-tah"
+        },
+        {
+          "id": "soap",
+          "sourceText": "soap",
+          "natural": "jabón",
+          "literal": "jabón",
+          "pronunciation": "hah-BOHN"
+        },
+        {
+          "id": "toilet-paper",
+          "sourceText": "toilet paper",
+          "natural": "papel higiénico",
+          "literal": "papel higiénico",
+          "pronunciation": "pah-PEHL ee-hee-EH-nee-koh"
+        },
+        {
+          "id": "iron",
+          "sourceText": "an iron",
+          "natural": "una plancha",
+          "literal": "una plancha",
+          "pronunciation": "OO-nah PLAHN-chah"
+        },
+        {
+          "id": "hair-dryer",
+          "sourceText": "a hair dryer",
+          "natural": "un secador de pelo",
+          "literal": "un secador de pelo",
+          "pronunciation": "oon seh-kah-DOR deh PEH-loh"
+        }
+      ]
+    },
     "review": "draft"
   },
   {
@@ -2090,25 +2210,78 @@
     "id": "dining-no-pork",
     "locale": "es-419",
     "category": "dining",
-    "sourceText": "I don't eat pork",
-    "literal": "No consumo carne de cerdo",
-    "natural": "No como cerdo",
-    "pronunciation": "noh KOH-moh SEHR-doh",
+    "sourceText": "I don't eat {slot}",
+    "literal": "No consumo {slot}",
+    "natural": "No como {slot}",
+    "pronunciation": "noh KOH-moh {slot}",
     "moment": "dietary",
     "replies": [
       {
-        "text": "Este no lleva cerdo.",
-        "meaning": "This one has no pork."
+        "text": "Este plato no lleva.",
+        "meaning": "This dish doesn't have any."
       },
       {
-        "text": "Lleva un poco de tocino.",
-        "meaning": "It has a little bacon."
+        "text": "Voy a preguntar en la cocina.",
+        "meaning": "I'll ask in the kitchen."
       },
       {
-        "text": "Se cocina con manteca.",
-        "meaning": "It's cooked with lard."
+        "text": "Le puedo traer otra cosa.",
+        "meaning": "I can bring you something else."
       }
     ],
+    "slot": {
+      "options": [
+        {
+          "id": "pork",
+          "sourceText": "pork",
+          "natural": "cerdo",
+          "literal": "carne de cerdo",
+          "pronunciation": "SEHR-doh"
+        },
+        {
+          "id": "meat",
+          "sourceText": "meat",
+          "natural": "carne",
+          "literal": "carne",
+          "pronunciation": "KAR-neh"
+        },
+        {
+          "id": "chicken",
+          "sourceText": "chicken",
+          "natural": "pollo",
+          "literal": "pollo",
+          "pronunciation": "POH-yoh"
+        },
+        {
+          "id": "fish",
+          "sourceText": "fish",
+          "natural": "pescado",
+          "literal": "pescado",
+          "pronunciation": "pehs-KAH-doh"
+        },
+        {
+          "id": "dairy",
+          "sourceText": "dairy",
+          "natural": "lácteos",
+          "literal": "lácteos",
+          "pronunciation": "LAHK-teh-ohs"
+        },
+        {
+          "id": "eggs",
+          "sourceText": "eggs",
+          "natural": "huevo",
+          "literal": "huevo",
+          "pronunciation": "WEH-voh"
+        },
+        {
+          "id": "gluten",
+          "sourceText": "gluten",
+          "natural": "gluten",
+          "literal": "gluten",
+          "pronunciation": "GLOO-tehn"
+        }
+      ]
+    },
     "review": "draft"
   },
   {
@@ -2155,6 +2328,80 @@
         "meaning": "The same one?"
       }
     ],
+    "review": "draft"
+  },
+  {
+    "id": "dining-i-would-like",
+    "locale": "es-419",
+    "category": "dining",
+    "sourceText": "I'd like {slot}, please",
+    "literal": "Quisiera {slot}, por favor",
+    "natural": "Me da {slot}, por favor",
+    "pronunciation": "meh dah {slot}, por fah-VOR",
+    "moment": "ordering",
+    "replies": [
+      {
+        "text": "Enseguida.",
+        "meaning": "Right away."
+      },
+      {
+        "text": "¿Algo más?",
+        "meaning": "Anything else?"
+      }
+    ],
+    "slot": {
+      "options": [
+        {
+          "id": "coffee",
+          "sourceText": "a coffee",
+          "natural": "un café",
+          "literal": "un café",
+          "pronunciation": "oon kah-FEH"
+        },
+        {
+          "id": "water",
+          "sourceText": "a bottle of water",
+          "natural": "una botella de agua",
+          "literal": "una botella de agua",
+          "pronunciation": "OO-nah boh-TEH-yah deh AH-gwah"
+        },
+        {
+          "id": "beer",
+          "sourceText": "a beer",
+          "natural": "una cerveza",
+          "literal": "una cerveza",
+          "pronunciation": "OO-nah sehr-VEH-sah"
+        },
+        {
+          "id": "wine",
+          "sourceText": "a glass of red wine",
+          "natural": "una copa de vino tinto",
+          "literal": "una copa de vino tinto",
+          "pronunciation": "OO-nah KOH-pah deh VEE-noh TEEN-toh"
+        },
+        {
+          "id": "juice",
+          "sourceText": "a juice",
+          "natural": "un jugo",
+          "literal": "un jugo",
+          "pronunciation": "oon HOO-goh"
+        },
+        {
+          "id": "tea",
+          "sourceText": "a tea",
+          "natural": "un té",
+          "literal": "un té",
+          "pronunciation": "oon teh"
+        },
+        {
+          "id": "dish-of-the-day",
+          "sourceText": "the dish of the day",
+          "natural": "el plato del día",
+          "literal": "el plato del día",
+          "pronunciation": "ehl PLAH-toh dehl DEE-ah"
+        }
+      ]
+    },
     "review": "draft"
   },
   {
@@ -2724,6 +2971,80 @@
     "review": "draft"
   },
   {
+    "id": "emergency-it-hurts",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "My {slot} hurts",
+    "literal": "Me duele {slot}",
+    "natural": "Me duele {slot}",
+    "pronunciation": "meh DWEH-leh {slot}",
+    "moment": "medical",
+    "replies": [
+      {
+        "text": "¿Desde cuándo?",
+        "meaning": "Since when?"
+      },
+      {
+        "text": "¿Le duele mucho?",
+        "meaning": "Does it hurt a lot?"
+      }
+    ],
+    "slot": {
+      "options": [
+        {
+          "id": "head",
+          "sourceText": "head",
+          "natural": "la cabeza",
+          "literal": "la cabeza",
+          "pronunciation": "lah kah-BEH-sah"
+        },
+        {
+          "id": "stomach",
+          "sourceText": "stomach",
+          "natural": "el estómago",
+          "literal": "el estómago",
+          "pronunciation": "ehl ehs-TOH-mah-goh"
+        },
+        {
+          "id": "chest",
+          "sourceText": "chest",
+          "natural": "el pecho",
+          "literal": "el pecho",
+          "pronunciation": "ehl PEH-choh"
+        },
+        {
+          "id": "throat",
+          "sourceText": "throat",
+          "natural": "la garganta",
+          "literal": "la garganta",
+          "pronunciation": "lah gar-GAHN-tah"
+        },
+        {
+          "id": "tooth",
+          "sourceText": "tooth",
+          "natural": "una muela",
+          "literal": "una muela",
+          "pronunciation": "OO-nah MWEH-lah"
+        },
+        {
+          "id": "back",
+          "sourceText": "back",
+          "natural": "la espalda",
+          "literal": "la espalda",
+          "pronunciation": "lah ehs-PAHL-dah"
+        },
+        {
+          "id": "ear",
+          "sourceText": "ear",
+          "natural": "el oído",
+          "literal": "el oído",
+          "pronunciation": "ehl oh-EE-doh"
+        }
+      ]
+    },
+    "review": "draft"
+  },
+  {
     "id": "emergency-leave-me-alone",
     "locale": "es-419",
     "category": "emergency",
@@ -2753,6 +3074,80 @@
         "meaning": "I'll go and find someone."
       }
     ],
+    "review": "draft"
+  },
+  {
+    "id": "emergency-i-need",
+    "locale": "es-419",
+    "category": "emergency",
+    "sourceText": "I need {slot}",
+    "literal": "Necesito {slot}",
+    "natural": "Necesito {slot}",
+    "pronunciation": "neh-seh-SEE-toh {slot}",
+    "moment": "getting-help",
+    "replies": [
+      {
+        "text": "¿Qué pasó?",
+        "meaning": "What happened?"
+      },
+      {
+        "text": "Un momento, por favor.",
+        "meaning": "One moment, please."
+      }
+    ],
+    "slot": {
+      "options": [
+        {
+          "id": "doctor",
+          "sourceText": "a doctor",
+          "natural": "un médico",
+          "literal": "un médico",
+          "pronunciation": "oon MEH-dee-koh"
+        },
+        {
+          "id": "ambulance",
+          "sourceText": "an ambulance",
+          "natural": "una ambulancia",
+          "literal": "una ambulancia",
+          "pronunciation": "OO-nah ahm-boo-LAHN-see-ah"
+        },
+        {
+          "id": "police",
+          "sourceText": "to call the police",
+          "natural": "llamar a la policía",
+          "literal": "llamar a la policía",
+          "pronunciation": "yah-MAR ah lah poh-lee-SEE-ah"
+        },
+        {
+          "id": "hospital",
+          "sourceText": "to go to a hospital",
+          "natural": "ir a un hospital",
+          "literal": "ir a un hospital",
+          "pronunciation": "eer ah oon ohs-pee-TAHL"
+        },
+        {
+          "id": "medication",
+          "sourceText": "my medication",
+          "natural": "mi medicamento",
+          "literal": "mi medicamento",
+          "pronunciation": "mee meh-dee-kah-MEHN-toh"
+        },
+        {
+          "id": "phone",
+          "sourceText": "a phone",
+          "natural": "un teléfono",
+          "literal": "un teléfono",
+          "pronunciation": "oon teh-LEH-foh-noh"
+        },
+        {
+          "id": "interpreter",
+          "sourceText": "an interpreter",
+          "natural": "un intérprete",
+          "literal": "un intérprete",
+          "pronunciation": "oon een-TEHR-preh-teh"
+        }
+      ]
+    },
     "review": "draft"
   },
   {
@@ -2865,6 +3260,169 @@
     "review": "draft"
   },
   {
+    "id": "transit-where-is",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "Where is {slot}?",
+    "literal": "¿Dónde se encuentra {slot}?",
+    "natural": "¿Dónde está {slot}?",
+    "pronunciation": "DOHN-deh ehs-TAH {slot}",
+    "moment": "finding",
+    "replies": [
+      {
+        "text": "Siga derecho.",
+        "meaning": "Go straight ahead."
+      },
+      {
+        "text": "A la vuelta.",
+        "meaning": "Around the corner."
+      },
+      {
+        "text": "Al fondo, a la derecha.",
+        "meaning": "At the back, on the right."
+      }
+    ],
+    "slot": {
+      "options": [
+        {
+          "id": "bathroom",
+          "sourceText": "the bathroom",
+          "natural": "el baño",
+          "literal": "el baño",
+          "pronunciation": "ehl BAH-nyoh"
+        },
+        {
+          "id": "pharmacy",
+          "sourceText": "the pharmacy",
+          "natural": "la farmacia",
+          "literal": "la farmacia",
+          "pronunciation": "lah far-MAH-see-ah"
+        },
+        {
+          "id": "exit",
+          "sourceText": "the exit",
+          "natural": "la salida",
+          "literal": "la salida",
+          "pronunciation": "lah sah-LEE-dah"
+        },
+        {
+          "id": "entrance",
+          "sourceText": "the entrance",
+          "natural": "la entrada",
+          "literal": "la entrada",
+          "pronunciation": "lah ehn-TRAH-dah"
+        },
+        {
+          "id": "bus-station",
+          "sourceText": "the bus station",
+          "natural": "la terminal de autobuses",
+          "literal": "la terminal de autobuses",
+          "pronunciation": "lah tehr-mee-NAHL deh ow-toh-BOO-sehs"
+        },
+        {
+          "id": "subway",
+          "sourceText": "the subway",
+          "natural": "el metro",
+          "literal": "el metro",
+          "pronunciation": "ehl MEH-troh"
+        },
+        {
+          "id": "market",
+          "sourceText": "the market",
+          "natural": "el mercado",
+          "literal": "el mercado",
+          "pronunciation": "ehl mehr-KAH-doh"
+        },
+        {
+          "id": "main-square",
+          "sourceText": "the main square",
+          "natural": "la plaza principal",
+          "literal": "la plaza principal",
+          "pronunciation": "lah PLAH-sah preen-see-PAHL"
+        }
+      ]
+    },
+    "review": "draft"
+  },
+  {
+    "id": "transit-how-get-to",
+    "locale": "es-419",
+    "category": "transit",
+    "sourceText": "How do I get to {slot}?",
+    "literal": "¿Cómo puedo llegar {slot}?",
+    "natural": "¿Cómo llego {slot}?",
+    "pronunciation": "KOH-moh YEH-goh {slot}",
+    "moment": "finding",
+    "replies": [
+      {
+        "text": "Tome el autobús.",
+        "meaning": "Take the bus."
+      },
+      {
+        "text": "Está cerca, puede ir caminando.",
+        "meaning": "It's close, you can walk."
+      },
+      {
+        "text": "Mejor en taxi.",
+        "meaning": "Better by taxi."
+      }
+    ],
+    "slot": {
+      "options": [
+        {
+          "id": "downtown",
+          "sourceText": "downtown",
+          "natural": "al centro",
+          "literal": "al centro",
+          "pronunciation": "ahl SEHN-troh"
+        },
+        {
+          "id": "airport",
+          "sourceText": "the airport",
+          "natural": "al aeropuerto",
+          "literal": "al aeropuerto",
+          "pronunciation": "ahl ah-eh-roh-PWEHR-toh"
+        },
+        {
+          "id": "bus-station",
+          "sourceText": "the bus station",
+          "natural": "a la terminal de autobuses",
+          "literal": "a la terminal de autobuses",
+          "pronunciation": "ah lah tehr-mee-NAHL deh ow-toh-BOO-sehs"
+        },
+        {
+          "id": "train-station",
+          "sourceText": "the train station",
+          "natural": "a la estación de tren",
+          "literal": "a la estación de tren",
+          "pronunciation": "ah lah ehs-tah-see-OHN deh trehn"
+        },
+        {
+          "id": "beach",
+          "sourceText": "the beach",
+          "natural": "a la playa",
+          "literal": "a la playa",
+          "pronunciation": "ah lah PLAH-yah"
+        },
+        {
+          "id": "hotel",
+          "sourceText": "the hotel",
+          "natural": "al hotel",
+          "literal": "al hotel",
+          "pronunciation": "ahl oh-TEHL"
+        },
+        {
+          "id": "this-address",
+          "sourceText": "this address",
+          "natural": "a esta dirección",
+          "literal": "a esta dirección",
+          "pronunciation": "ah EHS-tah dee-rehk-see-OHN"
+        }
+      ]
+    },
+    "review": "draft"
+  },
+  {
     "id": "general-atm",
     "locale": "es-419",
     "category": "shopping",
@@ -2946,6 +3504,84 @@
         "meaning": "You need your passport."
       }
     ],
+    "review": "draft"
+  },
+  {
+    "id": "shopping-do-you-have",
+    "locale": "es-419",
+    "category": "shopping",
+    "sourceText": "Do you have {slot}?",
+    "literal": "¿Tiene {slot}?",
+    "natural": "¿Tiene {slot}?",
+    "pronunciation": "tee-EH-neh {slot}",
+    "moment": "browsing",
+    "replies": [
+      {
+        "text": "Sí, aquí tiene.",
+        "meaning": "Yes, here you go."
+      },
+      {
+        "text": "No, no tenemos.",
+        "meaning": "No, we don't have any."
+      },
+      {
+        "text": "Déjeme ver.",
+        "meaning": "Let me check."
+      }
+    ],
+    "slot": {
+      "options": [
+        {
+          "id": "bigger-size",
+          "sourceText": "a bigger size",
+          "natural": "una talla más grande",
+          "literal": "una talla más grande",
+          "pronunciation": "OO-nah TAH-yah mahs GRAHN-deh"
+        },
+        {
+          "id": "smaller-size",
+          "sourceText": "a smaller size",
+          "natural": "una talla más chica",
+          "literal": "una talla más chica",
+          "pronunciation": "OO-nah TAH-yah mahs CHEE-kah"
+        },
+        {
+          "id": "another-color",
+          "sourceText": "another color",
+          "natural": "otro color",
+          "literal": "otro color",
+          "pronunciation": "OH-troh koh-LOR"
+        },
+        {
+          "id": "charger",
+          "sourceText": "a phone charger",
+          "natural": "un cargador",
+          "literal": "un cargador",
+          "pronunciation": "oon kar-gah-DOR"
+        },
+        {
+          "id": "sunscreen",
+          "sourceText": "sunscreen",
+          "natural": "protector solar",
+          "literal": "protector solar",
+          "pronunciation": "proh-tehk-TOR soh-LAR"
+        },
+        {
+          "id": "umbrella",
+          "sourceText": "an umbrella",
+          "natural": "un paraguas",
+          "literal": "un paraguas",
+          "pronunciation": "oon pah-RAH-gwahs"
+        },
+        {
+          "id": "batteries",
+          "sourceText": "batteries",
+          "natural": "pilas",
+          "literal": "pilas",
+          "pronunciation": "PEE-lahs"
+        }
+      ]
+    },
     "review": "draft"
   },
   {

@@ -15,6 +15,21 @@ export interface LikelyReply {
   meaning: string;
 }
 
+/**
+ * One thing that can fill a template's blank (SPEC.md §14). Each field is the
+ * complete fragment for that field of its own template — article and
+ * preposition included — because the app never assembles Spanish from parts.
+ */
+export interface SlotOption {
+  /** Lowercase English slug, permanent, unique within its phrase. */
+  id: string;
+  /** English fragment. */
+  sourceText: string;
+  natural: string;
+  literal: string;
+  pronunciation: string;
+}
+
 export interface Phrase {
   id: string;
   locale: string;
@@ -35,6 +50,12 @@ export interface Phrase {
    * bidirectional — an es->en result is English, not Spanish.
    */
   targetLanguage?: "en" | "es";
+  /**
+   * Present on a fill-in-the-blank template (SPEC.md §14): `sourceText`,
+   * `natural`, `literal` and `pronunciation` each contain one `{slot}` marker,
+   * and these are what can replace it. See `slot.ts`.
+   */
+  slot?: { options: SlotOption[] };
   /** Up to three likely replies (SPEC.md §14). Absent when the phrase expects none. */
   replies?: LikelyReply[];
   /**

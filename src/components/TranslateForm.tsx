@@ -2,6 +2,7 @@
 
 import { Languages, Loader2, Smartphone } from "lucide-react";
 import { brand } from "@/lib/brand";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import {
   findRecentTranslation,
@@ -32,7 +33,10 @@ const MAX_INPUT = 500;
 export function TranslateForm() {
   const traveller = useTraveller();
   const recent = useRecentTranslations();
-  const [input, setInput] = useState("");
+  // `/translate?text=…` arrives prefilled: a fill-in-the-blank phrase sends
+  // its sentence here when none of its options fit (SPEC.md §14).
+  const prefill = useSearchParams().get("text") ?? "";
+  const [input, setInput] = useState(prefill.slice(0, MAX_INPUT));
   const [result, setResult] = useState<Result>({ status: "empty" });
   // What was actually submitted, so "Try again" retries the request rather
   // than requiring the user to retype it after fixing nothing on their end.
