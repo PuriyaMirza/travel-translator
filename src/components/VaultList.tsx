@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { useSearchParams } from "next/navigation";
 import { useState } from "react";
 import { BookmarkPlus } from "lucide-react";
 import { CATEGORIES, type Category } from "@/lib/categories";
@@ -23,7 +24,12 @@ export function VaultList() {
   const { data: session, isPending } = authClient.useSession();
   const tripPacks = useTripPacks();
   const [filter, setFilter] = useState<Category | "all">("all");
-  const [tripFilter, setTripFilter] = useState<string>("all");
+  // `/vault?trip=<id>` opens with that trip selected (the Home card links
+  // here). The URL only seeds the filter: once the user taps a pill, their
+  // choice wins.
+  const tripParam = useSearchParams().get("trip");
+  const [chosenTrip, setTripFilter] = useState<string | null>(null);
+  const tripFilter = chosenTrip ?? tripParam ?? "all";
 
   if (state.status === "loading") {
     return (

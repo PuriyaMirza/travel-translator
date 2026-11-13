@@ -483,3 +483,37 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - The overlay is reachable from every `PhraseCard`, so the vault and trip-pack preview get it too; neither was screenshotted.
 - **Open questions:** none.
 - Verified with Playwright (iPhone 13 emulation, `next dev`): 8 triggers on Home, 7 on the dining page; overlay opens, focus lands on Close; Escape, the close button and Back each close it and leave the URL unchanged; focus returns to the phrase. lint, typecheck and build pass.
+
+### [2026-11-13 04:11] M8 phase 2: onboarding answers reach translate and trip pack
+- **Milestone:** M8
+- **Files:** created `src/lib/traveller.ts`, `scripts/eval-translate.mjs`; modified `src/lib/translate.ts`, `src/lib/tripPack.ts`, `src/app/api/translate/route.ts`, `src/app/api/trip-pack/route.ts`, `src/lib/local/settings.ts`, `src/lib/local/recentTranslations.ts`, `src/lib/showCardTranslate.ts`, `src/components/TranslateForm.tsx`, `TripPackBuilder.tsx`, `ShowCardForm.tsx`, `BUILDLOG.md`.
+- **Decisions:**
+  - One `Traveller` object (speaker gender, destination, travel month, Spanish level) replaces the bare `speakerGender` argument everywhere a model call is made, show cards included.
+  - Only a country name looked up from `destinations.ts` reaches the prompt. The request's text never does, so the new fields are not a prompt-injection path.
+  - `basic` adds no rule: a traveller with no destination and `basic` (or no answer) gets a prompt byte-identical to the one before this phase.
+  - The recent-translations key keeps its old form when neither destination nor comfort is set, so entries cached before M8 still match.
+  - The trip-pack title is suggested from onboarding until the user types; it is derived, not copied into state.
+- **Deviations:** none.
+- **Incomplete:**
+  - **The new prompt rules have not been run against the live model.** This container has no `ANTHROPIC_API_KEY`, and the Vercel preview's key is rejected by the API ("invalid x-api-key", 401, seen in the preview's runtime log at 04:09 UTC). A temporary preview-only self-test route was added to find that out and removed again in the same PR. Prompt assembly was checked offline: the rules are numbered correctly and appear only when set.
+  - `scripts/eval-translate.mjs` is written but has never been run, for the same reason.
+  - `/trip` could not be opened in the browser locally (it needs a session and there are no `NEON_AUTH_*` variables here), so the title prefill and the trip-pack request body were type-checked but not seen working.
+- **Open questions:**
+  - Is the production `ANTHROPIC_API_KEY` valid? Only the preview key was seen failing; production had no traffic in the last 50 minutes to judge by. If production shares the key, translation is down.
+- Verified with Playwright: `/api/translate` receives `destination`, `travelMonth` and `spanishComfort` once settings exist and only `speakerGender` before; the cache key becomes `es-419|feminine|MX/none|…`; offline, the cached answer for that traveller is served.
+
+### [2026-11-13 04:11] M8 phase 3: "Your trip" card replaces the Daily Phrase
+- **Milestone:** M8
+- **Files:** created `src/components/YourTripCard.tsx`; deleted `DailyPhraseCard.tsx`, `TripRow.tsx`, `src/lib/dailyPhrase.ts`; modified `src/app/page.tsx`, `src/app/vault/page.tsx`, `src/components/VaultList.tsx`, `SPEC.md`, `CLAUDE.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - The card always has two blocks, cards then trip phrases, each showing content or an invitation. The plan had four separate states; two blocks cover the same cases with less branching.
+  - With no cards, the five kinds are compact chips, not the large tiles from `/cards`, which would have doubled the card's height.
+  - `/vault?trip=<id>` seeds the trip filter; a tap on a pill then overrides it. `VaultList` is wrapped in `<Suspense>` because it now reads the URL.
+  - Home lost `revalidate = 3600`; nothing on it depends on the date any more.
+  - CLAUDE.md's architecture section said M3 was in progress and there was no service worker. Corrected, and the new files are listed.
+- **Deviations:** none.
+- **Incomplete:**
+  - Trip packs have no loading state of their own, so the trip block can show its invitation for a moment before a pack appears.
+  - The card was tested with seeded IndexedDB rows, not with a pack built through `/trip`.
+- **Open questions:** none.
+- Verified with Playwright (iPhone 13 emulation): empty, destination-only and full states; a trip phrase opens the overlay; "All 4 phrases from this trip" opens the vault with that trip selected; a show card opens show mode with its text. lint, typecheck and build pass.

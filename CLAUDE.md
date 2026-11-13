@@ -102,9 +102,9 @@ Deploys to Vercel; `vercel.json` pins
 
 ## Architecture
 
-M0–M2 shipped; M3 (Neon Postgres + Neon Auth +
-IndexedDB outbox sync) is in progress. No service
-worker yet — that is M4.
+M0–M6 shipped. M8 (companion pass, SPEC.md §14) is in
+progress, one phase at a time. M7 (menu scan) is a
+proposal only.
 
 ### The one-file rules, and where they resolve
 
@@ -151,10 +151,17 @@ worker yet — that is M4.
   lead copy per category. Banners are CSS gradients,
   not photography (SPEC.md §5 wants photos — still a
   TODO).
-- `src/lib/dailyPhrase.ts` — deterministic
-  phrase-of-day by UTC day number; no network.
-  Replaces the `/api/daily-phrase` route SPEC.md §6
-  describes until M2.
+- **Home feature card:** `YourTripCard.tsx` — the
+  traveller's show cards and latest trip-pack phrases,
+  from IndexedDB (SPEC.md §14). It replaced the daily
+  phrase; do not bring that back (see Mission).
+- **Showing a phrase:** `ShowSurface.tsx` is the dark
+  full-screen surface. `ShowMode.tsx` feeds it a show
+  card at `/cards/[id]`; `ShowPhraseOverlay.tsx` feeds it
+  any phrase in a `<dialog>`, opened by `ShowTrigger.tsx`.
+- **Traveller:** `src/lib/traveller.ts` — speaker gender
+  plus the onboarding answers, sent with every model
+  call and validated server-side by `parseTraveller()`.
 
 ### Design tokens — two vocabularies on purpose
 

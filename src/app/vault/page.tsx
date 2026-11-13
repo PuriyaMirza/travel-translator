@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Eyebrow } from "@/components/Eyebrow";
 import { VaultList } from "@/components/VaultList";
 
@@ -13,7 +14,10 @@ export default function VaultPage() {
       <p className="text-lead mt-4 mb-8 text-muted">
         Everything you&rsquo;ve kept, ready with no signal.
       </p>
-      <VaultList />
+      {/* VaultList reads `?trip=` from the URL, which needs a boundary on a static page. */}
+      <Suspense>
+        <VaultList />
+      </Suspense>
     </main>
   );
 }
