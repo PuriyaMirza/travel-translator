@@ -125,9 +125,21 @@ proposal only.
   off these.
 - **Phrases:** `src/lib/phrases.ts` — reads the bundled
   `phrases.snapshot.json` (300 rows, 3 locales) and shows
-  the es-419 rows that have a pronunciation (42, 7 per
-  visible category). `src/lib/types.ts` `Phrase`
-  requires `locale` on every record.
+  the es-419 rows that have a pronunciation: all 100
+  since M8 (92 in the visible categories, 8 `general`
+  essentials). `src/lib/types.ts` `Phrase` requires
+  `locale` on every record. Keep the snapshot out of
+  client bundles: only server code imports `phrases.ts`.
+- **Moments:** `src/lib/moments.ts` — the sub-groups
+  within a category ("Ordering", "Paying"), slugs unique
+  per category. Never call them "situations": the CSV's
+  category column already has that name.
+- **Draft text:** authored rows carry `review` in the
+  CSV. `src/lib/review.ts` decides which draft phrases
+  show the "still a draft" marker (`DraftNotice.tsx`).
+  `node scripts/build-review-doc.mjs` rebuilds
+  `docs/review/spanish-review.md` for the fluent-speaker
+  review; rerun it whenever the CSVs change.
 - **User data (M3):** writes go to IndexedDB first
   (`src/lib/local/`), queued in an outbox, synced by
   `src/lib/sync/engine.ts` ↔ `/api/sync`

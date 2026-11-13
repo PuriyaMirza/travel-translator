@@ -27,6 +27,17 @@ export interface Phrase {
    * bidirectional — an es->en result is English, not Spanish.
    */
   targetLanguage?: "en" | "es";
+  /**
+   * Sub-group within the category (SPEC.md §14), a slug from `moments.ts`.
+   * Only preset phrases have one.
+   */
+  moment?: string;
+  /**
+   * True while some of this phrase's authored text has not been read by a
+   * fluent speaker (SPEC.md §14 "Draft text"). Absent means reviewed, or not
+   * authored at all (a model translation).
+   */
+  draft?: boolean;
 }
 
 /**

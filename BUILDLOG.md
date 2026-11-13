@@ -517,3 +517,25 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - The card was tested with seeded IndexedDB rows, not with a pack built through `/trip`.
 - **Open questions:** none.
 - Verified with Playwright (iPhone 13 emulation): empty, destination-only and full states; a trip phrase opens the overlay; "All 4 phrases from this trip" opens the vault with that trip selected; a show card opens show mode with its text. lint, typecheck and build pass.
+
+### [2026-11-13 04:17] M8 phase 4: all 100 phrases shown, grouped by moment; draft marker and review document
+- **Milestone:** M8
+- **Files:** created `src/lib/moments.ts`, `src/lib/review.ts`, `src/lib/reviewPresets.ts`, `src/components/DraftNotice.tsx`, `scripts/build-review-doc.mjs`, `db/migrations/003_phrase_moments.sql`, `docs/review/spanish-review.md`; modified `data/phrases/*.csv` (two new columns), `scripts/phraseCsv.mjs`, `export-phrase-snapshot.mjs`, `build-phrase-seed.mjs`, `db/seed/phrases.sql`, `src/lib/phrases.snapshot.json`, `src/lib/phrases.ts`, `types.ts`, `labels.ts`, `src/app/phrasebook/[category]/page.tsx`, `src/app/vault/page.tsx`, `src/components/PhraseCard.tsx`, `VaultList.tsx`, `SPEC.md`, `CLAUDE.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - I wrote the 50 missing es-419 pronunciation guides. All 50 rows are `review: draft`. The 50 rows that were already live stay `ok`, though I have no record that a fluent speaker ever read those either.
+  - Eight `general` phrases were not essentials, so they had no page. They keep their ids and move category: "Is it far from here?" and "What time is it?" to transit; ATM, exchange money, dollars and SIM card to shopping; "Is there Wi-Fi?" to lodging; "Could you take a photo of us?" to greetings.
+  - Final moments (they differ from the proposal's first cut, which was written before sorting the phrases): greetings `hellos, courtesy, language`; dining `arriving, ordering, dietary, paying`; transit `finding, tickets, routes, taxi`; shopping `browsing, prices, paying, cash`; lodging `check-in, room-problems, check-out`; emergency `getting-help, medical, loss`.
+  - One living review document (`docs/review/spanish-review.md`, generated from the CSVs) instead of a file per phase, so it always lists exactly what is still unreviewed.
+  - The draft marker shows on 9 phrases today: 8 in emergency and "I don't eat pork". The vault marks a saved copy of any of them, matched by text, because a saved phrase does not carry the flag.
+  - `review.ts` must not import the phrase snapshot (client components use it); the draft text list is built server-side and passed to the vault as a prop. Checked: the snapshot is in no client chunk.
+  - The build fails if an es-419 phrase in a visible category has a moment that is not in `moments.ts`.
+- **Deviations:** none.
+- **Incomplete:**
+  - **Migration 003 and the regenerated seed have not been applied to Neon.** The running app reads the bundled snapshot, not the `phrases` table, so nothing breaks; but Neon, which SPEC.md §7 calls the source of truth for phrases, is now behind the CSVs. The snapshot was exported with `--from-csv`.
+  - No fluent speaker has read the 50 guides or the Spanish they sit beside.
+  - "Hay" is written as "eye" in the guides (`noh eye AH-gwah`). It is the closest English spelling; a reviewer may prefer another.
+  - fr-FR and de-DE rows got the two new columns, empty. Nothing else changed for them.
+  - Within a moment, phrases keep CSV order; they were not re-sorted by likely use.
+- **Open questions:**
+  - Apply migration 003 and the seed to Neon production? It is additive, but it is a production database change, so I have not done it unasked.
+- Verified with Playwright (iPhone 13 emulation): 92 cards across the six pages (14, 16, 18, 16, 13, 15) plus 8 essentials; chips jump to their group and the heading clears the sticky rows; the draft notice opens and closes; a saved draft phrase is marked in the vault. lint, typecheck and build pass.

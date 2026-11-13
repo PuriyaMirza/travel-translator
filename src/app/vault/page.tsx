@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Suspense } from "react";
 import { Eyebrow } from "@/components/Eyebrow";
 import { VaultList } from "@/components/VaultList";
+import { DRAFT_NOTICE_KEYS } from "@/lib/reviewPresets";
 
 export const metadata: Metadata = { title: "Vault" };
 
@@ -16,7 +17,7 @@ export default function VaultPage() {
       </p>
       {/* VaultList reads `?trip=` from the URL, which needs a boundary on a static page. */}
       <Suspense>
-        <VaultList />
+        <VaultList draftNoticeKeys={DRAFT_NOTICE_KEYS} />
       </Suspense>
     </main>
   );

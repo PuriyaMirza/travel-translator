@@ -32,6 +32,27 @@ export function categoryLabel(category: Category, language: "en" | "es" = "en") 
   return CATEGORY_LABELS[language][category];
 }
 
+/**
+ * Display labels for moments, the sub-groups within a category (SPEC.md §14).
+ * Slugs live in `moments.ts` and are unique within a category, not globally,
+ * so labels are keyed by category then moment. Never key logic off these.
+ */
+export const MOMENT_LABELS: Record<"en", Record<Category, Record<string, string>>> = {
+  en: {
+    greetings: { hellos: "Hello and goodbye", courtesy: "Being polite", language: "Language help" },
+    dining: { arriving: "Getting a table", ordering: "Ordering", dietary: "What you can't eat", paying: "Paying" },
+    transit: { finding: "Finding your way", tickets: "Tickets", routes: "Routes and times", taxi: "In a taxi" },
+    shopping: { browsing: "Looking around", prices: "Prices", paying: "Paying", cash: "Cash" },
+    lodging: { "check-in": "Checking in", "room-problems": "Room problems", "check-out": "Checking out" },
+    emergency: { "getting-help": "Getting help", medical: "Medical", loss: "Lost or stolen" },
+    general: {},
+  },
+};
+
+export function momentLabel(category: Category, moment: string): string {
+  return MOMENT_LABELS.en[category][moment] ?? moment;
+}
+
 /** Labels for the speaker-gender setting (SPEC.md §12). Never key logic off these. */
 export const SPEAKER_GENDER_LABELS: Record<"en", Record<SpeakerGender, string>> = {
   en: {
