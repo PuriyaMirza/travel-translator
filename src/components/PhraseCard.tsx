@@ -3,6 +3,7 @@
 import type { Phrase } from "@/lib/types";
 import { useSpeech } from "@/lib/useSpeech";
 import { SaveButton } from "./SaveButton";
+import { ShowTrigger } from "./ShowTrigger";
 import { SpeakButton } from "./SpeakButton";
 
 /**
@@ -24,10 +25,13 @@ export function PhraseCard({ phrase }: { phrase: Phrase }) {
       <div className="flex items-start justify-between gap-4">
         <div className="min-w-0 flex-1">
           <p className="text-small text-muted">{phrase.sourceText}</p>
-          <p lang={language} className="text-h2 mt-1 text-ink">
-            {phrase.natural}
-          </p>
-          <p className="text-small mt-1 text-muted italic">{phrase.pronunciation}</p>
+          {/* The phrase is the control: tap it to show it full screen. */}
+          <ShowTrigger phrase={phrase}>
+            <span lang={language} className="text-h2 block text-ink">
+              {phrase.natural}
+            </span>
+            <span className="text-small mt-1 block text-muted italic">{phrase.pronunciation}</span>
+          </ShowTrigger>
         </div>
 
         <div className="flex shrink-0 flex-col gap-2">

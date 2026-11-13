@@ -4,13 +4,15 @@ import { categoryLabel } from "@/lib/labels";
 import type { Phrase } from "@/lib/types";
 import { useSpeech } from "@/lib/useSpeech";
 import { SaveButton } from "./SaveButton";
+import { ShowTrigger } from "./ShowTrigger";
 import { SpeakButton } from "./SpeakButton";
 
 /**
  * A translation result (Figma: Language App › "Stamp blues palette · A Light
  * editorial · Translate result"): the mint card with labelled Natural /
  * Literal / Pronunciation blocks and a dashed cultural-note box, then the
- * action row — outlined speak button and the "Save to vault" pill.
+ * action row — outlined speak button, the show-full-screen button (SPEC.md
+ * §14, Spanish results only) and the "Save to vault" pill.
  *
  * Literal is shown only when it differs from natural, same rule as PhraseCard,
  * so the card never repeats itself.
@@ -70,6 +72,7 @@ export function TranslationResult({ phrase }: { phrase: Phrase }) {
           supported={supported}
           label={phrase.natural}
         />
+        <ShowTrigger phrase={phrase} variant="icon" className="size-13" />
         <SaveButton phrase={phrase} variant="pill" />
       </div>
     </div>
