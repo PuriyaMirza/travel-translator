@@ -539,3 +539,26 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Open questions:**
   - Apply migration 003 and the seed to Neon production? It is additive, but it is a production database change, so I have not done it unasked.
 - Verified with Playwright (iPhone 13 emulation): 92 cards across the six pages (14, 16, 18, 16, 13, 15) plus 8 essentials; chips jump to their group and the heading clears the sticky rows; the draft notice opens and closes; a saved draft phrase is marked in the vault. lint, typecheck and build pass.
+
+### [2026-11-13 04:25] M8 phase 5: likely replies
+- **Milestone:** M8
+- **Files:** created `data/replies/es-419.csv`, `src/components/LikelyReplies.tsx`, `db/migrations/004_likely_replies.sql`, `db/seed/phrase_replies.sql`; modified `scripts/phraseCsv.mjs`, `export-phrase-snapshot.mjs`, `build-phrase-seed.mjs`, `build-review-doc.mjs`, `src/lib/phrases.snapshot.json`, `src/lib/types.ts`, `translate.ts`, `tripPack.ts`, `sync/server.ts`, `local/savedPhrases.ts`, `src/components/PhraseCard.tsx`, `TranslationResult.tsx`, `docs/review/spanish-review.md`, `SPEC.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - I wrote 208 replies for 89 of the 92 phrases shown on category pages (two or three each). "Please", "You're welcome" and "Leave me alone" expect no reply and have none. All 208 are `review: draft`.
+  - Replies live in `data/replies/<locale>.csv`, not beside the phrase files as the plan said: the phrase reader loads every CSV in `data/phrases`.
+  - The snapshot carries one draft flag per phrase, true if the row or any reply is draft. So the marker now shows on every emergency and dietary phrase (19), up from 9.
+  - Collapsed in every list, the trip-pack preview included (the plan had the preview open; 25 open blocks would bury the phrases). Open on a translate result. It is a native `<details>`.
+  - The model returns `likelyReplies` on every translation: up to 3 on translate, up to 2 per phrase in a trip pack. Empty for es→en.
+  - **Sync without a migration dependency.** `saved_phrases.replies` is an optional column in the sync config: the server checks once per instance whether the column exists and only then reads and writes it. The code is safe to deploy before migration 004 is applied, which is the state production is in now.
+- **Deviations:** none.
+- **Incomplete:**
+  - **Migrations 003 and 004 are not applied to Neon.** Until 004 is, a saved phrase's replies stay on the device that saved it; other devices get the phrase without them. Nothing errors.
+  - **The reply prompt has not run against the live model**, for the reason logged in phase 2 (no key here; the preview key is rejected). The UI was tested with a mocked `/api/translate` response. Trip-pack latency with replies is therefore unmeasured, and the plan's "take replies out of trip packs if it hurts" check has not happened.
+  - The optional-column SQL in `sync/server.ts` was type-checked and read through, but not run against a database, with or without the column.
+  - The eight pinned essentials have no replies: their list has no room for them.
+  - Replies avoid currencies and place names, so price replies are generic ("That one costs a hundred").
+  - An older cached client that pushes an edit to a saved phrase will overwrite that phrase's server-side replies with an empty list once 004 is applied.
+  - Each translation now returns more output tokens (the replies), so each translate call costs slightly more. Not measured.
+- **Open questions:**
+  - Apply migrations 003 and 004 and both seeds to Neon production?
+- Verified with Playwright (iPhone 13 emulation): 16 collapsed blocks on the dining page, one opens with its replies; a mocked translate result shows replies open; saving it keeps the replies in IndexedDB and in the outbox row; the vault shows them and does not mark a model translation as draft. lint, typecheck and build pass; the snapshot is in no client chunk.

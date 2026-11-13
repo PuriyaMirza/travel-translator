@@ -95,3 +95,245 @@ The Spanish for these was already in the phrase list but hidden in the app becau
 | **High-stakes** | Leave me alone | Déjeme en paz | Por favor, déjeme en paz | DEH-heh-meh ehn pahs | |
 | **High-stakes** | I need someone who speaks English | Necesito a alguien que hable inglés | Necesito a una persona que hable inglés | neh-seh-SEE-toh ah AHL-gyehn keh AH-bleh een-GLEHS | |
 | **High-stakes** | I need to contact my embassy | Necesito comunicarme con mi embajada |  | neh-seh-SEE-toh koh-moo-nee-KAR-meh kohn mee ehm-bah-HAH-dah | |
+
+## Likely replies (208)
+
+What a local is likely to say back after the traveller says the phrase. The traveller only needs to recognise these, so there is no pronunciation guide. Please check that each reply is something a person would really say in that situation, and that the English meaning matches.
+
+### greetings (24)
+
+| | Traveller says | They might reply | Meaning | Reviewer notes |
+|---|---|---|---|---|
+|  | Hola *(Hello)* | Hola, buenos días. | Hello, good morning. | |
+|  | Hola *(Hello)* | Hola, ¿en qué le puedo ayudar? | Hello, how can I help you? | |
+|  | Buenos días *(Good morning)* | Buenos días. | Good morning. | |
+|  | Buenos días *(Good morning)* | Buen día. | Good day. (The same greeting, shorter.) | |
+|  | Buenas tardes *(Good afternoon / good evening)* | Buenas tardes. | Good afternoon. | |
+|  | Buenas tardes *(Good afternoon / good evening)* | Buenas. | Afternoon. (A casual short form.) | |
+|  | Buenas noches *(Good night)* | Buenas noches. | Good night. | |
+|  | Buenas noches *(Good night)* | Que descanse. | Sleep well. | |
+|  | ¿Cómo está? *(How are you?)* | Bien, gracias. ¿Y usted? | Fine, thanks. And you? | |
+|  | ¿Cómo está? *(How are you?)* | Muy bien, gracias. | Very well, thanks. | |
+|  | Mucho gusto *(Nice to meet you)* | Igualmente. | Likewise. | |
+|  | Mucho gusto *(Nice to meet you)* | El gusto es mío. | The pleasure is mine. | |
+|  | Hasta luego *(Goodbye)* | Hasta luego. | See you later. | |
+|  | Hasta luego *(Goodbye)* | Que le vaya bien. | Take care. (Literally: may it go well for you.) | |
+|  | Muchas gracias *(Thank you very much)* | De nada. | You're welcome. | |
+|  | Muchas gracias *(Thank you very much)* | Con gusto. | With pleasure. | |
+|  | Disculpe *(Excuse me)* | Sí, dígame. | Yes, go ahead. | |
+|  | Disculpe *(Excuse me)* | ¿Sí? | Yes? | |
+|  | ¿Nos puede tomar una foto? *(Could you take a photo of us?)* | Sí, claro. | Yes, of course. | |
+|  | ¿Nos puede tomar una foto? *(Could you take a photo of us?)* | ¿Así está bien? | Is it OK like this? | |
+|  | ¿Habla inglés? *(Do you speak English?)* | Sí, un poco. | Yes, a little. | |
+|  | ¿Habla inglés? *(Do you speak English?)* | No, solo español. | No, only Spanish. | |
+|  | Hablo poquito español *(I don't speak much Spanish)* | No se preocupe. | Don't worry. | |
+|  | Hablo poquito español *(I don't speak much Spanish)* | Le hablo despacio. | I'll speak slowly for you. | |
+
+### dining (41)
+
+| | Traveller says | They might reply | Meaning | Reviewer notes |
+|---|---|---|---|---|
+|  | Una mesa para dos, por favor *(A table for two, please)* | Síganme, por favor. | Follow me, please. | |
+|  | Una mesa para dos, por favor *(A table for two, please)* | ¿Tienen reservación? | Do you have a reservation? | |
+|  | Una mesa para dos, por favor *(A table for two, please)* | Hay que esperar unos minutos. | There's a wait of a few minutes. | |
+|  | ¿Me da el menú, por favor? *(Could I see the menu?)* | Aquí tiene. | Here you go. | |
+|  | ¿Me da el menú, por favor? *(Could I see the menu?)* | Enseguida se lo traigo. | I'll bring it right away. | |
+|  | Ya queremos pedir, por favor *(We're ready to order)* | Claro, ¿qué les traigo? | Of course, what can I bring you? | |
+|  | Ya queremos pedir, por favor *(We're ready to order)* | Dígame. | Go ahead. | |
+|  | ¿Qué me recomienda? *(What do you recommend?)* | Le recomiendo… | I recommend… | |
+|  | ¿Qué me recomienda? *(What do you recommend?)* | El plato del día es… | Today's special is… | |
+|  | Un vaso de agua, por favor *(A glass of water, please)* | ¿Natural o con gas? | Still or sparkling? | |
+|  | Un vaso de agua, por favor *(A glass of water, please)* | ¿De botella? | Bottled? | |
+|  | Un vaso de agua, por favor *(A glass of water, please)* | ¿Con hielo? | With ice? | |
+|  | Agua sin hielo, por favor *(Water without ice, please)* | Sí, claro. | Yes, of course. | |
+|  | Agua sin hielo, por favor *(Water without ice, please)* | ¿Fría o al tiempo? | Cold or room temperature? | |
+|  | Otra cerveza, por favor *(Another beer, please)* | Enseguida. | Right away. | |
+|  | Otra cerveza, por favor *(Another beer, please)* | ¿La misma? | The same one? | |
+|  | ¿Es picante? *(Is it spicy?)* | Sí, pica bastante. | Yes, it's quite spicy. | |
+|  | ¿Es picante? *(Is it spicy?)* | No, no pica. | No, it's not spicy. | |
+|  | ¿Es picante? *(Is it spicy?)* | Un poco. | A little. | |
+| **High-stakes** | Soy vegetariano *(I'm vegetarian)* | ¿Come pescado? | Do you eat fish? | |
+| **High-stakes** | Soy vegetariano *(I'm vegetarian)* | ¿Come huevo y queso? | Do you eat egg and cheese? | |
+| **High-stakes** | Soy vegetariano *(I'm vegetarian)* | Tenemos platos sin carne. | We have dishes without meat. | |
+| **High-stakes** | ¿Esto lleva carne? *(Does this have meat in it?)* | Sí, lleva carne. | Yes, it has meat. | |
+| **High-stakes** | ¿Esto lleva carne? *(Does this have meat in it?)* | No, es solo verdura. | No, it's only vegetables. | |
+| **High-stakes** | ¿Esto lleva carne? *(Does this have meat in it?)* | Lleva caldo de pollo. | It has chicken broth. | |
+| **High-stakes** | No como cerdo *(I don't eat pork)* | Este no lleva cerdo. | This one has no pork. | |
+| **High-stakes** | No como cerdo *(I don't eat pork)* | Lleva un poco de tocino. | It has a little bacon. | |
+| **High-stakes** | No como cerdo *(I don't eat pork)* | Se cocina con manteca. | It's cooked with lard. | |
+| **High-stakes** | Soy alérgico a... *(I have an allergy to...)* | ¿A qué tiene alergia? | What are you allergic to? | |
+| **High-stakes** | Soy alérgico a... *(I have an allergy to...)* | Voy a preguntar en la cocina. | I'll ask in the kitchen. | |
+| **High-stakes** | Soy alérgico a... *(I have an allergy to...)* | Este plato no lleva. | This dish doesn't have any. | |
+|  | La cuenta, por favor *(The check, please)* | Enseguida. | Right away. | |
+|  | La cuenta, por favor *(The check, please)* | ¿En efectivo o con tarjeta? | Cash or card? | |
+|  | La cuenta, por favor *(The check, please)* | ¿Juntos o separados? | Together or separate? | |
+|  | ¿La propina está incluida? *(Is the tip included?)* | Sí, ya está incluida. | Yes, it's already included. | |
+|  | ¿La propina está incluida? *(Is the tip included?)* | No, no está incluida. | No, it's not included. | |
+|  | ¿La propina está incluida? *(Is the tip included?)* | Es voluntaria. | It's optional. | |
+|  | ¿Me lo puede preparar para llevar? *(Can I get this to go?)* | Sí, se lo empaco. | Yes, I'll pack it for you. | |
+|  | ¿Me lo puede preparar para llevar? *(Can I get this to go?)* | Claro, un momento. | Of course, one moment. | |
+|  | Está muy rico *(The food is delicious)* | ¡Qué bueno! Gracias. | Glad to hear it! Thank you. | |
+|  | Está muy rico *(The food is delicious)* | Me alegro. | I'm glad. | |
+
+### transit (43)
+
+| | Traveller says | They might reply | Meaning | Reviewer notes |
+|---|---|---|---|---|
+|  | ¿Dónde tomo el autobús? *(Where do I catch the bus?)* | En la esquina. | On the corner. | |
+|  | ¿Dónde tomo el autobús? *(Where do I catch the bus?)* | Cruzando la calle. | Across the street. | |
+|  | ¿Dónde tomo el autobús? *(Where do I catch the bus?)* | A dos cuadras. | Two blocks away. | |
+|  | ¿Dónde queda la parada? *(Where is the bus stop?)* | Ahí, en la esquina. | There, on the corner. | |
+|  | ¿Dónde queda la parada? *(Where is the bus stop?)* | Siga derecho dos cuadras. | Go straight for two blocks. | |
+|  | ¿Dónde queda la parada? *(Where is the bus stop?)* | Del otro lado de la calle. | On the other side of the street. | |
+|  | ¿Dónde queda la estación de tren? *(Where is the train station?)* | Siga derecho. | Go straight ahead. | |
+|  | ¿Dónde queda la estación de tren? *(Where is the train station?)* | Está a diez minutos caminando. | It's ten minutes on foot. | |
+|  | ¿Dónde queda la estación de tren? *(Where is the train station?)* | Tiene que tomar un taxi. | You need to take a taxi. | |
+|  | ¿Dónde hay taxis? *(Where can I get a taxi?)* | Hay una parada de taxis en la esquina. | There's a taxi stand on the corner. | |
+|  | ¿Dónde hay taxis? *(Where can I get a taxi?)* | Mejor pida uno por aplicación. | Better to order one with an app. | |
+|  | ¿Queda lejos? *(Is it far from here?)* | No, está cerca. | No, it's close. | |
+|  | ¿Queda lejos? *(Is it far from here?)* | Sí, está lejos. | Yes, it's far. | |
+|  | ¿Queda lejos? *(Is it far from here?)* | Unos diez minutos caminando. | About ten minutes on foot. | |
+|  | Un boleto, por favor *(One ticket, please)* | ¿Para dónde? | Where to? | |
+|  | Un boleto, por favor *(One ticket, please)* | ¿Solo ida? | One way only? | |
+|  | Un boleto de ida y vuelta, por favor *(A round-trip ticket, please)* | ¿Para qué día? | For which day? | |
+|  | Un boleto de ida y vuelta, por favor *(A round-trip ticket, please)* | ¿Cuándo regresa? | When are you coming back? | |
+|  | ¿Cuánto es el pasaje? *(How much is the fare?)* | Se paga al subir. | You pay when you get on. | |
+|  | ¿Cuánto es el pasaje? *(How much is the fare?)* | Solo efectivo. | Cash only. | |
+|  | ¿Cuánto es el pasaje? *(How much is the fare?)* | Necesita una tarjeta. | You need a transit card. | |
+|  | ¿Este va al aeropuerto? *(Does this go to the airport?)* | Sí, lo deja en el aeropuerto. | Yes, it drops you at the airport. | |
+|  | ¿Este va al aeropuerto? *(Does this go to the airport?)* | No, tiene que tomar otro. | No, you have to take a different one. | |
+|  | ¿Este va al centro? *(Does this go downtown?)* | Sí, súbase. | Yes, get on. | |
+|  | ¿Este va al centro? *(Does this go downtown?)* | No, es el de enfrente. | No, it's the one across the street. | |
+|  | ¿De qué andén sale? *(Which platform does it leave from?)* | Del andén dos. | From platform two. | |
+|  | ¿De qué andén sale? *(Which platform does it leave from?)* | Mire la pantalla. | Check the screen. | |
+|  | ¿A qué hora sale? *(What time does it leave?)* | Sale a las tres. | It leaves at three. | |
+|  | ¿A qué hora sale? *(What time does it leave?)* | En diez minutos. | In ten minutes. | |
+|  | ¿A qué hora sale? *(What time does it leave?)* | Ya salió. | It already left. | |
+|  | ¿A qué hora llega? *(What time does it arrive?)* | Llega a las cinco. | It arrives at five. | |
+|  | ¿A qué hora llega? *(What time does it arrive?)* | Viene con retraso. | It's running late. | |
+|  | ¿Cuánto tarda? *(How long does it take?)* | Como una hora. | About an hour. | |
+|  | ¿Cuánto tarda? *(How long does it take?)* | Depende del tráfico. | It depends on the traffic. | |
+|  | ¿Qué hora es? *(What time is it?)* | Son las tres. | It's three o'clock. | |
+|  | ¿Qué hora es? *(What time is it?)* | Las tres y media. | Half past three. | |
+|  | Lléveme a esta dirección, por favor *(Please take me to this address)* | Sí, súbase. | Yes, get in. | |
+|  | Lléveme a esta dirección, por favor *(Please take me to this address)* | ¿Me la muestra en el mapa? | Can you show me on the map? | |
+|  | ¿Me pone el taxímetro, por favor? *(Could you use the meter?)* | Sí, claro. | Yes, of course. | |
+|  | ¿Me pone el taxímetro, por favor? *(Could you use the meter?)* | No funciona. | It doesn't work. | |
+|  | ¿Me pone el taxímetro, por favor? *(Could you use the meter?)* | Es tarifa fija. | It's a fixed fare. | |
+|  | Aquí está bien, gracias *(Stop here, please)* | ¿Aquí está bien? | Is here OK? | |
+|  | Aquí está bien, gracias *(Stop here, please)* | Aquí lo dejo. | I'll leave you here. | |
+
+### shopping (35)
+
+| | Traveller says | They might reply | Meaning | Reviewer notes |
+|---|---|---|---|---|
+|  | Solo estoy viendo, gracias *(I'm just looking, thanks)* | Adelante. | Go ahead. | |
+|  | Solo estoy viendo, gracias *(I'm just looking, thanks)* | Cualquier cosa, me avisa. | Let me know if you need anything. | |
+|  | ¿Lo tiene en otra talla? *(Do you have this in another size?)* | ¿Qué talla busca? | What size are you looking for? | |
+|  | ¿Lo tiene en otra talla? *(Do you have this in another size?)* | Déjeme ver. | Let me check. | |
+|  | ¿Lo tiene en otra talla? *(Do you have this in another size?)* | Solo queda esta. | This is the only one left. | |
+|  | ¿Me lo puedo probar? *(Can I try this on?)* | Claro, pase. | Of course, go ahead. | |
+|  | ¿Me lo puedo probar? *(Can I try this on?)* | El probador está al fondo. | The fitting room is at the back. | |
+|  | ¿A qué hora cierran? *(What time do you close?)* | Cerramos a las ocho. | We close at eight. | |
+|  | ¿A qué hora cierran? *(What time do you close?)* | Ya estamos cerrando. | We're closing now. | |
+|  | ¿Dónde puedo comprar un chip? *(Where can I buy a SIM card?)* | En cualquier tienda de celulares. | At any mobile phone shop. | |
+|  | ¿Dónde puedo comprar un chip? *(Where can I buy a SIM card?)* | Necesita su pasaporte. | You need your passport. | |
+|  | ¿Cuánto cuesta? *(How much does this cost?)* | ¿Cuál? | Which one? | |
+|  | ¿Cuánto cuesta? *(How much does this cost?)* | Ese cuesta cien. | That one costs a hundred. | |
+|  | ¿Cuánto cuesta? *(How much does this cost?)* | Dos por cien. | Two for a hundred. | |
+|  | Está muy caro *(That's too expensive)* | Es buen precio. | It's a good price. | |
+|  | Está muy caro *(That's too expensive)* | ¿Cuánto me ofrece? | How much are you offering? | |
+|  | ¿Me hace un mejor precio? *(Could you give me a better price?)* | Es lo menos. | That's the lowest I can go. | |
+|  | ¿Me hace un mejor precio? *(Could you give me a better price?)* | Si lleva dos, le hago descuento. | If you take two, I'll give you a discount. | |
+|  | Me lo llevo *(I'll take it)* | ¿Algo más? | Anything else? | |
+|  | Me lo llevo *(I'll take it)* | ¿Se lo envuelvo? | Shall I wrap it for you? | |
+|  | ¿Aceptan tarjeta? *(Do you take cards?)* | Sí, aceptamos tarjeta. | Yes, we take cards. | |
+|  | ¿Aceptan tarjeta? *(Do you take cards?)* | Solo efectivo. | Cash only. | |
+|  | ¿Aceptan tarjeta? *(Do you take cards?)* | Con tarjeta hay un recargo. | There's a surcharge for cards. | |
+|  | ¿Me da una bolsa? *(Could I have a bag?)* | Sí, claro. | Yes, of course. | |
+|  | ¿Me da una bolsa? *(Could I have a bag?)* | La bolsa se cobra. | There's a charge for the bag. | |
+|  | ¿Me da el recibo, por favor? *(Could I have a receipt?)* | Aquí tiene. | Here you go. | |
+|  | ¿Me da el recibo, por favor? *(Could I have a receipt?)* | ¿Necesita factura? | Do you need an official invoice? | |
+|  | ¿Tiene cambio? *(Do you have change?)* | No tengo cambio. | I don't have change. | |
+|  | ¿Tiene cambio? *(Do you have change?)* | ¿No tiene un billete más chico? | Don't you have a smaller bill? | |
+|  | ¿Aceptan dólares? *(Do you accept dollars?)* | Sí, pero el cambio se lo doy en moneda local. | Yes, but I'll give you change in local currency. | |
+|  | ¿Aceptan dólares? *(Do you accept dollars?)* | No, solo moneda local. | No, only local currency. | |
+|  | ¿Dónde hay un cajero? *(Where is the ATM?)* | Hay uno en el banco de la esquina. | There's one at the bank on the corner. | |
+|  | ¿Dónde hay un cajero? *(Where is the ATM?)* | Dentro del supermercado. | Inside the supermarket. | |
+|  | ¿Dónde puedo cambiar dinero? *(Where can I exchange money?)* | En una casa de cambio. | At an exchange office. | |
+|  | ¿Dónde puedo cambiar dinero? *(Where can I exchange money?)* | En el banco, con su pasaporte. | At the bank, with your passport. | |
+
+### lodging (30)
+
+| | Traveller says | They might reply | Meaning | Reviewer notes |
+|---|---|---|---|---|
+|  | Tengo una reservación *(I have a reservation)* | ¿A nombre de quién? | Under what name? | |
+|  | Tengo una reservación *(I have a reservation)* | ¿Me permite su pasaporte? | May I have your passport? | |
+|  | Tengo una reservación *(I have a reservation)* | Su habitación todavía no está lista. | Your room isn't ready yet. | |
+|  | ¿Tienen habitaciones disponibles? *(Do you have any rooms available?)* | ¿Para cuántas noches? | For how many nights? | |
+|  | ¿Tienen habitaciones disponibles? *(Do you have any rooms available?)* | ¿Para cuántas personas? | For how many people? | |
+|  | ¿Tienen habitaciones disponibles? *(Do you have any rooms available?)* | Lo siento, estamos llenos. | Sorry, we're full. | |
+|  | Una habitación para dos noches, por favor *(A room for two nights, please)* | ¿Con una cama o dos? | With one bed or two? | |
+|  | Una habitación para dos noches, por favor *(A room for two nights, please)* | ¿Me permite su pasaporte? | May I have your passport? | |
+|  | ¿Incluye el desayuno? *(Is breakfast included?)* | Sí, de siete a diez. | Yes, from seven to ten. | |
+|  | ¿Incluye el desayuno? *(Is breakfast included?)* | No, se paga aparte. | No, it's paid separately. | |
+|  | ¿Cuál es la clave del wifi? *(What's the Wi-Fi password?)* | Está en la tarjeta de la llave. | It's on the key card. | |
+|  | ¿Cuál es la clave del wifi? *(What's the Wi-Fi password?)* | Se la anoto. | I'll write it down for you. | |
+|  | ¿Hay Wi-Fi? *(Is there Wi-Fi?)* | Sí, es gratis. | Yes, it's free. | |
+|  | ¿Hay Wi-Fi? *(Is there Wi-Fi?)* | Solo en la recepción. | Only in the lobby. | |
+|  | No funciona el aire *(The air conditioning isn't working)* | ¿Cuál es su habitación? | Which room are you in? | |
+|  | No funciona el aire *(The air conditioning isn't working)* | Enseguida mando a alguien. | I'll send someone right away. | |
+|  | No funciona el aire *(The air conditioning isn't working)* | Lo podemos cambiar de habitación. | We can move you to another room. | |
+|  | No hay agua caliente *(There's no hot water)* | Déjela correr unos minutos. | Let it run for a few minutes. | |
+|  | No hay agua caliente *(There's no hot water)* | Enseguida lo revisamos. | We'll check it right away. | |
+|  | La llave de mi cuarto no funciona *(My room key doesn't work)* | ¿Cuál es su habitación? | Which room are you in? | |
+|  | La llave de mi cuarto no funciona *(My room key doesn't work)* | Se la vuelvo a activar. | I'll reactivate it for you. | |
+|  | ¿Me puede traer otra toalla? *(Could I have another towel?)* | ¿Cuál es su habitación? | Which room are you in? | |
+|  | ¿Me puede traer otra toalla? *(Could I have another towel?)* | Enseguida se la llevan. | They'll bring it up right away. | |
+|  | ¿A qué hora es la salida? *(What time is check-out?)* | A las doce. | At twelve. | |
+|  | ¿A qué hora es la salida? *(What time is check-out?)* | Puede dejar sus maletas aquí. | You can leave your bags here. | |
+|  | ¿Puedo dejar mis maletas aquí? *(Can I leave my bags here?)* | Sí, claro. | Yes, of course. | |
+|  | ¿Puedo dejar mis maletas aquí? *(Can I leave my bags here?)* | ¿Hasta qué hora? | Until what time? | |
+|  | ¿Puedo dejar mis maletas aquí? *(Can I leave my bags here?)* | Aquí tiene su comprobante. | Here's your claim ticket. | |
+|  | ¿Me puede llamar un taxi? *(Could you call me a taxi?)* | ¿A dónde va? | Where are you going? | |
+|  | ¿Me puede llamar un taxi? *(Could you call me a taxi?)* | Llega en cinco minutos. | It arrives in five minutes. | |
+
+### emergency (35)
+
+| | Traveller says | They might reply | Meaning | Reviewer notes |
+|---|---|---|---|---|
+| **High-stakes** | Necesito ayuda *(I need help)* | ¿Qué pasó? | What happened? | |
+| **High-stakes** | Necesito ayuda *(I need help)* | ¿Qué necesita? | What do you need? | |
+| **High-stakes** | Necesito ayuda *(I need help)* | ¿Está bien? | Are you OK? | |
+| **High-stakes** | ¡Llame una ambulancia! *(Call an ambulance)* | ¿Qué pasó? | What happened? | |
+| **High-stakes** | ¡Llame una ambulancia! *(Call an ambulance)* | ¿Dónde está? | Where are you? | |
+| **High-stakes** | ¡Llame una ambulancia! *(Call an ambulance)* | Ya viene. | It's on its way. | |
+| **High-stakes** | Llame a la policía *(Call the police)* | ¿Qué pasó? | What happened? | |
+| **High-stakes** | Llame a la policía *(Call the police)* | Ya los llamo. | I'm calling them now. | |
+| **High-stakes** | Hubo un accidente *(There's been an accident)* | ¿Hay heridos? | Is anyone hurt? | |
+| **High-stakes** | Hubo un accidente *(There's been an accident)* | ¿Dónde fue? | Where did it happen? | |
+| **High-stakes** | Necesito a alguien que hable inglés *(I need someone who speaks English)* | Un momento, por favor. | One moment, please. | |
+| **High-stakes** | Necesito a alguien que hable inglés *(I need someone who speaks English)* | Voy a buscar a alguien. | I'll go and find someone. | |
+| **High-stakes** | Necesito un médico *(I need a doctor)* | ¿Qué le pasa? | What's wrong? | |
+| **High-stakes** | Necesito un médico *(I need a doctor)* | ¿Dónde le duele? | Where does it hurt? | |
+| **High-stakes** | Necesito un médico *(I need a doctor)* | Siéntese, por favor. | Please sit down. | |
+| **High-stakes** | ¿Dónde queda el hospital más cercano? *(Where is the nearest hospital?)* | Está a unas cuadras. | It's a few blocks away. | |
+| **High-stakes** | ¿Dónde queda el hospital más cercano? *(Where is the nearest hospital?)* | Mejor tome un taxi. | Better to take a taxi. | |
+| **High-stakes** | No me siento bien *(I don't feel well)* | ¿Qué siente? | What are you feeling? | |
+| **High-stakes** | No me siento bien *(I don't feel well)* | ¿Desde cuándo? | Since when? | |
+| **High-stakes** | No me siento bien *(I don't feel well)* | ¿Necesita un médico? | Do you need a doctor? | |
+| **High-stakes** | ¿Dónde hay una farmacia cerca? *(Where is the nearest pharmacy?)* | Hay una a la vuelta. | There's one around the corner. | |
+| **High-stakes** | ¿Dónde hay una farmacia cerca? *(Where is the nearest pharmacy?)* | Está abierta las veinticuatro horas. | It's open twenty-four hours. | |
+| **High-stakes** | Tengo diabetes *(I have diabetes)* | ¿Necesita azúcar? | Do you need sugar? | |
+| **High-stakes** | Tengo diabetes *(I have diabetes)* | ¿Tiene su medicamento? | Do you have your medication? | |
+| **High-stakes** | Tengo diabetes *(I have diabetes)* | ¿Usa insulina? | Do you use insulin? | |
+| **High-stakes** | Soy alérgico a la penicilina *(I'm allergic to penicillin)* | ¿Tiene alguna otra alergia? | Do you have any other allergies? | |
+| **High-stakes** | Soy alérgico a la penicilina *(I'm allergic to penicillin)* | Entendido. | Understood. | |
+| **High-stakes** | Perdí mi pasaporte *(I lost my passport)* | ¿Dónde lo perdió? | Where did you lose it? | |
+| **High-stakes** | Perdí mi pasaporte *(I lost my passport)* | Tiene que ir a su embajada. | You have to go to your embassy. | |
+| **High-stakes** | Perdí mi pasaporte *(I lost my passport)* | Necesita hacer una denuncia. | You need to file a police report. | |
+| **High-stakes** | Me robaron la cartera *(My wallet was stolen)* | ¿Cuándo fue? | When did it happen? | |
+| **High-stakes** | Me robaron la cartera *(My wallet was stolen)* | ¿Qué tenía adentro? | What was inside? | |
+| **High-stakes** | Me robaron la cartera *(My wallet was stolen)* | Tiene que hacer una denuncia. | You have to file a police report. | |
+| **High-stakes** | Necesito comunicarme con mi embajada *(I need to contact my embassy)* | ¿De qué país es? | What country are you from? | |
+| **High-stakes** | Necesito comunicarme con mi embajada *(I need to contact my embassy)* | Le doy el número. | I'll give you the number. | |

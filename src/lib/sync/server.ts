@@ -25,6 +25,8 @@ const savedPhraseRow = z.object({
   pronunciation: text(2000),
   category: z.enum(CATEGORIES),
   tripPackId: z.uuid().optional(),
+  // SPEC.md §14. Optional: rows saved before M8, and older clients, have none.
+  replies: z.array(z.object({ text: text(500), meaning: text(500) })).max(3).optional(),
   savedAt: iso,
   updatedAt: iso,
   deletedAt: iso.optional(),
@@ -49,6 +51,12 @@ interface TableConfig {
   table: string;
   /** camelCase field → snake_case column, for every client-writable column. */
   columns: Record<string, string>;
+  /**
+   * Columns added by a later migration. They are used only if the database
+   * has them (see `activeColumns`), so the code can deploy before or after
+   * the migration is applied and sync keeps working either way.
+   */
+  optionalColumns?: Record<string, { column: string; cast: string; fallback: unknown }>;
   /** SQL expression over the table's columns that two duplicates share. */
   dedupe: { expression: string; fields: string[] };
   schema: z.ZodType<Record<string, unknown>>;
@@ -70,6 +78,10 @@ export const SYNC_TABLES = {
       savedAt: "saved_at",
       updatedAt: "updated_at",
       deletedAt: "deleted_at",
+    },
+    // Migration 004. jsonb, so the value goes in as a JSON string with a cast.
+    optionalColumns: {
+      replies: { column: "replies", cast: "jsonb", fallback: [] },
     },
     dedupe: {
       expression: "locale || '|' || lower(trim(source_text))",
@@ -110,6 +122,51 @@ export const pushSchema = z.object({
   showCards: z.array(showCardRow).max(500).default([]),
 });
 
+interface ActiveColumn {
+  field: string;
+  column: string;
+  /** Present for optional columns: the SQL cast and the value to store when the row has none. */
+  cast?: string;
+  fallback?: unknown;
+}
+
+const activeColumnCache = new Map<string, Promise<ActiveColumn[]>>();
+
+/**
+ * The columns to read and write for a table: the fixed ones, plus each
+ * optional column the database actually has. Checked once per server
+ * instance and cached; a failed check is not cached, so it is retried.
+ */
+function activeColumns(config: TableConfig): Promise<ActiveColumn[]> {
+  const cached = activeColumnCache.get(config.table);
+  if (cached) return cached;
+
+  const fixed: ActiveColumn[] = Object.entries(config.columns).map(([field, column]) => ({ field, column }));
+  const optional = Object.entries(config.optionalColumns ?? {});
+  const lookup: Promise<ActiveColumn[]> =
+    optional.length === 0
+      ? Promise.resolve(fixed)
+      : getSql()
+          .query(
+            `select column_name from information_schema.columns
+             where table_schema = current_schema() and table_name = $1 and column_name = any($2)`,
+            [config.table, optional.map(([, o]) => o.column)],
+          )
+          .then((rows) => {
+            const present = new Set(rows.map((r) => r.column_name as string));
+            return [
+              ...fixed,
+              ...optional
+                .filter(([, o]) => present.has(o.column))
+                .map(([field, o]) => ({ field, column: o.column, cast: o.cast, fallback: o.fallback })),
+            ];
+          });
+
+  activeColumnCache.set(config.table, lookup);
+  lookup.catch(() => activeColumnCache.delete(config.table));
+  return lookup;
+}
+
 /** The dedupe key computed in JS, matching `dedupe.expression` in SQL. */
 function dedupeKeyOf(config: TableConfig, row: Record<string, unknown>) {
   return config.dedupe.fields
@@ -127,7 +184,7 @@ function dedupeKeyOf(config: TableConfig, row: Record<string, unknown>) {
  */
 async function upsertRow(config: TableConfig, userId: string, row: Record<string, unknown>) {
   const sql = getSql();
-  const entries = Object.entries(config.columns);
+  const columns = await activeColumns(config);
 
   let deletedAt = row.deletedAt ?? null;
   if (!deletedAt) {
@@ -140,21 +197,23 @@ async function upsertRow(config: TableConfig, userId: string, row: Record<string
     if (dup) deletedAt = new Date().toISOString();
   }
 
-  const values = entries.map(([field]) =>
-    field === "deletedAt" ? deletedAt : (row[field] ?? null),
-  );
-  const columnList = entries.map(([, column]) => column).join(", ");
-  const placeholders = entries
-    .map(([field], i) =>
+  const values = columns.map(({ field, cast, fallback }) => {
+    if (field === "deletedAt") return deletedAt;
+    // An optional column travels as JSON text and is cast in SQL.
+    if (cast) return JSON.stringify(row[field] ?? fallback);
+    return row[field] ?? null;
+  });
+  const columnList = columns.map(({ column }) => column).join(", ");
+  const placeholders = columns
+    .map(({ field, cast }, i) => {
       // A trip pack id is only kept if that trip pack is the caller's own.
-      field === "tripPackId"
-        ? `(select id from trip_packs where id = $${i + 2} and user_id = $1)`
-        : `$${i + 2}`,
-    )
+      if (field === "tripPackId") return `(select id from trip_packs where id = $${i + 2} and user_id = $1)`;
+      return cast ? `$${i + 2}::${cast}` : `$${i + 2}`;
+    })
     .join(", ");
-  const updates = entries
-    .filter(([field]) => field !== "id")
-    .map(([, column]) => `${column} = excluded.${column}`)
+  const updates = columns
+    .filter(({ field }) => field !== "id")
+    .map(({ column }) => `${column} = excluded.${column}`)
     .join(", ");
 
   await sql.query(
@@ -196,8 +255,8 @@ export async function pullChanges(userId: string, since: string | null) {
 
   for (const name of SYNC_TABLE_NAMES) {
     const config = SYNC_TABLES[name];
-    const select = Object.entries(config.columns)
-      .map(([field, column]) => `${column} as "${field}"`)
+    const select = (await activeColumns(config))
+      .map(({ field, column }) => `${column} as "${field}"`)
       .join(", ");
     const rows = await sql.query(
       `select ${select} from ${config.table}
@@ -208,7 +267,8 @@ export async function pullChanges(userId: string, since: string | null) {
     result[name] = rows.map((row) =>
       Object.fromEntries(
         Object.entries(row)
-          .filter(([, value]) => value !== null)
+          // Nulls are absent fields; an empty array (no replies) is too.
+          .filter(([, value]) => value !== null && !(Array.isArray(value) && value.length === 0))
           .map(([key, value]) => [key, value instanceof Date ? value.toISOString() : value]),
       ),
     );

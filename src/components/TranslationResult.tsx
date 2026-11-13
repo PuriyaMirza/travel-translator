@@ -3,6 +3,7 @@
 import { categoryLabel } from "@/lib/labels";
 import type { Phrase } from "@/lib/types";
 import { useSpeech } from "@/lib/useSpeech";
+import { LikelyReplies } from "./LikelyReplies";
 import { SaveButton } from "./SaveButton";
 import { ShowTrigger } from "./ShowTrigger";
 import { SpeakButton } from "./SpeakButton";
@@ -61,6 +62,11 @@ export function TranslationResult({ phrase }: { phrase: Phrase }) {
             <p className="font-bold">Cultural note</p>
             <p className="leading-[19px]">{phrase.culturalNote}</p>
           </div>
+        )}
+
+        {/* Open here: on a single result the next thing the user needs is the answer they'll hear. */}
+        {phrase.replies && phrase.replies.length > 0 && (
+          <LikelyReplies phraseId={phrase.id} replies={phrase.replies} lang={phrase.locale} defaultOpen />
         )}
       </article>
 

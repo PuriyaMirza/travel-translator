@@ -7,6 +7,14 @@ import type { Category } from "./categories";
  * rule 4). Without it there is no way to tell es-419 phrases from es-PR
  * phrases when the dialect packs land, and no clean migration.
  */
+/** What the other person is likely to say back (SPEC.md §14). */
+export interface LikelyReply {
+  /** In the locale's language, as the traveller will hear it. */
+  text: string;
+  /** English. */
+  meaning: string;
+}
+
 export interface Phrase {
   id: string;
   locale: string;
@@ -27,6 +35,8 @@ export interface Phrase {
    * bidirectional — an es->en result is English, not Spanish.
    */
   targetLanguage?: "en" | "es";
+  /** Up to three likely replies (SPEC.md §14). Absent when the phrase expects none. */
+  replies?: LikelyReply[];
   /**
    * Sub-group within the category (SPEC.md §14), a slug from `moments.ts`.
    * Only preset phrases have one.
@@ -92,6 +102,8 @@ export interface SavedPhrase {
   category: Category;
   /** Set when saved from a trip pack (M6); absent otherwise. */
   tripPackId?: string;
+  /** Kept with the phrase so they work offline (SPEC.md §14). Absent on rows saved before M8. */
+  replies?: LikelyReply[];
   savedAt: string;
   /** The client's clock. Decides conflicts: last write wins. */
   updatedAt: string;

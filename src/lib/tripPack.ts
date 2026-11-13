@@ -9,6 +9,7 @@ import {
   client,
   EFFORT,
   MODEL,
+  normalizeReplies,
   sharedPromptRules,
   TranslationSchema,
   travellerRules,
@@ -27,6 +28,11 @@ export const TRIP_DESCRIPTION_MAX = 500;
 
 /** The prompt asks for this many; anything beyond is truncated. */
 export const TRIP_PACK_SIZE = 25;
+/**
+ * Replies per phrase in a pack (SPEC.md §14): fewer than a single translation
+ * gets, because 25 phrases already make this the slowest request in the app.
+ */
+export const TRIP_PACK_REPLIES = 2;
 /** Fewer than this is an error state, not a short pack. */
 export const TRIP_PACK_MIN = 10;
 
@@ -68,7 +74,8 @@ Rules:
 9. Do not repeat the phrases the app already ships. These are already covered:
 ${presets}
 10. Spread phrases across categories only as far as the trip warrants. Do not
-   pad a category to balance the set.${travellerRules(locale, traveller, 11)}
+   pad a category to balance the set.
+11. ${sharedPromptRules.likelyReplies(TRIP_PACK_REPLIES)}${travellerRules(locale, traveller, 12)}
 
 Example, for a trip described as "vegetarian, two weeks in Mexico City":
 
@@ -77,7 +84,9 @@ targetLanguage "es", literal "¿Esto tiene caldo de carne?", natural "¿Esto
 lleva caldo de carne?", pronunciation "EH-sto YEH-vah KAL-do deh KAR-neh",
 category "dining", culturalNote "Many soups and rice dishes are made with meat
 stock even when no meat is visible, so ask about the broth as well as the
-ingredients."`;
+ingredients.", likelyReplies [{text "Sí, lleva caldo de pollo.", meaning "Yes,
+it has chicken broth."}, {text "No, es solo verdura.", meaning "No, it's only
+vegetables."}]`;
 }
 
 export interface TripPackError {
@@ -133,6 +142,7 @@ export function normalizeTripPack(
       pronunciation: item.pronunciation,
       category: isCategory(item.category) ? item.category : "general",
       targetLanguage: "es",
+      replies: normalizeReplies(item.likelyReplies, TRIP_PACK_REPLIES),
     });
   }
 

@@ -6,7 +6,7 @@
 // Regenerate it whenever the CSVs change. A row leaves this document when its
 // `review` cell in the CSV is cleared.
 import { mkdirSync, writeFileSync } from "node:fs";
-import { readPhraseCsvs } from "./phraseCsv.mjs";
+import { readPhraseCsvs, readReplyCsvs } from "./phraseCsv.mjs";
 
 const LOCALE = "es-419";
 const cell = (text) => String(text ?? "").replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
@@ -14,7 +14,8 @@ const cell = (text) => String(text ?? "").replace(/\|/g, "\\|").replace(/\r?\n/g
 // Mirrors isHighStakes() in src/lib/review.ts.
 const highStakes = (p) => p.category === "emergency" || (p.category === "dining" && p.moment === "dietary");
 
-const drafts = readPhraseCsvs().filter((p) => p.locale === LOCALE && p.review === "draft");
+const allPhrases = readPhraseCsvs();
+const drafts = allPhrases.filter((p) => p.locale === LOCALE && p.review === "draft");
 const byCategory = Map.groupBy(drafts, (p) => p.category);
 
 let doc = `# Spanish review
@@ -43,6 +44,25 @@ for (const [category, rows] of byCategory) {
   }
 }
 
+// Likely replies (SPEC.md §14): what the other person may say back.
+const phraseById = new Map(allPhrases.filter((p) => p.locale === LOCALE).map((p) => [p.id, p]));
+const draftReplies = readReplyCsvs(allPhrases).filter((r) => r.locale === LOCALE && r.review === "draft");
+if (draftReplies.length > 0) {
+  doc += `
+## Likely replies (${draftReplies.length})
+
+What a local is likely to say back after the traveller says the phrase. The traveller only needs to recognise these, so there is no pronunciation guide. Please check that each reply is something a person would really say in that situation, and that the English meaning matches.
+`;
+  const byPhraseCategory = Map.groupBy(draftReplies, (r) => phraseById.get(r.phraseId).category);
+  for (const [category, rows] of byPhraseCategory) {
+    doc += `\n### ${category} (${rows.length})\n\n| | Traveller says | They might reply | Meaning | Reviewer notes |\n|---|---|---|---|---|\n`;
+    for (const r of rows) {
+      const p = phraseById.get(r.phraseId);
+      doc += `| ${highStakes(p) ? "**High-stakes**" : ""} | ${cell(p.natural)} *(${cell(p.sourceText)})* | ${cell(r.text)} | ${cell(r.meaning)} | |\n`;
+    }
+  }
+}
+
 mkdirSync("docs/review", { recursive: true });
 writeFileSync("docs/review/spanish-review.md", doc);
-console.log(`docs/review/spanish-review.md: ${drafts.length} draft phrases`);
+console.log(`docs/review/spanish-review.md: ${drafts.length} draft phrases, ${draftReplies.length} draft replies`);

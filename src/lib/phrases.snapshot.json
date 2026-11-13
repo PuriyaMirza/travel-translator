@@ -907,7 +907,18 @@
     "literal": "Hola",
     "natural": "Hola",
     "pronunciation": "OH-lah",
-    "moment": "hellos"
+    "moment": "hellos",
+    "replies": [
+      {
+        "text": "Hola, buenos días.",
+        "meaning": "Hello, good morning."
+      },
+      {
+        "text": "Hola, ¿en qué le puedo ayudar?",
+        "meaning": "Hello, how can I help you?"
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "greetings-good-morning",
@@ -918,7 +929,18 @@
     "natural": "Buenos días",
     "culturalNote": "Used until about midday, then buenas tardes. Greeting someone before you ask them anything is expected, not optional — skipping it reads as brusque.",
     "pronunciation": "BWEH-nohs DEE-ahs",
-    "moment": "hellos"
+    "moment": "hellos",
+    "replies": [
+      {
+        "text": "Buenos días.",
+        "meaning": "Good morning."
+      },
+      {
+        "text": "Buen día.",
+        "meaning": "Good day. (The same greeting, shorter.)"
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "greetings-thank-you",
@@ -929,7 +951,18 @@
     "natural": "Muchas gracias",
     "culturalNote": "GRAH-see-ahs, never grah-THEE-ahs. The Castilian lisp is not used anywhere in Latin America.",
     "pronunciation": "MOO-chahs GRAH-see-ahs",
-    "moment": "courtesy"
+    "moment": "courtesy",
+    "replies": [
+      {
+        "text": "De nada.",
+        "meaning": "You're welcome."
+      },
+      {
+        "text": "Con gusto.",
+        "meaning": "With pleasure."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "greetings-excuse-me",
@@ -940,7 +973,18 @@
     "natural": "Disculpe",
     "culturalNote": "For getting a stranger's attention. Permiso is for squeezing past someone, and perdón is for apologising after you have already bumped into them.",
     "pronunciation": "dees-KOOL-peh",
-    "moment": "courtesy"
+    "moment": "courtesy",
+    "replies": [
+      {
+        "text": "Sí, dígame.",
+        "meaning": "Yes, go ahead."
+      },
+      {
+        "text": "¿Sí?",
+        "meaning": "Yes?"
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "greetings-do-you-speak-english",
@@ -950,7 +994,18 @@
     "literal": "¿Habla usted inglés?",
     "natural": "¿Habla inglés?",
     "pronunciation": "AH-blah een-GLEHS",
-    "moment": "language"
+    "moment": "language",
+    "replies": [
+      {
+        "text": "Sí, un poco.",
+        "meaning": "Yes, a little."
+      },
+      {
+        "text": "No, solo español.",
+        "meaning": "No, only Spanish."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "greetings-little-spanish",
@@ -961,7 +1016,18 @@
     "natural": "Hablo poquito español",
     "culturalNote": "Saying this early nearly always makes the other person slow down. Poquito is warmer than the flat no hablo and tends to get a friendlier response.",
     "pronunciation": "AH-bloh poh-KEE-toh ehs-pah-NYOL",
-    "moment": "language"
+    "moment": "language",
+    "replies": [
+      {
+        "text": "No se preocupe.",
+        "meaning": "Don't worry."
+      },
+      {
+        "text": "Le hablo despacio.",
+        "meaning": "I'll speak slowly for you."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "greetings-nice-to-meet-you",
@@ -971,7 +1037,18 @@
     "literal": "Es un placer conocerlo",
     "natural": "Mucho gusto",
     "pronunciation": "MOO-choh GOOS-toh",
-    "moment": "hellos"
+    "moment": "hellos",
+    "replies": [
+      {
+        "text": "Igualmente.",
+        "meaning": "Likewise."
+      },
+      {
+        "text": "El gusto es mío.",
+        "meaning": "The pleasure is mine."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "dining-menu",
@@ -982,7 +1059,18 @@
     "natural": "¿Me da el menú, por favor?",
     "culturalNote": "La carta is the more common word in many countries; both are understood everywhere.",
     "pronunciation": "meh dah ehl meh-NOO, por fah-VOR",
-    "moment": "arriving"
+    "moment": "arriving",
+    "replies": [
+      {
+        "text": "Aquí tiene.",
+        "meaning": "Here you go."
+      },
+      {
+        "text": "Enseguida se lo traigo.",
+        "meaning": "I'll bring it right away."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "dining-table-for-two",
@@ -992,7 +1080,22 @@
     "literal": "Una mesa para dos, por favor",
     "natural": "Una mesa para dos, por favor",
     "pronunciation": "OO-nah MEH-sah PAH-rah dohs, por fah-VOR",
-    "moment": "arriving"
+    "moment": "arriving",
+    "replies": [
+      {
+        "text": "Síganme, por favor.",
+        "meaning": "Follow me, please."
+      },
+      {
+        "text": "¿Tienen reservación?",
+        "meaning": "Do you have a reservation?"
+      },
+      {
+        "text": "Hay que esperar unos minutos.",
+        "meaning": "There's a wait of a few minutes."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "dining-vegetarian",
@@ -1003,7 +1106,22 @@
     "natural": "Soy vegetariano",
     "culturalNote": "Say vegetariana if you are a woman. Worth adding no como pollo ni pescado — chicken and fish are often not counted as meat.",
     "pronunciation": "soy veh-heh-tah-ree-AH-noh",
-    "moment": "dietary"
+    "moment": "dietary",
+    "replies": [
+      {
+        "text": "¿Come pescado?",
+        "meaning": "Do you eat fish?"
+      },
+      {
+        "text": "¿Come huevo y queso?",
+        "meaning": "Do you eat egg and cheese?"
+      },
+      {
+        "text": "Tenemos platos sin carne.",
+        "meaning": "We have dishes without meat."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "dining-does-this-have-meat",
@@ -1014,7 +1132,22 @@
     "natural": "¿Esto lleva carne?",
     "culturalNote": "Lleva starts with a soft y sound, not a hard L. Beans and rice are very often cooked with pork fat, so this is worth asking even about a side dish.",
     "pronunciation": "EHS-toh YEH-vah KAR-neh",
-    "moment": "dietary"
+    "moment": "dietary",
+    "replies": [
+      {
+        "text": "Sí, lleva carne.",
+        "meaning": "Yes, it has meat."
+      },
+      {
+        "text": "No, es solo verdura.",
+        "meaning": "No, it's only vegetables."
+      },
+      {
+        "text": "Lleva caldo de pollo.",
+        "meaning": "It has chicken broth."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "dining-allergy",
@@ -1025,7 +1158,22 @@
     "natural": "Soy alérgico a...",
     "culturalNote": "Alérgica if you are a woman. The g in alérgico is a throaty h sound.",
     "pronunciation": "soy ah-LEHR-hee-koh ah",
-    "moment": "dietary"
+    "moment": "dietary",
+    "replies": [
+      {
+        "text": "¿A qué tiene alergia?",
+        "meaning": "What are you allergic to?"
+      },
+      {
+        "text": "Voy a preguntar en la cocina.",
+        "meaning": "I'll ask in the kitchen."
+      },
+      {
+        "text": "Este plato no lleva.",
+        "meaning": "This dish doesn't have any."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "dining-check",
@@ -1036,7 +1184,22 @@
     "natural": "La cuenta, por favor",
     "culturalNote": "It will not be brought until you ask. Sitting on a finished table is normal and nobody is trying to rush you out.",
     "pronunciation": "lah KWEHN-tah, por fah-VOR",
-    "moment": "paying"
+    "moment": "paying",
+    "replies": [
+      {
+        "text": "Enseguida.",
+        "meaning": "Right away."
+      },
+      {
+        "text": "¿En efectivo o con tarjeta?",
+        "meaning": "Cash or card?"
+      },
+      {
+        "text": "¿Juntos o separados?",
+        "meaning": "Together or separate?"
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "dining-tip-included",
@@ -1047,7 +1210,22 @@
     "natural": "¿La propina está incluida?",
     "culturalNote": "Often added automatically as propina or servicio. Check before tipping again — expectations vary a lot from country to country.",
     "pronunciation": "lah proh-PEE-nah ehs-TAH een-kloo-EE-dah",
-    "moment": "paying"
+    "moment": "paying",
+    "replies": [
+      {
+        "text": "Sí, ya está incluida.",
+        "meaning": "Yes, it's already included."
+      },
+      {
+        "text": "No, no está incluida.",
+        "meaning": "No, it's not included."
+      },
+      {
+        "text": "Es voluntaria.",
+        "meaning": "It's optional."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "transit-where-bus",
@@ -1058,7 +1236,22 @@
     "natural": "¿Dónde tomo el autobús?",
     "culturalNote": "The local word changes by country — camión, colectivo, micro, guagua. Autobús is understood everywhere, so it is the safe one to travel with.",
     "pronunciation": "DOHN-deh TOH-moh ehl ow-toh-BOOS",
-    "moment": "finding"
+    "moment": "finding",
+    "replies": [
+      {
+        "text": "En la esquina.",
+        "meaning": "On the corner."
+      },
+      {
+        "text": "Cruzando la calle.",
+        "meaning": "Across the street."
+      },
+      {
+        "text": "A dos cuadras.",
+        "meaning": "Two blocks away."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "transit-fare",
@@ -1068,7 +1261,22 @@
     "literal": "¿Cuánto cuesta el pasaje?",
     "natural": "¿Cuánto es el pasaje?",
     "pronunciation": "KWAN-toh ehs ehl pah-SAH-heh",
-    "moment": "tickets"
+    "moment": "tickets",
+    "replies": [
+      {
+        "text": "Se paga al subir.",
+        "meaning": "You pay when you get on."
+      },
+      {
+        "text": "Solo efectivo.",
+        "meaning": "Cash only."
+      },
+      {
+        "text": "Necesita una tarjeta.",
+        "meaning": "You need a transit card."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "transit-this-address",
@@ -1079,7 +1287,18 @@
     "natural": "Lléveme a esta dirección, por favor",
     "culturalNote": "Showing the address on your phone while you say it removes most of the risk of being misheard.",
     "pronunciation": "YEH-veh-meh ah EHS-tah dee-rehk-see-OHN, por fah-VOR",
-    "moment": "taxi"
+    "moment": "taxi",
+    "replies": [
+      {
+        "text": "Sí, súbase.",
+        "meaning": "Yes, get in."
+      },
+      {
+        "text": "¿Me la muestra en el mapa?",
+        "meaning": "Can you show me on the map?"
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "transit-airport",
@@ -1089,7 +1308,18 @@
     "literal": "¿Este va al aeropuerto?",
     "natural": "¿Este va al aeropuerto?",
     "pronunciation": "EHS-teh vah ahl ah-eh-roh-PWEHR-toh",
-    "moment": "routes"
+    "moment": "routes",
+    "replies": [
+      {
+        "text": "Sí, lo deja en el aeropuerto.",
+        "meaning": "Yes, it drops you at the airport."
+      },
+      {
+        "text": "No, tiene que tomar otro.",
+        "meaning": "No, you have to take a different one."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "transit-train-station",
@@ -1100,7 +1330,22 @@
     "natural": "¿Dónde queda la estación de tren?",
     "culturalNote": "Queda is the more natural verb for where a fixed place is. Estación is ehs-tah-see-OHN — the c is an s.",
     "pronunciation": "DOHN-deh KEH-dah lah ehs-tah-see-OHN deh trehn",
-    "moment": "finding"
+    "moment": "finding",
+    "replies": [
+      {
+        "text": "Siga derecho.",
+        "meaning": "Go straight ahead."
+      },
+      {
+        "text": "Está a diez minutos caminando.",
+        "meaning": "It's ten minutes on foot."
+      },
+      {
+        "text": "Tiene que tomar un taxi.",
+        "meaning": "You need to take a taxi."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "transit-meter",
@@ -1111,7 +1356,22 @@
     "natural": "¿Me pone el taxímetro, por favor?",
     "culturalNote": "Settle the meter or agree a flat price before the car moves. Asking once you are already riding leaves you with no room to negotiate.",
     "pronunciation": "meh POH-neh ehl tahk-SEE-meh-troh, por fah-VOR",
-    "moment": "taxi"
+    "moment": "taxi",
+    "replies": [
+      {
+        "text": "Sí, claro.",
+        "meaning": "Yes, of course."
+      },
+      {
+        "text": "No funciona.",
+        "meaning": "It doesn't work."
+      },
+      {
+        "text": "Es tarifa fija.",
+        "meaning": "It's a fixed fare."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "transit-stop-here",
@@ -1121,7 +1381,18 @@
     "literal": "Pare aquí, por favor",
     "natural": "Aquí está bien, gracias",
     "pronunciation": "ah-KEE ehs-TAH bee-EHN, GRAH-see-ahs",
-    "moment": "taxi"
+    "moment": "taxi",
+    "replies": [
+      {
+        "text": "¿Aquí está bien?",
+        "meaning": "Is here OK?"
+      },
+      {
+        "text": "Aquí lo dejo.",
+        "meaning": "I'll leave you here."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "shopping-how-much",
@@ -1131,7 +1402,22 @@
     "literal": "¿Cuánto cuesta esto?",
     "natural": "¿Cuánto cuesta?",
     "pronunciation": "KWAN-toh KWEHS-tah",
-    "moment": "prices"
+    "moment": "prices",
+    "replies": [
+      {
+        "text": "¿Cuál?",
+        "meaning": "Which one?"
+      },
+      {
+        "text": "Ese cuesta cien.",
+        "meaning": "That one costs a hundred."
+      },
+      {
+        "text": "Dos por cien.",
+        "meaning": "Two for a hundred."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "shopping-cards",
@@ -1142,7 +1428,22 @@
     "natural": "¿Aceptan tarjeta?",
     "culturalNote": "The j in tarjeta is a throaty h. Plenty of markets and small shops are cash only, so ask before you pick things up.",
     "pronunciation": "ah-SEHP-tahn tar-HEH-tah",
-    "moment": "paying"
+    "moment": "paying",
+    "replies": [
+      {
+        "text": "Sí, aceptamos tarjeta.",
+        "meaning": "Yes, we take cards."
+      },
+      {
+        "text": "Solo efectivo.",
+        "meaning": "Cash only."
+      },
+      {
+        "text": "Con tarjeta hay un recargo.",
+        "meaning": "There's a surcharge for cards."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "shopping-just-looking",
@@ -1152,7 +1453,18 @@
     "literal": "Solo estoy mirando, gracias",
     "natural": "Solo estoy viendo, gracias",
     "pronunciation": "SOH-loh ehs-TOY vee-EHN-doh, GRAH-see-ahs",
-    "moment": "browsing"
+    "moment": "browsing",
+    "replies": [
+      {
+        "text": "Adelante.",
+        "meaning": "Go ahead."
+      },
+      {
+        "text": "Cualquier cosa, me avisa.",
+        "meaning": "Let me know if you need anything."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "shopping-another-size",
@@ -1163,7 +1475,22 @@
     "natural": "¿Lo tiene en otra talla?",
     "culturalNote": "Talla is TAH-yah, with a soft y. Use número instead when you mean shoes.",
     "pronunciation": "loh tee-EH-neh ehn OH-trah TAH-yah",
-    "moment": "browsing"
+    "moment": "browsing",
+    "replies": [
+      {
+        "text": "¿Qué talla busca?",
+        "meaning": "What size are you looking for?"
+      },
+      {
+        "text": "Déjeme ver.",
+        "meaning": "Let me check."
+      },
+      {
+        "text": "Solo queda esta.",
+        "meaning": "This is the only one left."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "shopping-better-price",
@@ -1174,7 +1501,18 @@
     "natural": "¿Me hace un mejor precio?",
     "culturalNote": "Fine in a market or with a street vendor. In a shop with printed price tags it will just be awkward.",
     "pronunciation": "meh AH-seh oon meh-HOR PREH-see-oh",
-    "moment": "prices"
+    "moment": "prices",
+    "replies": [
+      {
+        "text": "Es lo menos.",
+        "meaning": "That's the lowest I can go."
+      },
+      {
+        "text": "Si lleva dos, le hago descuento.",
+        "meaning": "If you take two, I'll give you a discount."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "shopping-ill-take-it",
@@ -1184,7 +1522,18 @@
     "literal": "Lo voy a comprar",
     "natural": "Me lo llevo",
     "pronunciation": "meh loh YEH-voh",
-    "moment": "paying"
+    "moment": "paying",
+    "replies": [
+      {
+        "text": "¿Algo más?",
+        "meaning": "Anything else?"
+      },
+      {
+        "text": "¿Se lo envuelvo?",
+        "meaning": "Shall I wrap it for you?"
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "shopping-change",
@@ -1195,7 +1544,18 @@
     "natural": "¿Tiene cambio?",
     "culturalNote": "Small vendors frequently cannot break a large note. Breaking big bills at a supermarket early in the day saves a lot of friction later.",
     "pronunciation": "tee-EH-neh KAHM-bee-oh",
-    "moment": "cash"
+    "moment": "cash",
+    "replies": [
+      {
+        "text": "No tengo cambio.",
+        "meaning": "I don't have change."
+      },
+      {
+        "text": "¿No tiene un billete más chico?",
+        "meaning": "Don't you have a smaller bill?"
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "lodging-reservation",
@@ -1206,7 +1566,22 @@
     "natural": "Tengo una reservación",
     "culturalNote": "Reserva is used just as widely; both are understood.",
     "pronunciation": "TEHN-goh OO-nah reh-sehr-vah-see-OHN",
-    "moment": "check-in"
+    "moment": "check-in",
+    "replies": [
+      {
+        "text": "¿A nombre de quién?",
+        "meaning": "Under what name?"
+      },
+      {
+        "text": "¿Me permite su pasaporte?",
+        "meaning": "May I have your passport?"
+      },
+      {
+        "text": "Su habitación todavía no está lista.",
+        "meaning": "Your room isn't ready yet."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "lodging-checkout-time",
@@ -1217,7 +1592,18 @@
     "natural": "¿A qué hora es la salida?",
     "culturalNote": "The h in hora is completely silent.",
     "pronunciation": "ah keh OH-rah ehs lah sah-LEE-dah",
-    "moment": "check-out"
+    "moment": "check-out",
+    "replies": [
+      {
+        "text": "A las doce.",
+        "meaning": "At twelve."
+      },
+      {
+        "text": "Puede dejar sus maletas aquí.",
+        "meaning": "You can leave your bags here."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "lodging-breakfast-included",
@@ -1227,7 +1613,18 @@
     "literal": "¿El desayuno está incluido?",
     "natural": "¿Incluye el desayuno?",
     "pronunciation": "een-KLOO-yeh ehl deh-sah-YOO-noh",
-    "moment": "check-in"
+    "moment": "check-in",
+    "replies": [
+      {
+        "text": "Sí, de siete a diez.",
+        "meaning": "Yes, from seven to ten."
+      },
+      {
+        "text": "No, se paga aparte.",
+        "meaning": "No, it's paid separately."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "lodging-ac-broken",
@@ -1238,7 +1635,22 @@
     "natural": "No funciona el aire",
     "culturalNote": "El aire on its own is understood as the air conditioning. The same sentence works for anything else in the room — just swap in la ducha for the shower or la luz for the light.",
     "pronunciation": "noh foonk-see-OH-nah ehl AH-ee-reh",
-    "moment": "room-problems"
+    "moment": "room-problems",
+    "replies": [
+      {
+        "text": "¿Cuál es su habitación?",
+        "meaning": "Which room are you in?"
+      },
+      {
+        "text": "Enseguida mando a alguien.",
+        "meaning": "I'll send someone right away."
+      },
+      {
+        "text": "Lo podemos cambiar de habitación.",
+        "meaning": "We can move you to another room."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "lodging-another-towel",
@@ -1248,7 +1660,18 @@
     "literal": "¿Podría darme otra toalla?",
     "natural": "¿Me puede traer otra toalla?",
     "pronunciation": "meh PWEH-deh trah-EHR OH-trah toh-AH-yah",
-    "moment": "room-problems"
+    "moment": "room-problems",
+    "replies": [
+      {
+        "text": "¿Cuál es su habitación?",
+        "meaning": "Which room are you in?"
+      },
+      {
+        "text": "Enseguida se la llevan.",
+        "meaning": "They'll bring it up right away."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "lodging-wifi-password",
@@ -1259,7 +1682,18 @@
     "natural": "¿Cuál es la clave del wifi?",
     "culturalNote": "Clave is what most people say day to day. Wifi is pronounced WEE-fee, not WY-fy.",
     "pronunciation": "kwahl ehs lah KLAH-veh dehl WEE-fee",
-    "moment": "check-in"
+    "moment": "check-in",
+    "replies": [
+      {
+        "text": "Está en la tarjeta de la llave.",
+        "meaning": "It's on the key card."
+      },
+      {
+        "text": "Se la anoto.",
+        "meaning": "I'll write it down for you."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "lodging-leave-bags",
@@ -1270,7 +1704,22 @@
     "natural": "¿Puedo dejar mis maletas aquí?",
     "culturalNote": "Useful on the last morning — most places will hold luggage after check-out without charging.",
     "pronunciation": "PWEH-doh deh-HAR mees mah-LEH-tahs ah-KEE",
-    "moment": "check-out"
+    "moment": "check-out",
+    "replies": [
+      {
+        "text": "Sí, claro.",
+        "meaning": "Yes, of course."
+      },
+      {
+        "text": "¿Hasta qué hora?",
+        "meaning": "Until what time?"
+      },
+      {
+        "text": "Aquí tiene su comprobante.",
+        "meaning": "Here's your claim ticket."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "emergency-need-help",
@@ -1280,7 +1729,22 @@
     "literal": "Necesito ayuda",
     "natural": "Necesito ayuda",
     "pronunciation": "neh-seh-SEE-toh ah-YOO-dah",
-    "moment": "getting-help"
+    "moment": "getting-help",
+    "replies": [
+      {
+        "text": "¿Qué pasó?",
+        "meaning": "What happened?"
+      },
+      {
+        "text": "¿Qué necesita?",
+        "meaning": "What do you need?"
+      },
+      {
+        "text": "¿Está bien?",
+        "meaning": "Are you OK?"
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "emergency-call-ambulance",
@@ -1291,7 +1755,22 @@
     "natural": "¡Llame una ambulancia!",
     "culturalNote": "Llame opens with a soft y. The emergency number is not 911 everywhere — look up the local one when you arrive.",
     "pronunciation": "YAH-meh OO-nah ahm-boo-LAHN-see-ah",
-    "moment": "getting-help"
+    "moment": "getting-help",
+    "replies": [
+      {
+        "text": "¿Qué pasó?",
+        "meaning": "What happened?"
+      },
+      {
+        "text": "¿Dónde está?",
+        "meaning": "Where are you?"
+      },
+      {
+        "text": "Ya viene.",
+        "meaning": "It's on its way."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "emergency-need-doctor",
@@ -1301,7 +1780,22 @@
     "literal": "Necesito un médico",
     "natural": "Necesito un médico",
     "pronunciation": "neh-seh-SEE-toh oon MEH-dee-koh",
-    "moment": "medical"
+    "moment": "medical",
+    "replies": [
+      {
+        "text": "¿Qué le pasa?",
+        "meaning": "What's wrong?"
+      },
+      {
+        "text": "¿Dónde le duele?",
+        "meaning": "Where does it hurt?"
+      },
+      {
+        "text": "Siéntese, por favor.",
+        "meaning": "Please sit down."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "emergency-nearest-hospital",
@@ -1312,7 +1806,18 @@
     "natural": "¿Dónde queda el hospital más cercano?",
     "culturalNote": "Hospital starts with the vowel — the h is silent. Cercano is sehr-KAH-noh, never thehr-KAH-noh.",
     "pronunciation": "DOHN-deh KEH-dah ehl ohs-pee-TAHL mahs sehr-KAH-noh",
-    "moment": "medical"
+    "moment": "medical",
+    "replies": [
+      {
+        "text": "Está a unas cuadras.",
+        "meaning": "It's a few blocks away."
+      },
+      {
+        "text": "Mejor tome un taxi.",
+        "meaning": "Better to take a taxi."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "emergency-lost-passport",
@@ -1322,7 +1827,22 @@
     "literal": "Perdí mi pasaporte",
     "natural": "Perdí mi pasaporte",
     "pronunciation": "pehr-DEE mee pah-sah-POR-teh",
-    "moment": "loss"
+    "moment": "loss",
+    "replies": [
+      {
+        "text": "¿Dónde lo perdió?",
+        "meaning": "Where did you lose it?"
+      },
+      {
+        "text": "Tiene que ir a su embajada.",
+        "meaning": "You have to go to your embassy."
+      },
+      {
+        "text": "Necesita hacer una denuncia.",
+        "meaning": "You need to file a police report."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "emergency-wallet-stolen",
@@ -1333,7 +1853,22 @@
     "natural": "Me robaron la cartera",
     "culturalNote": "Billetera is equally common. You will need a police report — denuncia — before any insurer will pay out.",
     "pronunciation": "meh roh-BAH-rohn lah kar-TEH-rah",
-    "moment": "loss"
+    "moment": "loss",
+    "replies": [
+      {
+        "text": "¿Cuándo fue?",
+        "meaning": "When did it happen?"
+      },
+      {
+        "text": "¿Qué tenía adentro?",
+        "meaning": "What was inside?"
+      },
+      {
+        "text": "Tiene que hacer una denuncia.",
+        "meaning": "You have to file a police report."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "emergency-allergic-penicillin",
@@ -1344,7 +1879,18 @@
     "natural": "Soy alérgico a la penicilina",
     "culturalNote": "Alérgica if you are a woman. Both c sounds in penicilina are plain s sounds.",
     "pronunciation": "soy ah-LEHR-hee-koh ah lah peh-nee-see-LEE-nah",
-    "moment": "medical"
+    "moment": "medical",
+    "replies": [
+      {
+        "text": "¿Tiene alguna otra alergia?",
+        "meaning": "Do you have any other allergies?"
+      },
+      {
+        "text": "Entendido.",
+        "meaning": "Understood."
+      }
+    ],
+    "review": "draft"
   },
   {
     "id": "greetings-good-afternoon",
@@ -1355,6 +1901,16 @@
     "natural": "Buenas tardes",
     "pronunciation": "BWEH-nahs TAR-dehs",
     "moment": "hellos",
+    "replies": [
+      {
+        "text": "Buenas tardes.",
+        "meaning": "Good afternoon."
+      },
+      {
+        "text": "Buenas.",
+        "meaning": "Afternoon. (A casual short form.)"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1366,6 +1922,16 @@
     "natural": "Buenas noches",
     "pronunciation": "BWEH-nahs NOH-chehs",
     "moment": "hellos",
+    "replies": [
+      {
+        "text": "Buenas noches.",
+        "meaning": "Good night."
+      },
+      {
+        "text": "Que descanse.",
+        "meaning": "Sleep well."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1377,6 +1943,16 @@
     "natural": "Hasta luego",
     "pronunciation": "AHS-tah LWEH-goh",
     "moment": "hellos",
+    "replies": [
+      {
+        "text": "Hasta luego.",
+        "meaning": "See you later."
+      },
+      {
+        "text": "Que le vaya bien.",
+        "meaning": "Take care. (Literally: may it go well for you.)"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1410,6 +1986,16 @@
     "natural": "¿Cómo está?",
     "pronunciation": "KOH-moh ehs-TAH",
     "moment": "hellos",
+    "replies": [
+      {
+        "text": "Bien, gracias. ¿Y usted?",
+        "meaning": "Fine, thanks. And you?"
+      },
+      {
+        "text": "Muy bien, gracias.",
+        "meaning": "Very well, thanks."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1421,6 +2007,20 @@
     "natural": "Un vaso de agua, por favor",
     "pronunciation": "oon VAH-soh deh AH-gwah, por fah-VOR",
     "moment": "ordering",
+    "replies": [
+      {
+        "text": "¿Natural o con gas?",
+        "meaning": "Still or sparkling?"
+      },
+      {
+        "text": "¿De botella?",
+        "meaning": "Bottled?"
+      },
+      {
+        "text": "¿Con hielo?",
+        "meaning": "With ice?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1432,6 +2032,16 @@
     "natural": "Agua sin hielo, por favor",
     "pronunciation": "AH-gwah seen YEH-loh, por fah-VOR",
     "moment": "ordering",
+    "replies": [
+      {
+        "text": "Sí, claro.",
+        "meaning": "Yes, of course."
+      },
+      {
+        "text": "¿Fría o al tiempo?",
+        "meaning": "Cold or room temperature?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1443,6 +2053,16 @@
     "natural": "Ya queremos pedir, por favor",
     "pronunciation": "yah keh-REH-mohs peh-DEER, por fah-VOR",
     "moment": "ordering",
+    "replies": [
+      {
+        "text": "Claro, ¿qué les traigo?",
+        "meaning": "Of course, what can I bring you?"
+      },
+      {
+        "text": "Dígame.",
+        "meaning": "Go ahead."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1454,6 +2074,16 @@
     "natural": "¿Qué me recomienda?",
     "pronunciation": "keh meh reh-koh-mee-EHN-dah",
     "moment": "ordering",
+    "replies": [
+      {
+        "text": "Le recomiendo…",
+        "meaning": "I recommend…"
+      },
+      {
+        "text": "El plato del día es…",
+        "meaning": "Today's special is…"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1465,6 +2095,20 @@
     "natural": "No como cerdo",
     "pronunciation": "noh KOH-moh SEHR-doh",
     "moment": "dietary",
+    "replies": [
+      {
+        "text": "Este no lleva cerdo.",
+        "meaning": "This one has no pork."
+      },
+      {
+        "text": "Lleva un poco de tocino.",
+        "meaning": "It has a little bacon."
+      },
+      {
+        "text": "Se cocina con manteca.",
+        "meaning": "It's cooked with lard."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1476,6 +2120,20 @@
     "natural": "¿Es picante?",
     "pronunciation": "ehs pee-KAHN-teh",
     "moment": "ordering",
+    "replies": [
+      {
+        "text": "Sí, pica bastante.",
+        "meaning": "Yes, it's quite spicy."
+      },
+      {
+        "text": "No, no pica.",
+        "meaning": "No, it's not spicy."
+      },
+      {
+        "text": "Un poco.",
+        "meaning": "A little."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1487,6 +2145,16 @@
     "natural": "Otra cerveza, por favor",
     "pronunciation": "OH-trah sehr-VEH-sah, por fah-VOR",
     "moment": "ordering",
+    "replies": [
+      {
+        "text": "Enseguida.",
+        "meaning": "Right away."
+      },
+      {
+        "text": "¿La misma?",
+        "meaning": "The same one?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1498,6 +2166,16 @@
     "natural": "Está muy rico",
     "pronunciation": "ehs-TAH mwee REE-koh",
     "moment": "paying",
+    "replies": [
+      {
+        "text": "¡Qué bueno! Gracias.",
+        "meaning": "Glad to hear it! Thank you."
+      },
+      {
+        "text": "Me alegro.",
+        "meaning": "I'm glad."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1509,6 +2187,16 @@
     "natural": "¿Me lo puede preparar para llevar?",
     "pronunciation": "meh loh PWEH-deh preh-pah-RAR PAH-rah yeh-VAR",
     "moment": "paying",
+    "replies": [
+      {
+        "text": "Sí, se lo empaco.",
+        "meaning": "Yes, I'll pack it for you."
+      },
+      {
+        "text": "Claro, un momento.",
+        "meaning": "Of course, one moment."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1520,6 +2208,20 @@
     "natural": "¿Dónde queda la parada?",
     "pronunciation": "DOHN-deh KEH-dah lah pah-RAH-dah",
     "moment": "finding",
+    "replies": [
+      {
+        "text": "Ahí, en la esquina.",
+        "meaning": "There, on the corner."
+      },
+      {
+        "text": "Siga derecho dos cuadras.",
+        "meaning": "Go straight for two blocks."
+      },
+      {
+        "text": "Del otro lado de la calle.",
+        "meaning": "On the other side of the street."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1531,6 +2233,16 @@
     "natural": "Un boleto, por favor",
     "pronunciation": "oon boh-LEH-toh, por fah-VOR",
     "moment": "tickets",
+    "replies": [
+      {
+        "text": "¿Para dónde?",
+        "meaning": "Where to?"
+      },
+      {
+        "text": "¿Solo ida?",
+        "meaning": "One way only?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1542,6 +2254,16 @@
     "natural": "Un boleto de ida y vuelta, por favor",
     "pronunciation": "oon boh-LEH-toh deh EE-dah ee VWEHL-tah, por fah-VOR",
     "moment": "tickets",
+    "replies": [
+      {
+        "text": "¿Para qué día?",
+        "meaning": "For which day?"
+      },
+      {
+        "text": "¿Cuándo regresa?",
+        "meaning": "When are you coming back?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1553,6 +2275,16 @@
     "natural": "¿De qué andén sale?",
     "pronunciation": "deh keh ahn-DEHN SAH-leh",
     "moment": "routes",
+    "replies": [
+      {
+        "text": "Del andén dos.",
+        "meaning": "From platform two."
+      },
+      {
+        "text": "Mire la pantalla.",
+        "meaning": "Check the screen."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1564,6 +2296,20 @@
     "natural": "¿A qué hora sale?",
     "pronunciation": "ah keh OH-rah SAH-leh",
     "moment": "routes",
+    "replies": [
+      {
+        "text": "Sale a las tres.",
+        "meaning": "It leaves at three."
+      },
+      {
+        "text": "En diez minutos.",
+        "meaning": "In ten minutes."
+      },
+      {
+        "text": "Ya salió.",
+        "meaning": "It already left."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1575,6 +2321,16 @@
     "natural": "¿A qué hora llega?",
     "pronunciation": "ah keh OH-rah YEH-gah",
     "moment": "routes",
+    "replies": [
+      {
+        "text": "Llega a las cinco.",
+        "meaning": "It arrives at five."
+      },
+      {
+        "text": "Viene con retraso.",
+        "meaning": "It's running late."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1586,6 +2342,16 @@
     "natural": "¿Cuánto tarda?",
     "pronunciation": "KWAN-toh TAR-dah",
     "moment": "routes",
+    "replies": [
+      {
+        "text": "Como una hora.",
+        "meaning": "About an hour."
+      },
+      {
+        "text": "Depende del tráfico.",
+        "meaning": "It depends on the traffic."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1597,6 +2363,16 @@
     "natural": "¿Dónde hay taxis?",
     "pronunciation": "DOHN-deh eye TAHK-sees",
     "moment": "finding",
+    "replies": [
+      {
+        "text": "Hay una parada de taxis en la esquina.",
+        "meaning": "There's a taxi stand on the corner."
+      },
+      {
+        "text": "Mejor pida uno por aplicación.",
+        "meaning": "Better to order one with an app."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1608,6 +2384,16 @@
     "natural": "¿Este va al centro?",
     "pronunciation": "EHS-teh vah ahl SEHN-troh",
     "moment": "routes",
+    "replies": [
+      {
+        "text": "Sí, súbase.",
+        "meaning": "Yes, get on."
+      },
+      {
+        "text": "No, es el de enfrente.",
+        "meaning": "No, it's the one across the street."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1619,6 +2405,16 @@
     "natural": "¿Me lo puedo probar?",
     "pronunciation": "meh loh PWEH-doh proh-BAR",
     "moment": "browsing",
+    "replies": [
+      {
+        "text": "Claro, pase.",
+        "meaning": "Of course, go ahead."
+      },
+      {
+        "text": "El probador está al fondo.",
+        "meaning": "The fitting room is at the back."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1630,6 +2426,16 @@
     "natural": "Está muy caro",
     "pronunciation": "ehs-TAH mwee KAH-roh",
     "moment": "prices",
+    "replies": [
+      {
+        "text": "Es buen precio.",
+        "meaning": "It's a good price."
+      },
+      {
+        "text": "¿Cuánto me ofrece?",
+        "meaning": "How much are you offering?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1641,6 +2447,16 @@
     "natural": "¿Me da una bolsa?",
     "pronunciation": "meh dah OO-nah BOHL-sah",
     "moment": "paying",
+    "replies": [
+      {
+        "text": "Sí, claro.",
+        "meaning": "Yes, of course."
+      },
+      {
+        "text": "La bolsa se cobra.",
+        "meaning": "There's a charge for the bag."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1652,6 +2468,16 @@
     "natural": "¿Me da el recibo, por favor?",
     "pronunciation": "meh dah ehl reh-SEE-boh, por fah-VOR",
     "moment": "paying",
+    "replies": [
+      {
+        "text": "Aquí tiene.",
+        "meaning": "Here you go."
+      },
+      {
+        "text": "¿Necesita factura?",
+        "meaning": "Do you need an official invoice?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1663,6 +2489,16 @@
     "natural": "¿A qué hora cierran?",
     "pronunciation": "ah keh OH-rah see-EH-rrahn",
     "moment": "browsing",
+    "replies": [
+      {
+        "text": "Cerramos a las ocho.",
+        "meaning": "We close at eight."
+      },
+      {
+        "text": "Ya estamos cerrando.",
+        "meaning": "We're closing now."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1674,6 +2510,20 @@
     "natural": "¿Tienen habitaciones disponibles?",
     "pronunciation": "tee-EH-nehn ah-bee-tah-see-OH-nehs dees-poh-NEE-blehs",
     "moment": "check-in",
+    "replies": [
+      {
+        "text": "¿Para cuántas noches?",
+        "meaning": "For how many nights?"
+      },
+      {
+        "text": "¿Para cuántas personas?",
+        "meaning": "For how many people?"
+      },
+      {
+        "text": "Lo siento, estamos llenos.",
+        "meaning": "Sorry, we're full."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1685,6 +2535,16 @@
     "natural": "Una habitación para dos noches, por favor",
     "pronunciation": "OO-nah ah-bee-tah-see-OHN PAH-rah dohs NOH-chehs, por fah-VOR",
     "moment": "check-in",
+    "replies": [
+      {
+        "text": "¿Con una cama o dos?",
+        "meaning": "With one bed or two?"
+      },
+      {
+        "text": "¿Me permite su pasaporte?",
+        "meaning": "May I have your passport?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1696,6 +2556,16 @@
     "natural": "¿Me puede llamar un taxi?",
     "pronunciation": "meh PWEH-deh yah-MAR oon TAHK-see",
     "moment": "check-out",
+    "replies": [
+      {
+        "text": "¿A dónde va?",
+        "meaning": "Where are you going?"
+      },
+      {
+        "text": "Llega en cinco minutos.",
+        "meaning": "It arrives in five minutes."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1707,6 +2577,16 @@
     "natural": "La llave de mi cuarto no funciona",
     "pronunciation": "lah YAH-veh deh mee KWAR-toh noh foonk-see-OH-nah",
     "moment": "room-problems",
+    "replies": [
+      {
+        "text": "¿Cuál es su habitación?",
+        "meaning": "Which room are you in?"
+      },
+      {
+        "text": "Se la vuelvo a activar.",
+        "meaning": "I'll reactivate it for you."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1718,6 +2598,16 @@
     "natural": "No hay agua caliente",
     "pronunciation": "noh eye AH-gwah kah-lee-EHN-teh",
     "moment": "room-problems",
+    "replies": [
+      {
+        "text": "Déjela correr unos minutos.",
+        "meaning": "Let it run for a few minutes."
+      },
+      {
+        "text": "Enseguida lo revisamos.",
+        "meaning": "We'll check it right away."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1729,6 +2619,16 @@
     "natural": "Llame a la policía",
     "pronunciation": "YAH-meh ah lah poh-lee-SEE-ah",
     "moment": "getting-help",
+    "replies": [
+      {
+        "text": "¿Qué pasó?",
+        "meaning": "What happened?"
+      },
+      {
+        "text": "Ya los llamo.",
+        "meaning": "I'm calling them now."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1740,6 +2640,16 @@
     "natural": "Hubo un accidente",
     "pronunciation": "OO-boh oon ahk-see-DEHN-teh",
     "moment": "getting-help",
+    "replies": [
+      {
+        "text": "¿Hay heridos?",
+        "meaning": "Is anyone hurt?"
+      },
+      {
+        "text": "¿Dónde fue?",
+        "meaning": "Where did it happen?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1751,6 +2661,20 @@
     "natural": "No me siento bien",
     "pronunciation": "noh meh see-EHN-toh bee-EHN",
     "moment": "medical",
+    "replies": [
+      {
+        "text": "¿Qué siente?",
+        "meaning": "What are you feeling?"
+      },
+      {
+        "text": "¿Desde cuándo?",
+        "meaning": "Since when?"
+      },
+      {
+        "text": "¿Necesita un médico?",
+        "meaning": "Do you need a doctor?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1762,6 +2686,16 @@
     "natural": "¿Dónde hay una farmacia cerca?",
     "pronunciation": "DOHN-deh eye OO-nah far-MAH-see-ah SEHR-kah",
     "moment": "medical",
+    "replies": [
+      {
+        "text": "Hay una a la vuelta.",
+        "meaning": "There's one around the corner."
+      },
+      {
+        "text": "Está abierta las veinticuatro horas.",
+        "meaning": "It's open twenty-four hours."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1773,6 +2707,20 @@
     "natural": "Tengo diabetes",
     "pronunciation": "TEHN-goh dee-ah-BEH-tehs",
     "moment": "medical",
+    "replies": [
+      {
+        "text": "¿Necesita azúcar?",
+        "meaning": "Do you need sugar?"
+      },
+      {
+        "text": "¿Tiene su medicamento?",
+        "meaning": "Do you have your medication?"
+      },
+      {
+        "text": "¿Usa insulina?",
+        "meaning": "Do you use insulin?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1795,6 +2743,16 @@
     "natural": "Necesito a alguien que hable inglés",
     "pronunciation": "neh-seh-SEE-toh ah AHL-gyehn keh AH-bleh een-GLEHS",
     "moment": "getting-help",
+    "replies": [
+      {
+        "text": "Un momento, por favor.",
+        "meaning": "One moment, please."
+      },
+      {
+        "text": "Voy a buscar a alguien.",
+        "meaning": "I'll go and find someone."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1806,6 +2764,16 @@
     "natural": "Necesito comunicarme con mi embajada",
     "pronunciation": "neh-seh-SEE-toh koh-moo-nee-KAR-meh kohn mee ehm-bah-HAH-dah",
     "moment": "loss",
+    "replies": [
+      {
+        "text": "¿De qué país es?",
+        "meaning": "What country are you from?"
+      },
+      {
+        "text": "Le doy el número.",
+        "meaning": "I'll give you the number."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1880,6 +2848,20 @@
     "natural": "¿Queda lejos?",
     "pronunciation": "KEH-dah LEH-hohs",
     "moment": "finding",
+    "replies": [
+      {
+        "text": "No, está cerca.",
+        "meaning": "No, it's close."
+      },
+      {
+        "text": "Sí, está lejos.",
+        "meaning": "Yes, it's far."
+      },
+      {
+        "text": "Unos diez minutos caminando.",
+        "meaning": "About ten minutes on foot."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1891,6 +2873,16 @@
     "natural": "¿Dónde hay un cajero?",
     "pronunciation": "DOHN-deh eye oon kah-HEH-roh",
     "moment": "cash",
+    "replies": [
+      {
+        "text": "Hay uno en el banco de la esquina.",
+        "meaning": "There's one at the bank on the corner."
+      },
+      {
+        "text": "Dentro del supermercado.",
+        "meaning": "Inside the supermarket."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1902,6 +2894,16 @@
     "natural": "¿Hay Wi-Fi?",
     "pronunciation": "eye WEE-fee",
     "moment": "check-in",
+    "replies": [
+      {
+        "text": "Sí, es gratis.",
+        "meaning": "Yes, it's free."
+      },
+      {
+        "text": "Solo en la recepción.",
+        "meaning": "Only in the lobby."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1913,6 +2915,16 @@
     "natural": "¿Qué hora es?",
     "pronunciation": "keh OH-rah ehs",
     "moment": "routes",
+    "replies": [
+      {
+        "text": "Son las tres.",
+        "meaning": "It's three o'clock."
+      },
+      {
+        "text": "Las tres y media.",
+        "meaning": "Half past three."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1924,6 +2936,16 @@
     "natural": "¿Dónde puedo comprar un chip?",
     "pronunciation": "DOHN-deh PWEH-doh kohm-PRAR oon cheep",
     "moment": "browsing",
+    "replies": [
+      {
+        "text": "En cualquier tienda de celulares.",
+        "meaning": "At any mobile phone shop."
+      },
+      {
+        "text": "Necesita su pasaporte.",
+        "meaning": "You need your passport."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1935,6 +2957,16 @@
     "natural": "¿Nos puede tomar una foto?",
     "pronunciation": "nohs PWEH-deh toh-MAR OO-nah FOH-toh",
     "moment": "courtesy",
+    "replies": [
+      {
+        "text": "Sí, claro.",
+        "meaning": "Yes, of course."
+      },
+      {
+        "text": "¿Así está bien?",
+        "meaning": "Is it OK like this?"
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1946,6 +2978,16 @@
     "natural": "¿Dónde puedo cambiar dinero?",
     "pronunciation": "DOHN-deh PWEH-doh kahm-bee-AR dee-NEH-roh",
     "moment": "cash",
+    "replies": [
+      {
+        "text": "En una casa de cambio.",
+        "meaning": "At an exchange office."
+      },
+      {
+        "text": "En el banco, con su pasaporte.",
+        "meaning": "At the bank, with your passport."
+      }
+    ],
     "review": "draft"
   },
   {
@@ -1957,6 +2999,16 @@
     "natural": "¿Aceptan dólares?",
     "pronunciation": "ah-SEHP-tahn DOH-lah-rehs",
     "moment": "cash",
+    "replies": [
+      {
+        "text": "Sí, pero el cambio se lo doy en moneda local.",
+        "meaning": "Yes, but I'll give you change in local currency."
+      },
+      {
+        "text": "No, solo moneda local.",
+        "meaning": "No, only local currency."
+      }
+    ],
     "review": "draft"
   },
   {
