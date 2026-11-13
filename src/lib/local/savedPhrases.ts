@@ -42,6 +42,7 @@ export async function savePhrase(
     pronunciation: phrase.pronunciation,
     category: phrase.category,
     ...(options.tripPackId && { tripPackId: options.tripPackId }),
+    ...(phrase.replies?.length && { replies: phrase.replies }),
     savedAt: now,
     updatedAt: now,
   };

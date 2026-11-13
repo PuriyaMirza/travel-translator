@@ -6,7 +6,7 @@ import { isCategory } from "./categories";
 import { destinationName } from "./destinations";
 import { localeName } from "./locale";
 import { DEFAULT_TRAVELLER, type Traveller } from "./traveller";
-import type { Phrase, SpanishComfort, SpeakerGender } from "./types";
+import type { LikelyReply, Phrase, SpanishComfort, SpeakerGender } from "./types";
 
 /**
  * The translation backend (SPEC.md §8). Never imported by a client component —
@@ -72,7 +72,26 @@ export const TranslationSchema = z.object({
   // Rule 5: empty string when there's nothing worth noting, never omitted.
   culturalNote: z.string(),
   pronunciation: z.string(),
+  // SPEC.md §14. Always present; an empty array is the "expects no reply"
+  // value. The count is capped in normalizeReplies(), not here: array limits
+  // would only reach the model as description text.
+  likelyReplies: z.array(z.object({ text: z.string(), meaning: z.string() })),
 });
+
+/** At most this many replies on a single translation; a trip pack keeps fewer. */
+export const MAX_REPLIES = 3;
+
+/** Drop blank replies and cap the count. Undefined when none are left. */
+export function normalizeReplies(
+  raw: z.infer<typeof TranslationSchema>["likelyReplies"],
+  max: number,
+): LikelyReply[] | undefined {
+  const replies = raw
+    .map((r) => ({ text: r.text.trim(), meaning: r.meaning.trim() }))
+    .filter((r) => r.text && r.meaning)
+    .slice(0, max);
+  return replies.length > 0 ? replies : undefined;
+}
 
 /**
  * The prompt rules the translate prompt (SPEC.md §8) and the trip-pack prompt
@@ -103,6 +122,13 @@ export const sharedPromptRules = {
    agreement. If it is neutral, prefer constructions that avoid gendered
    agreement — "Tengo alergia a…" rather than "Soy alérgico a…" — and use
    the masculine form only where no natural neutral phrasing exists.`,
+  // SPEC.md §14 "Likely replies".
+  likelyReplies: (max: number) =>
+    `Fill likelyReplies with up to ${max} short things the other person is
+   likely to say back, most likely first: "text" in Spanish as it would be
+   spoken, "meaning" in English. Only replies a stranger in that situation
+   would plausibly give. Use an empty array when the output is English, or
+   when the phrase expects no reply.`,
   // SPEC.md §14. The name comes from destinations.ts, never from the request.
   destination: (name: string) =>
     `The traveler is going to ${name}. Keep "literal" neutral. In "natural",
@@ -149,25 +175,29 @@ Rules:
 4. ${sharedPromptRules.pronunciation}
 5. ${sharedPromptRules.culturalNote}
 6. ${sharedPromptRules.category}
-7. ${sharedPromptRules.speakerGender(traveller.speakerGender)}${travellerRules(locale, traveller, 8)}
+7. ${sharedPromptRules.speakerGender(traveller.speakerGender)}
+8. ${sharedPromptRules.likelyReplies(MAX_REPLIES)}${travellerRules(locale, traveller, 9)}
 
 Examples:
 
 Input: "Could I see the menu?"
 Output: sourceLanguage "en", targetLanguage "es", literal "¿Podría ver el
 menú?", natural "¿Me da el menú, por favor?", pronunciation "meh dah ehl
-meh-NOO, por fah-VOR", category "dining", culturalNote "".
+meh-NOO, por fah-VOR", category "dining", culturalNote "", likelyReplies
+[{text "Aquí tiene.", meaning "Here you go."}, {text "Enseguida se lo
+traigo.", meaning "I'll bring it right away."}].
 
 Input: "¿Dónde tomo el autobús?"
 Output: sourceLanguage "es", targetLanguage "en", literal "Where do I catch
 the bus?", natural "Where do I catch the bus?", pronunciation "WEHR doo eye
-kach thuh buhs", category "transit", culturalNote "".
+kach thuh buhs", category "transit", culturalNote "", likelyReplies [].
 
 Input: "Estoy full"
 Output: sourceLanguage "es", targetLanguage "en", literal "I am full",
 natural "I'm stuffed", pronunciation "eem stuhft", category "dining",
 culturalNote "Full here means physically full from eating, not the English
-sense of complete — a common false friend for English speakers."`;
+sense of complete — a common false friend for English speakers.",
+likelyReplies [].`;
 }
 
 export interface TranslateError {
@@ -205,6 +235,8 @@ export function normalizeTranslation(
     pronunciation: parsed.pronunciation,
     category: isCategory(parsed.category) ? parsed.category : "general",
     targetLanguage: parsed.targetLanguage,
+    // Replies only make sense for something the traveller says in Spanish.
+    replies: parsed.targetLanguage === "es" ? normalizeReplies(parsed.likelyReplies, MAX_REPLIES) : undefined,
   };
 }
 

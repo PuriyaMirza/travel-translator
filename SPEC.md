@@ -679,11 +679,11 @@ interface LikelyReply {
 
 `Phrase.replies?: LikelyReply[]`, at most three. No pronunciation guide: the traveller hears these, they don't say them. Each has a speak button so it can be recognised by ear.
 
-- **Presets:** authored in `data/phrases/replies.<locale>.csv`, stored in `phrase_replies`, bundled in the snapshot. A phrase that expects no reply has none. Do not pad.
+- **Presets:** authored in `data/replies/<locale>.csv`, stored in `phrase_replies`, bundled in the snapshot. The pinned essentials have none: their list has no room to show them. A phrase that expects no reply has none. Do not pad.
 - **Translate:** the response schema gains `likelyReplies` (0–3). Prompt rule: only when the output is in the locale's language, only what a stranger would plausibly say back, an empty array when the phrase expects no reply.
 - **Trip pack:** the same field, at most two per phrase. If measured latency makes the loading state worse, replies come out of trip packs and stay everywhere else.
-- **Saved phrases** keep their replies: `SavedPhrase.replies`, `saved_phrases.replies` (jsonb), one more entry in the sync column map. Show cards have none.
-- **UI:** a "They might say" block under the phrase. Collapsed behind a disclosure in lists; open on a translate result and in the trip-pack preview.
+- **Saved phrases** keep their replies: `SavedPhrase.replies` in IndexedDB, and `saved_phrases.replies` (jsonb, migration 004) for other devices. The sync layer treats that column as optional: it checks once per server instance whether the database has it, so the code works before and after the migration is applied. Until it is, replies stay on the device that saved the phrase. Show cards have none.
+- **UI:** a "They might say" block under the phrase, a native `<details>`. Collapsed in every list, the trip-pack preview included; open on a translate result.
 
 ### Fill-in-the-blank phrases
 

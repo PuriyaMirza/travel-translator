@@ -4,6 +4,7 @@ import { showsDraftNotice } from "@/lib/review";
 import type { Phrase } from "@/lib/types";
 import { useSpeech } from "@/lib/useSpeech";
 import { DraftNotice } from "./DraftNotice";
+import { LikelyReplies } from "./LikelyReplies";
 import { SaveButton } from "./SaveButton";
 import { ShowTrigger } from "./ShowTrigger";
 import { SpeakButton } from "./SpeakButton";
@@ -58,7 +59,7 @@ export function PhraseCard({
         </div>
       </div>
 
-      {(showLiteral || phrase.culturalNote) && (
+      {(showLiteral || phrase.culturalNote || phrase.replies?.length) && (
         <div className="mt-4 space-y-2 border-t border-hairline pt-4">
           {showLiteral && (
             <p className="text-small text-muted">
@@ -68,6 +69,10 @@ export function PhraseCard({
           )}
           {phrase.culturalNote && (
             <p className="text-small text-muted">{phrase.culturalNote}</p>
+          )}
+          {/* Behind one tap in a list, so the list stays scannable (SPEC.md §14). */}
+          {phrase.replies && phrase.replies.length > 0 && (
+            <LikelyReplies phraseId={phrase.id} replies={phrase.replies} lang={phrase.locale} />
           )}
         </div>
       )}
