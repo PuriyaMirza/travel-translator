@@ -3,6 +3,7 @@
 import type { Phrase } from "@/lib/types";
 import { useSpeech } from "@/lib/useSpeech";
 import { Eyebrow } from "./Eyebrow";
+import { ShowTrigger } from "./ShowTrigger";
 import { SpeakButton } from "./SpeakButton";
 
 /**
@@ -11,7 +12,8 @@ import { SpeakButton } from "./SpeakButton";
  * Deliberately denser than PhraseCard: this is for the moment a conversation
  * stalls, so all eight fit on one phone screen with Spanish, pronunciation and
  * a speak button visible without a tap. No literal or cultural note — those
- * belong on the full card, not here.
+ * belong on the full card, not here. Tapping a phrase shows it full screen
+ * (SPEC.md §14).
  *
  * Not in the Stamp blues Figma frames (it shipped after them); styled to match
  * the outlined tiles and the eyebrow-only section headings there.
@@ -30,15 +32,15 @@ export function EssentialPhrases({ phrases }: { phrases: Phrase[] }) {
           const language = phrase.targetLanguage ?? "es";
           return (
             <li key={phrase.id} className="flex items-center gap-3 px-[18px] py-3 text-ink">
-              <div className="min-w-0 flex-1">
-                <p lang={language} className="text-[15px] leading-5 font-bold">
+              <ShowTrigger phrase={phrase} className="min-w-0 flex-1">
+                <span lang={language} className="block text-[15px] leading-5 font-bold">
                   {phrase.natural}
-                </p>
-                <p className="text-[13px] leading-[18px]">{phrase.sourceText}</p>
-                <p className="font-display text-[14px] leading-5 font-light">
+                </span>
+                <span className="block text-[13px] leading-[18px]">{phrase.sourceText}</span>
+                <span className="block font-display text-[14px] leading-5 font-light">
                   {phrase.pronunciation}
-                </p>
-              </div>
+                </span>
+              </ShowTrigger>
               <SpeakButton
                 className="size-10"
                 onSpeak={() => speak(phrase.id, phrase.natural, language)}

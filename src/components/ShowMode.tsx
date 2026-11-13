@@ -6,10 +6,8 @@ import { useParams } from "next/navigation";
 import { X } from "lucide-react";
 import { useShowCard } from "@/lib/local/showCards";
 import { SHOW_SHELL_PATH } from "@/lib/nav";
-import { cn } from "@/lib/utils";
-import { useSpeech } from "@/lib/useSpeech";
 import { useWakeLock } from "@/lib/useWakeLock";
-import { SpeakButton } from "./SpeakButton";
+import { ShowSurface, ShowText, showCloseClass } from "./ShowSurface";
 
 const SHELL_ID = SHOW_SHELL_PATH.split("/")[2];
 
@@ -22,7 +20,7 @@ const currentPath = () => window.location.pathname;
 
 /**
  * Show mode (SPEC.md §12): the card's Spanish, full screen, for someone else
- * to read. A dark reading surface — no crimson anywhere.
+ * to read. The surface itself is `ShowSurface`; this loads the card for it.
  *
  * Rendered entirely on the device. The id comes from the URL on the client,
  * because the service worker may answer `/cards/<id>` with the pre-rendered
@@ -37,44 +35,26 @@ export function ShowMode() {
   const id = routeId === SHELL_ID ? (urlSegment && decodeURIComponent(urlSegment)) || undefined : routeId;
 
   const { state } = useShowCard(id);
-  const { speak, speakingId, supported } = useSpeech();
   useWakeLock();
 
   return (
     <main className="fixed inset-0 z-40 flex flex-col overflow-y-auto bg-charcoal text-inverse">
-      <div className="px-4 pt-[env(safe-area-inset-top)]">
-        <Link
-          href="/cards"
-          aria-label="Close"
-          className="mt-3 flex size-11 items-center justify-center rounded-full border border-inverse/30 text-inverse transition hover:border-inverse motion-reduce:transition-none"
-        >
-          <X className="size-5" />
-        </Link>
-      </div>
-
-      <div className="mx-auto flex w-full max-w-3xl flex-1 flex-col justify-center px-6 py-10">
+      <ShowSurface
+        close={
+          <Link href="/cards" aria-label="Close" className={showCloseClass}>
+            <X className="size-5" />
+          </Link>
+        }
+      >
         {state.status === "ready" ? (
-          <>
-            <p
-              lang={state.card.locale}
-              className={cn(
-                "text-display font-bold whitespace-pre-line text-inverse md:text-5xl",
-                "[overflow-wrap:anywhere]",
-              )}
-            >
-              {state.card.literal}
-            </p>
-            <p className="text-small mt-6 whitespace-pre-line text-muted">{state.card.sourceText}</p>
-            <div className="mt-8">
-              <SpeakButton
-                tone="dark"
-                onSpeak={() => speak(state.card.id, state.card.literal, "es")}
-                isSpeaking={speakingId === state.card.id}
-                supported={supported}
-                label={state.card.title}
-              />
-            </div>
-          </>
+          <ShowText
+            text={state.card.literal}
+            lang={state.card.locale}
+            voice="es"
+            sourceText={state.card.sourceText}
+            speakId={state.card.id}
+            speakLabel={state.card.title}
+          />
         ) : state.status === "loading" ? null : (
           <div>
             <p className="text-h2 text-inverse">
@@ -87,7 +67,7 @@ export function ShowMode() {
             </Link>
           </div>
         )}
-      </div>
+      </ShowSurface>
     </main>
   );
 }

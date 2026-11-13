@@ -1,6 +1,8 @@
 # Proposal: Companion pass — deepen what already exists
 
-Status: **draft 2026-11-12; awaiting owner decisions (§2) and plan approval.** Nothing in here is SPEC.md until Phase 0 copies it in.
+Status: **approved 2026-11-13; in SPEC.md as §14 (M8).** SPEC.md is the contract; this file keeps the reasoning.
+
+Owner decisions, 2026-11-13: D1 yes. D2 yes. D5 yes (`natural`). D6 yes (M8, built before M7). D3: Spanish ships first and is corrected after; each authoring phase also writes a review document under `docs/review/`, and high-stakes phrases with unreviewed text carry a "still a draft" marker (SPEC §14). D4 and D7 follow the recommendations below; the owner asked to be consulted only on security, monetary cost and vital dependencies. Phases run back to back and are merged as they pass.
 
 Six improvements to features the app already has, chosen by the owner. No new surface area: no new top-level routes, no new dependencies expected. Each one is judged against the mission (SPEC.md §1): *does this hand someone the exact words for the moment they're in?*
 

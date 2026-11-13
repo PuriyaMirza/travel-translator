@@ -454,3 +454,32 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Open questions:**
   - Who reviews the roughly 300 lines of Spanish this plan has me author?
   - Correction to an earlier chat answer: 50 es-419 phrases are hidden for lack of a pronunciation guide, not 58.
+
+### [2026-11-13 04:02] M8 phase 0: companion pass written into SPEC.md
+- **Milestone:** M8
+- **Files:** modified `SPEC.md` (§6, §7, §8, §10, §12, new §14), `docs/proposals/companion-pass.md` (status + owner decisions), `BUILDLOG.md`.
+- **Decisions:**
+  - Owner approved the plan on 2026-11-13: pronunciation for all presets, the "Your trip" card, M8 built before M7, `natural` in the full-screen overlay. Phases run back to back and are merged as they pass; the owner is consulted only on security, monetary cost and vital dependencies.
+  - Owner chose ship-first for authored Spanish. So every authored row carries `review` (`draft`/`ok`), each authoring phase writes a review document under `docs/review/`, and high-stakes phrases with draft text show an alert icon that opens "This text is still a draft".
+  - Two plan decisions the owner did not answer follow my recommendation, under the "only critical decisions" instruction: likely replies are collapsed in lists, and trip-pack phrases get at most two replies.
+  - "High-stakes" is defined as the `emergency` category, the `dietary` moment, and allergy or medical templates. That definition is mine.
+- **Deviations:** none.
+- **Incomplete:** SPEC.md §7 lists the new tables and columns, but no migration exists yet; they land in phases 4–6.
+- **Open questions:** none blocking.
+
+### [2026-11-13 04:02] M8 phase 1: show any phrase full-screen
+- **Milestone:** M8
+- **Files:** created `src/components/ShowSurface.tsx`, `ShowPhraseOverlay.tsx`, `ShowTrigger.tsx`; modified `ShowMode.tsx`, `PhraseCard.tsx`, `EssentialPhrases.tsx`, `TranslationResult.tsx`, `SPEC.md`, `BUILDLOG.md`.
+- **Decisions:**
+  - On phrase cards and the essentials list the phrase itself is the control (tap the Spanish; a small expand glyph marks it). The plan said a third round button; that would have added about 50px to every card. The translate result keeps an icon button in its action row. SPEC.md §14 says this.
+  - Type scale in the overlay: 56px up to 18 characters, 44px up to 40, otherwise the 36px floor. Show cards are unchanged.
+  - Back closes the overlay through one pushed history entry, guarded so React strict mode does not push two.
+- **Deviations:**
+  - SPEC.md §12 puts the user's English under the shown text in `--text-muted`. Since the Stamp blues re-skin that token is indigo, which is unreadable on the navy surface. It is now `text-inverse` at 70% opacity, for show cards as well as the new overlay.
+- **Incomplete:**
+  - The speak button inside the overlay was not exercised: headless Chromium has no voices, so the button does not render there. It is the same `SpeakButton` show cards already use.
+  - Show mode for a real saved card was not re-tested end to end; only the "card isn't on this device" path was loaded after the refactor.
+  - Not tested on a physical iOS or Android device, including the Android back button.
+  - The overlay is reachable from every `PhraseCard`, so the vault and trip-pack preview get it too; neither was screenshotted.
+- **Open questions:** none.
+- Verified with Playwright (iPhone 13 emulation, `next dev`): 8 triggers on Home, 7 on the dining page; overlay opens, focus lands on Close; Escape, the close button and Back each close it and leave the URL unchanged; focus returns to the phrase. lint, typecheck and build pass.

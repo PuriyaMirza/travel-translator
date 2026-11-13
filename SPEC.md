@@ -180,12 +180,11 @@ Header bar: hamburger left, wordmark centered, account avatar right. No floating
 
 | Route | Purpose |
 |---|---|
-| `/` | Home. Wordmark, Daily Phrase card, 2-column category grid, freeform translate entry point. |
-| `/phrasebook/[category]` | Editorial banner + phrase list for one category. |
+| `/` | Home. Wordmark, freeform translate entry point, pinned essentials, the "Your trip" card (section 14), 2-column category grid. |
+| `/phrasebook/[category]` | Editorial banner + phrase list for one category, grouped by moment (section 14). |
 | `/translate` | Freeform input, result card with literal + natural + cultural note + pronunciation. |
 | `/vault` | Saved phrases. Filter by category. |
 | `/api/translate` | POST. Server route → Anthropic. |
-| `/api/daily-phrase` | GET. Cached per day. |
 | `/cards` | Show cards: list, create, edit. M5 — see section 12. |
 | `/cards/[id]` | Full-screen show mode for one card. M5. |
 | `/trip` | Trip prep: describe the trip, preview generated phrases, save them to the vault. M6 — see section 13. |
@@ -212,7 +211,36 @@ create table phrases (
   cultural_note  text not null default '',
   pronunciation  text not null default '',
   sort_order     int  not null default 0,
+  moment         text,                   -- M8: sub-group within the category; null = ungrouped
+  review         text not null default 'ok' check (review in ('ok','draft')),  -- M8: 'draft' = not yet read by a fluent speaker
   primary key (id, locale)
+);
+
+-- M8 (section 14). What the other person is likely to say back.
+create table phrase_replies (
+  phrase_id   text not null,
+  locale      text not null,
+  sort_order  int  not null,
+  reply       text not null,           -- as the traveller will hear it
+  meaning     text not null,           -- English
+  review      text not null default 'ok' check (review in ('ok','draft')),
+  primary key (phrase_id, locale, sort_order),
+  foreign key (phrase_id, locale) references phrases (id, locale)
+);
+
+-- M8 (section 14). Options for a phrase whose text contains one {slot}.
+create table phrase_slot_options (
+  phrase_id      text not null,
+  locale         text not null,
+  option_id      text not null,        -- lowercase English slug, permanent
+  sort_order     int  not null,
+  source_text    text not null,        -- English fragment
+  literal        text not null,
+  natural_text   text not null,
+  pronunciation  text not null,
+  review         text not null default 'ok' check (review in ('ok','draft')),
+  primary key (phrase_id, locale, option_id),
+  foreign key (phrase_id, locale) references phrases (id, locale)
 );
 
 -- Per-user settings. user_id is the Neon Auth user id.
@@ -249,6 +277,7 @@ create table saved_phrases (
   pronunciation  text not null,
   category       text not null,
   trip_pack_id   uuid references trip_packs(id),
+  replies        jsonb not null default '[]',  -- M8: [{ "text", "meaning" }], section 14
   saved_at       timestamptz not null,
   updated_at     timestamptz not null,
   deleted_at     timestamptz,             -- tombstone
@@ -297,6 +326,7 @@ interface SavedPhrase {
   pronunciation: string;
   category: Category;
   tripPackId?: string;           // set when saved from a trip pack (section 13); absent otherwise
+  replies?: LikelyReply[];       // M8 (section 14); absent on rows saved before it
   savedAt: string;
   updatedAt: string;
   deletedAt?: string;            // tombstone; present = deleted
@@ -347,6 +377,7 @@ There are no database-side rules to lean on, so the server enforces ownership:
 - `phrases` in Neon is the source of truth. It is seeded from `data/phrases/*.csv` (one file per locale, shared ids across files).
 - A script exports it to a committed JSON snapshot bundled into the app. The phrasebook therefore works with zero signal on first load, and builds never need database access.
 - Re-export and commit the snapshot whenever the table changes.
+- From M8 the snapshot also carries each phrase's `moment`, `review`, replies and slot options (section 14).
 
 ### Local-first sync
 
@@ -401,6 +432,8 @@ Rules:
 Rule 6 does not need to police formatting. The response shape is enforced by the API through structured outputs (below), not by asking the model nicely — so no "output strictly valid JSON," no "no markdown fences," no "no commentary." Those instructions are cruft against a constrained decode and were removed.
 
 Rule 7 earns its place even though the schema also carries the field: `category` is deliberately typed as a plain string rather than an enum (see the route handler note below), so the prompt is the only place the seven slugs are stated to the model. The runtime `isCategory()` check is the backstop, not the primary instruction.
+
+From M8 the template takes two more variables, `{{DESTINATION_NAME}}` and `{{SPANISH_COMFORT}}`, and the response gains `likelyReplies`. Their rules are in section 14.
 
 Response shape (camelCase, matching `SavedPhrase`):
 
@@ -468,6 +501,10 @@ Ship each milestone to Vercel before starting the next.
 
 **M6 — Trip pack.** `/trip`, `/api/trip-pack` behind sign-in (uses `requireUser()`), save-to-vault with `tripPackId`, vault filter by trip, and the recent-translations cache on `/translate`. See section 13.
 
+**M7 — Menu scan.** Proposed in `docs/proposals/menu-scan.md`; not yet approved. Numbers are names, not an order: M8 is built first.
+
+**M8 — Companion pass.** Six improvements to what already exists, built as phases 1–6 in section 14, each shipped before the next. The owner has approved running the phases back to back.
+
 Write ~40 preset phrases across the six visible categories before M1 — evenly spread, not 5 dining and 1 shopping like the old set.
 
 ---
@@ -521,6 +558,7 @@ Spanish marks the speaker's gender in phrases travelers say constantly: *alérgi
 - Speak button (existing `useSpeech`) for reading it aloud.
 - The Screen Wake Lock API keeps the screen on while show mode is open. This is progressive: where the API is missing, nothing breaks and nothing is shown.
 - No brand accents in show mode. It's a high-contrast reading surface, not a branded one.
+- From M8 the same surface also shows any phrase, as an overlay (section 14). Show cards keep `literal`; phrases show `natural`.
 
 ### List (`/cards`)
 
@@ -569,3 +607,107 @@ Part of M6 because it's the other half of "translations you made before you lost
 - `/translate` shows these as a "Recent" list under the input.
 - Offline, submitting text that exactly matches a cached key shows the cached result, labelled as saved on this device, not the offline error. Anything else gets the offline error as before.
 - This is also where section 8's "a stable answer for a given input comes from caching the result" lands.
+
+---
+
+## 14. Companion pass (M8)
+
+Six improvements to features that already exist, each judged against section 1: *does this hand someone the exact words for the moment they're in?* No new top-level routes and no new dependencies. The working plan, with the reasoning behind each choice, is `docs/proposals/companion-pass.md`; this section is the contract.
+
+Built in this order, each phase shipped before the next:
+
+| Phase | Feature |
+|---|---|
+| 1 | Show any phrase full-screen |
+| 2 | Use the onboarding answers |
+| 3 | "Your trip" card replaces the Daily Phrase |
+| 4 | Pronunciation for every preset, then moments within categories |
+| 5 | Likely replies |
+| 6 | Fill-in-the-blank phrases |
+
+### Show any phrase full-screen
+
+- `ShowMode` splits into a presentational `ShowSurface` (the section 12 layout, speak button and wake lock) and the loader that feeds it a show card. `/cards/[id]` behaves as before.
+- Any phrase opens the same surface as a **client overlay, not a route**: the phrase may come from the bundle, from a translate result held in memory, or from IndexedDB, and the overlay is handed the phrase it was opened from. It therefore works offline everywhere with no lookup and no service-worker change.
+- Entry point: on a phrase card and in the essentials list, **the phrase itself is the control** — tapping the Spanish opens it, and a small expand glyph marks it as tappable. A third round button would add about 50px to every card in a list that is meant to be dense. The translate result has room, so it gets an icon button in its action row. Either way it appears only when the phrase's target language is the locale's language; an es→en result has nothing to show a local.
+- The overlay shows **`natural`** (the card leads with it and speaks it). Show cards keep `literal` (section 12).
+- Short phrases scale up beyond the `display` minimum. Long ones wrap at it.
+- Close control, Escape, and the device's back button all close it. The overlay pushes a history entry so Back closes the overlay instead of leaving the page.
+- It is a native `<dialog>` opened with `showModal()`: focus is trapped and returns to the Show button on close.
+
+### Use the onboarding answers
+
+- `/api/translate` and `/api/trip-pack` accept two more optional fields, `destination` (ISO 3166-1 alpha-2) and `spanishComfort`. The client sends the current settings on every call, as it does `speakerGender`.
+- The server validates both: `destination` must be in `src/lib/destinations.ts` for the request's locale, `spanishComfort` one of its three slugs. An invalid value is dropped, not rejected, so an older client keeps working.
+- Prompt rules, as variables — never a hardcoded country (section 2, rule 2):
+  - **Destination.** `literal` stays neutral. Where people in `{{DESTINATION_NAME}}` use a different everyday word, `natural` uses it and `culturalNote` says so in one sentence. No destination means the neutral behaviour.
+  - **Comfort.** `none`: the shortest polite phrasing, avoiding sounds English speakers stumble on where an equal alternative exists. `basic`: unchanged. `conversational`: fuller, more idiomatic `natural`.
+- `/trip` prefills the title from the settings ("Mexico, March 2027") and sends destination and month to the trip-pack prompt. The description stays blank.
+- The recent-translations key (section 13) gains destination and comfort, so an answer cached for one country is not served for another.
+- Preset phrases stay neutral. Country variants of presets are dialect-pack work (section 1).
+
+### "Your trip" card
+
+The mint feature card on Home. Rendered from IndexedDB, so it works offline and signed out. It replaces the Daily Phrase card, which was a language-learning pattern (section 1).
+
+| State | What it shows |
+|---|---|
+| Has show cards | Up to three, as large tap targets that open show mode directly |
+| Has a trip pack | The latest pack's title and first three phrases, with a link to the vault filtered to that trip |
+| Has a destination, no pack | An invitation to build a pack for that trip → `/trip`, prefilled |
+| Nothing yet | An invitation to make a first show card, with the five kind tiles |
+
+The first two stack when both apply. The heading carries the destination and month where the date used to sit. The separate trip row on Home folds into this card. While IndexedDB loads the card holds a fixed height.
+
+### Moments
+
+A **moment** is a sub-group within a category ("Ordering", "Paying"). In code it is never called a situation: the phrase CSV's category column is already named `situation`, and Home labels the category grid "Situations".
+
+- Moment slugs are lowercase English and permanent, with labels in `src/lib/labels.ts` (section 2, rule 3). They are unique within a category, not globally, so data keys on `category + moment`. The ordered list per category lives in `src/lib/moments.ts`.
+- `phrases.moment` is nullable. A phrase with none falls into an unlabelled group at the end, so locales without moments keep working.
+- The category page stays one scrolling page. Under the banner, a sticky row of chips jumps to each group; each group is led by an eyebrow heading. Nothing is hidden behind a tap.
+- Every es-419 preset has a pronunciation guide before moments ship, so all 100 phrases show, not the 50 that had guides.
+
+### Likely replies
+
+```ts
+interface LikelyReply {
+  text: string;     // the locale's language, as the traveller will hear it
+  meaning: string;  // English
+}
+```
+
+`Phrase.replies?: LikelyReply[]`, at most three. No pronunciation guide: the traveller hears these, they don't say them. Each has a speak button so it can be recognised by ear.
+
+- **Presets:** authored in `data/phrases/replies.<locale>.csv`, stored in `phrase_replies`, bundled in the snapshot. A phrase that expects no reply has none. Do not pad.
+- **Translate:** the response schema gains `likelyReplies` (0–3). Prompt rule: only when the output is in the locale's language, only what a stranger would plausibly say back, an empty array when the phrase expects no reply.
+- **Trip pack:** the same field, at most two per phrase. If measured latency makes the loading state worse, replies come out of trip packs and stay everywhere else.
+- **Saved phrases** keep their replies: `SavedPhrase.replies`, `saved_phrases.replies` (jsonb), one more entry in the sync column map. Show cards have none.
+- **UI:** a "They might say" block under the phrase. Collapsed behind a disclosure in lists; open on a translate result and in the trip-pack preview.
+
+### Fill-in-the-blank phrases
+
+**The app never assembles Spanish from parts.** Articles and contractions change with the noun (*el baño*, *la estación*, *al baño*), so every option is written out as a complete fragment for its own template, article included, in all four text fields. There is no shared vocabulary list.
+
+- A template is a normal phrase whose `sourceText`, `literal`, `natural` and `pronunciation` each contain one `{slot}` marker. One slot per phrase.
+- Options are authored in `data/phrases/slots.<locale>.csv`, stored in `phrase_slot_options`, bundled in the snapshot.
+- The blank renders inside the sentence as a chip showing the current option. It is a native `<select>`, so phones open their own picker. Choosing an option updates the English, the Spanish, the pronunciation and what the speak button says, on the device.
+- The last option is always "Something else…", which opens `/translate` with the English sentence prefilled. That path needs signal.
+- Saving a filled phrase saves the resolved sentence as an ordinary `SavedPhrase`. Templates never reach the vault or the sync layer.
+- Not in this version: two blanks in one phrase, free-typed blanks, numbers and times.
+
+### Draft text and the review document
+
+Spanish written for M8 ships before a fluent speaker has read it, and is corrected afterwards. Two things make that honest:
+
+- Every authored row (phrase, reply, slot option) carries `review`: `draft` until a fluent speaker has read it, then `ok`.
+- A phrase that is **high-stakes** and has any `draft` text shows a small alert icon (lucide `CircleAlert`) beside it. Activating it opens a short popover: "This text is still a draft. A fluent speaker hasn't checked it yet." High-stakes means the `emergency` category, the `dietary` moment, and any template about allergies or medical needs; the test lives in one function in `src/lib/review.ts`.
+- Each phase that authors Spanish also writes `docs/review/<phase>.md`: a table of English, Spanish, pronunciation and an empty reviewer-notes column, for the owner to go through with a fluent speaker. Corrections come back as CSV edits that flip `review` to `ok`.
+
+Model-generated translations are not marked. They are generated on demand and were never presented as reviewed.
+
+### Verification
+
+- Every phase: `npm run lint`, `npm run typecheck`, `npm run build`; a Playwright run at phone size against the dev server; the offline path with the network off; labels and keyboard access on each new control.
+- Prompt changes: a script under `scripts/` runs a fixed input list across destinations and comfort levels and writes the results for the owner to read. It is a reviewed eval, not an automated test; the repo has no test runner.
+- A build-time check fails the build when a reply or slot option names a phrase id that does not exist.
