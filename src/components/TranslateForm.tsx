@@ -8,8 +8,9 @@ import {
   storeRecentTranslation,
   useRecentTranslations,
 } from "@/lib/local/recentTranslations";
-import { useSpeakerGender } from "@/lib/local/settings";
+import { useTraveller } from "@/lib/local/settings";
 import { NETWORK_MESSAGE, OFFLINE_MESSAGE } from "@/lib/messages";
+import { travellerRequestFields } from "@/lib/traveller";
 import type { Phrase } from "@/lib/types";
 import { ErrorCard } from "./ErrorCard";
 import { PhraseCardSkeleton } from "./PhraseCardSkeleton";
@@ -29,7 +30,7 @@ const RECENT_SHOWN = 10;
 const MAX_INPUT = 500;
 
 export function TranslateForm() {
-  const { speakerGender } = useSpeakerGender();
+  const traveller = useTraveller();
   const recent = useRecentTranslations();
   const [input, setInput] = useState("");
   const [result, setResult] = useState<Result>({ status: "empty" });
@@ -41,7 +42,7 @@ export function TranslateForm() {
     if (typeof navigator !== "undefined" && !navigator.onLine) {
       // Offline, an exact match in the recent-translations cache stands in
       // for the network (SPEC.md §13); anything else is the offline error.
-      const cached = findRecentTranslation(text, brand.defaultLocale, speakerGender);
+      const cached = findRecentTranslation(text, brand.defaultLocale, traveller);
       setResult(
         cached
           ? { status: "success", phrase: cached, fromDevice: true }
@@ -55,14 +56,14 @@ export function TranslateForm() {
       const response = await fetch("/api/translate", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ text, speakerGender }),
+        body: JSON.stringify({ text, ...travellerRequestFields(traveller) }),
       });
       const body = await response.json();
       if (!response.ok) {
         setResult({ status: "error", message: body.error?.message ?? NETWORK_MESSAGE });
         return;
       }
-      storeRecentTranslation(text, speakerGender, body.phrase);
+      storeRecentTranslation(text, traveller, body.phrase);
       setResult({ status: "success", phrase: body.phrase, fromDevice: false });
     } catch {
       setResult({ status: "error", message: NETWORK_MESSAGE });

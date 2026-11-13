@@ -6,7 +6,10 @@ import { Check, Luggage, Sparkles } from "lucide-react";
 import { authClient } from "@/lib/auth/client";
 import { brand } from "@/lib/brand";
 import { saveTripPack, type SaveTripPackResult } from "@/lib/local/tripPacks";
-import { useSpeakerGender } from "@/lib/local/settings";
+import { destinationName } from "@/lib/destinations";
+import { useTraveller } from "@/lib/local/settings";
+import { travelMonthLabel } from "@/lib/onboarding";
+import { travellerRequestFields } from "@/lib/traveller";
 import { NETWORK_MESSAGE, OFFLINE_TRIP_MESSAGE } from "@/lib/messages";
 import type { Phrase } from "@/lib/types";
 import { ErrorCard } from "./ErrorCard";
@@ -55,8 +58,18 @@ function SignInInvitation() {
 
 export function TripPackBuilder() {
   const { data: session, isPending } = authClient.useSession();
-  const { speakerGender } = useSpeakerGender();
-  const [title, setTitle] = useState("");
+  const traveller = useTraveller();
+  // Null until the user types. Until then the title is suggested from the
+  // onboarding answers ("Mexico, March 2027"), so they don't retype what they
+  // already told the app (SPEC.md §14). Derived, not copied into state, so it
+  // appears whenever the settings finish loading.
+  const [typedTitle, setTitle] = useState<string | null>(null);
+  const country = traveller.destination
+    ? destinationName(brand.defaultLocale, traveller.destination)
+    : undefined;
+  const month = traveller.travelMonth ? travelMonthLabel(traveller.travelMonth) : undefined;
+  const suggestedTitle = country ? (month ? `${country}, ${month}` : country) : "";
+  const title = typedTitle ?? suggestedTitle;
   const [description, setDescription] = useState("");
   const [stage, setStage] = useState<Stage>({ status: "form" });
   // The phrases still ticked in the preview, by id. Everything starts ticked.
@@ -86,7 +99,7 @@ export function TripPackBuilder() {
           title: trimmedTitle,
           description: trimmedDescription,
           locale: brand.defaultLocale,
-          speakerGender,
+          ...travellerRequestFields(traveller),
         }),
         signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       });
