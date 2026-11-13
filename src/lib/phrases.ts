@@ -1,5 +1,6 @@
 import { brand } from "./brand";
 import { isCategory } from "./categories";
+import { isMoment } from "./moments";
 import snapshot from "./phrases.snapshot.json";
 import type { Phrase } from "./types";
 
@@ -11,10 +12,14 @@ import type { Phrase } from "./types";
  * the phrasebook works with zero signal (SPEC.md §7 "The phrase library").
  * Regenerate it with `node scripts/export-phrase-snapshot.mjs`.
  *
- * Only phrases with a pronunciation guide are shown: the app's phrase card
- * promises one, and the newer rows don't have them yet. That is 42 rows in
- * the six visible categories plus the 8 `general` essentials pinned on the
- * home screen (src/lib/essentials.ts).
+ * Every es-419 row has a pronunciation guide since M8, so all 100 show: 92
+ * across the six visible categories, grouped by moment (`moments.ts`), plus
+ * the 8 `general` essentials pinned on the home screen (`essentials.ts`). A
+ * row without a guide is still skipped, because the phrase card promises one;
+ * that is what keeps the fr-FR and de-DE rows out until they are written.
+ *
+ * Rows marked `review: "draft"` have text no fluent speaker has read yet.
+ * `review.ts` decides which of those carry a visible marker.
  *
  * House rules for the es-419 rows (data/phrases/es-419.csv):
  *
@@ -31,7 +36,14 @@ export const PRESET_PHRASES: Phrase[] = snapshot.flatMap((row): Phrase[] => {
   if (!isCategory(row.category)) {
     throw new Error(`phrases.snapshot.json: "${row.id}" has unknown category "${row.category}"`);
   }
-  return [{ ...row, category: row.category }];
+  // A phrase in a visible category must sit in one of that category's
+  // moments, or it would fall off the grouped page. Fail the build instead.
+  const moment = "moment" in row ? row.moment : undefined;
+  if (row.category !== "general" && !isMoment(row.category, moment)) {
+    throw new Error(`phrases.snapshot.json: "${row.id}" has unknown moment "${moment}" for ${row.category}`);
+  }
+  const { review, ...phrase } = { review: undefined, ...row };
+  return [{ ...phrase, category: row.category, moment, ...(review === "draft" ? { draft: true } : {}) }];
 });
 
 export function phrasesForCategory(category: string): Phrase[] {

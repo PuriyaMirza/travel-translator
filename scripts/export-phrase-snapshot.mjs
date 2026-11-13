@@ -16,7 +16,8 @@ async function fromNeon() {
   return sql`
     select id, locale, category,
            source_text as "sourceText", literal, natural_text as "natural",
-           cultural_note as "culturalNote", pronunciation, sort_order as "sortOrder"
+           cultural_note as "culturalNote", pronunciation, sort_order as "sortOrder",
+           coalesce(moment, '') as "moment", review
     from phrases`;
 }
 
@@ -24,7 +25,7 @@ const rows = process.argv.includes("--from-csv") ? readPhraseCsvs() : await from
 
 const snapshot = rows
   .toSorted((a, b) => a.locale.localeCompare(b.locale) || a.sortOrder - b.sortOrder)
-  .map(({ id, locale, category, sourceText, literal, natural, culturalNote, pronunciation }) => ({
+  .map(({ id, locale, category, sourceText, literal, natural, culturalNote, pronunciation, moment, review }) => ({
     id,
     locale,
     category,
@@ -33,6 +34,8 @@ const snapshot = rows
     natural,
     ...(culturalNote ? { culturalNote } : {}),
     pronunciation,
+    ...(moment ? { moment } : {}),
+    ...(review === "draft" ? { review } : {}),
   }));
 
 writeFileSync("src/lib/phrases.snapshot.json", JSON.stringify(snapshot, null, 2) + "\n");

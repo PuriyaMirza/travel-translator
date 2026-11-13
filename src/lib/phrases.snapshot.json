@@ -906,7 +906,8 @@
     "sourceText": "Hello",
     "literal": "Hola",
     "natural": "Hola",
-    "pronunciation": "OH-lah"
+    "pronunciation": "OH-lah",
+    "moment": "hellos"
   },
   {
     "id": "greetings-good-morning",
@@ -916,7 +917,8 @@
     "literal": "Buenos días",
     "natural": "Buenos días",
     "culturalNote": "Used until about midday, then buenas tardes. Greeting someone before you ask them anything is expected, not optional — skipping it reads as brusque.",
-    "pronunciation": "BWEH-nohs DEE-ahs"
+    "pronunciation": "BWEH-nohs DEE-ahs",
+    "moment": "hellos"
   },
   {
     "id": "greetings-thank-you",
@@ -926,7 +928,8 @@
     "literal": "Muchas gracias",
     "natural": "Muchas gracias",
     "culturalNote": "GRAH-see-ahs, never grah-THEE-ahs. The Castilian lisp is not used anywhere in Latin America.",
-    "pronunciation": "MOO-chahs GRAH-see-ahs"
+    "pronunciation": "MOO-chahs GRAH-see-ahs",
+    "moment": "courtesy"
   },
   {
     "id": "greetings-excuse-me",
@@ -936,7 +939,8 @@
     "literal": "Disculpe",
     "natural": "Disculpe",
     "culturalNote": "For getting a stranger's attention. Permiso is for squeezing past someone, and perdón is for apologising after you have already bumped into them.",
-    "pronunciation": "dees-KOOL-peh"
+    "pronunciation": "dees-KOOL-peh",
+    "moment": "courtesy"
   },
   {
     "id": "greetings-do-you-speak-english",
@@ -945,7 +949,8 @@
     "sourceText": "Do you speak English?",
     "literal": "¿Habla usted inglés?",
     "natural": "¿Habla inglés?",
-    "pronunciation": "AH-blah een-GLEHS"
+    "pronunciation": "AH-blah een-GLEHS",
+    "moment": "language"
   },
   {
     "id": "greetings-little-spanish",
@@ -955,7 +960,8 @@
     "literal": "No hablo mucho español",
     "natural": "Hablo poquito español",
     "culturalNote": "Saying this early nearly always makes the other person slow down. Poquito is warmer than the flat no hablo and tends to get a friendlier response.",
-    "pronunciation": "AH-bloh poh-KEE-toh ehs-pah-NYOL"
+    "pronunciation": "AH-bloh poh-KEE-toh ehs-pah-NYOL",
+    "moment": "language"
   },
   {
     "id": "greetings-nice-to-meet-you",
@@ -964,7 +970,8 @@
     "sourceText": "Nice to meet you",
     "literal": "Es un placer conocerlo",
     "natural": "Mucho gusto",
-    "pronunciation": "MOO-choh GOOS-toh"
+    "pronunciation": "MOO-choh GOOS-toh",
+    "moment": "hellos"
   },
   {
     "id": "dining-menu",
@@ -974,7 +981,8 @@
     "literal": "¿Podría ver el menú?",
     "natural": "¿Me da el menú, por favor?",
     "culturalNote": "La carta is the more common word in many countries; both are understood everywhere.",
-    "pronunciation": "meh dah ehl meh-NOO, por fah-VOR"
+    "pronunciation": "meh dah ehl meh-NOO, por fah-VOR",
+    "moment": "arriving"
   },
   {
     "id": "dining-table-for-two",
@@ -983,7 +991,8 @@
     "sourceText": "A table for two, please",
     "literal": "Una mesa para dos, por favor",
     "natural": "Una mesa para dos, por favor",
-    "pronunciation": "OO-nah MEH-sah PAH-rah dohs, por fah-VOR"
+    "pronunciation": "OO-nah MEH-sah PAH-rah dohs, por fah-VOR",
+    "moment": "arriving"
   },
   {
     "id": "dining-vegetarian",
@@ -993,7 +1002,8 @@
     "literal": "Soy vegetariano",
     "natural": "Soy vegetariano",
     "culturalNote": "Say vegetariana if you are a woman. Worth adding no como pollo ni pescado — chicken and fish are often not counted as meat.",
-    "pronunciation": "soy veh-heh-tah-ree-AH-noh"
+    "pronunciation": "soy veh-heh-tah-ree-AH-noh",
+    "moment": "dietary"
   },
   {
     "id": "dining-does-this-have-meat",
@@ -1003,7 +1013,8 @@
     "literal": "¿Esto contiene carne?",
     "natural": "¿Esto lleva carne?",
     "culturalNote": "Lleva starts with a soft y sound, not a hard L. Beans and rice are very often cooked with pork fat, so this is worth asking even about a side dish.",
-    "pronunciation": "EHS-toh YEH-vah KAR-neh"
+    "pronunciation": "EHS-toh YEH-vah KAR-neh",
+    "moment": "dietary"
   },
   {
     "id": "dining-allergy",
@@ -1013,7 +1024,8 @@
     "literal": "Tengo una alergia a...",
     "natural": "Soy alérgico a...",
     "culturalNote": "Alérgica if you are a woman. The g in alérgico is a throaty h sound.",
-    "pronunciation": "soy ah-LEHR-hee-koh ah"
+    "pronunciation": "soy ah-LEHR-hee-koh ah",
+    "moment": "dietary"
   },
   {
     "id": "dining-check",
@@ -1023,7 +1035,8 @@
     "literal": "La cuenta, por favor",
     "natural": "La cuenta, por favor",
     "culturalNote": "It will not be brought until you ask. Sitting on a finished table is normal and nobody is trying to rush you out.",
-    "pronunciation": "lah KWEHN-tah, por fah-VOR"
+    "pronunciation": "lah KWEHN-tah, por fah-VOR",
+    "moment": "paying"
   },
   {
     "id": "dining-tip-included",
@@ -1033,7 +1046,8 @@
     "literal": "¿La propina está incluida?",
     "natural": "¿La propina está incluida?",
     "culturalNote": "Often added automatically as propina or servicio. Check before tipping again — expectations vary a lot from country to country.",
-    "pronunciation": "lah proh-PEE-nah ehs-TAH een-kloo-EE-dah"
+    "pronunciation": "lah proh-PEE-nah ehs-TAH een-kloo-EE-dah",
+    "moment": "paying"
   },
   {
     "id": "transit-where-bus",
@@ -1043,7 +1057,8 @@
     "literal": "¿Dónde tomo el autobús?",
     "natural": "¿Dónde tomo el autobús?",
     "culturalNote": "The local word changes by country — camión, colectivo, micro, guagua. Autobús is understood everywhere, so it is the safe one to travel with.",
-    "pronunciation": "DOHN-deh TOH-moh ehl ow-toh-BOOS"
+    "pronunciation": "DOHN-deh TOH-moh ehl ow-toh-BOOS",
+    "moment": "finding"
   },
   {
     "id": "transit-fare",
@@ -1052,7 +1067,8 @@
     "sourceText": "How much is the fare?",
     "literal": "¿Cuánto cuesta el pasaje?",
     "natural": "¿Cuánto es el pasaje?",
-    "pronunciation": "KWAN-toh ehs ehl pah-SAH-heh"
+    "pronunciation": "KWAN-toh ehs ehl pah-SAH-heh",
+    "moment": "tickets"
   },
   {
     "id": "transit-this-address",
@@ -1062,7 +1078,8 @@
     "literal": "Por favor, lléveme a esta dirección",
     "natural": "Lléveme a esta dirección, por favor",
     "culturalNote": "Showing the address on your phone while you say it removes most of the risk of being misheard.",
-    "pronunciation": "YEH-veh-meh ah EHS-tah dee-rehk-see-OHN, por fah-VOR"
+    "pronunciation": "YEH-veh-meh ah EHS-tah dee-rehk-see-OHN, por fah-VOR",
+    "moment": "taxi"
   },
   {
     "id": "transit-airport",
@@ -1071,7 +1088,8 @@
     "sourceText": "Does this go to the airport?",
     "literal": "¿Este va al aeropuerto?",
     "natural": "¿Este va al aeropuerto?",
-    "pronunciation": "EHS-teh vah ahl ah-eh-roh-PWEHR-toh"
+    "pronunciation": "EHS-teh vah ahl ah-eh-roh-PWEHR-toh",
+    "moment": "routes"
   },
   {
     "id": "transit-train-station",
@@ -1081,7 +1099,8 @@
     "literal": "¿Dónde está la estación de tren?",
     "natural": "¿Dónde queda la estación de tren?",
     "culturalNote": "Queda is the more natural verb for where a fixed place is. Estación is ehs-tah-see-OHN — the c is an s.",
-    "pronunciation": "DOHN-deh KEH-dah lah ehs-tah-see-OHN deh trehn"
+    "pronunciation": "DOHN-deh KEH-dah lah ehs-tah-see-OHN deh trehn",
+    "moment": "finding"
   },
   {
     "id": "transit-meter",
@@ -1091,7 +1110,8 @@
     "literal": "¿Podría usar el taxímetro?",
     "natural": "¿Me pone el taxímetro, por favor?",
     "culturalNote": "Settle the meter or agree a flat price before the car moves. Asking once you are already riding leaves you with no room to negotiate.",
-    "pronunciation": "meh POH-neh ehl tahk-SEE-meh-troh, por fah-VOR"
+    "pronunciation": "meh POH-neh ehl tahk-SEE-meh-troh, por fah-VOR",
+    "moment": "taxi"
   },
   {
     "id": "transit-stop-here",
@@ -1100,7 +1120,8 @@
     "sourceText": "Stop here, please",
     "literal": "Pare aquí, por favor",
     "natural": "Aquí está bien, gracias",
-    "pronunciation": "ah-KEE ehs-TAH bee-EHN, GRAH-see-ahs"
+    "pronunciation": "ah-KEE ehs-TAH bee-EHN, GRAH-see-ahs",
+    "moment": "taxi"
   },
   {
     "id": "shopping-how-much",
@@ -1109,7 +1130,8 @@
     "sourceText": "How much does this cost?",
     "literal": "¿Cuánto cuesta esto?",
     "natural": "¿Cuánto cuesta?",
-    "pronunciation": "KWAN-toh KWEHS-tah"
+    "pronunciation": "KWAN-toh KWEHS-tah",
+    "moment": "prices"
   },
   {
     "id": "shopping-cards",
@@ -1119,7 +1141,8 @@
     "literal": "¿Aceptan tarjetas de crédito?",
     "natural": "¿Aceptan tarjeta?",
     "culturalNote": "The j in tarjeta is a throaty h. Plenty of markets and small shops are cash only, so ask before you pick things up.",
-    "pronunciation": "ah-SEHP-tahn tar-HEH-tah"
+    "pronunciation": "ah-SEHP-tahn tar-HEH-tah",
+    "moment": "paying"
   },
   {
     "id": "shopping-just-looking",
@@ -1128,7 +1151,8 @@
     "sourceText": "I'm just looking, thanks",
     "literal": "Solo estoy mirando, gracias",
     "natural": "Solo estoy viendo, gracias",
-    "pronunciation": "SOH-loh ehs-TOY vee-EHN-doh, GRAH-see-ahs"
+    "pronunciation": "SOH-loh ehs-TOY vee-EHN-doh, GRAH-see-ahs",
+    "moment": "browsing"
   },
   {
     "id": "shopping-another-size",
@@ -1138,7 +1162,8 @@
     "literal": "¿Tiene esto en otra talla?",
     "natural": "¿Lo tiene en otra talla?",
     "culturalNote": "Talla is TAH-yah, with a soft y. Use número instead when you mean shoes.",
-    "pronunciation": "loh tee-EH-neh ehn OH-trah TAH-yah"
+    "pronunciation": "loh tee-EH-neh ehn OH-trah TAH-yah",
+    "moment": "browsing"
   },
   {
     "id": "shopping-better-price",
@@ -1148,7 +1173,8 @@
     "literal": "¿Podría darme un mejor precio?",
     "natural": "¿Me hace un mejor precio?",
     "culturalNote": "Fine in a market or with a street vendor. In a shop with printed price tags it will just be awkward.",
-    "pronunciation": "meh AH-seh oon meh-HOR PREH-see-oh"
+    "pronunciation": "meh AH-seh oon meh-HOR PREH-see-oh",
+    "moment": "prices"
   },
   {
     "id": "shopping-ill-take-it",
@@ -1157,7 +1183,8 @@
     "sourceText": "I'll take it",
     "literal": "Lo voy a comprar",
     "natural": "Me lo llevo",
-    "pronunciation": "meh loh YEH-voh"
+    "pronunciation": "meh loh YEH-voh",
+    "moment": "paying"
   },
   {
     "id": "shopping-change",
@@ -1167,7 +1194,8 @@
     "literal": "¿Tiene cambio?",
     "natural": "¿Tiene cambio?",
     "culturalNote": "Small vendors frequently cannot break a large note. Breaking big bills at a supermarket early in the day saves a lot of friction later.",
-    "pronunciation": "tee-EH-neh KAHM-bee-oh"
+    "pronunciation": "tee-EH-neh KAHM-bee-oh",
+    "moment": "cash"
   },
   {
     "id": "lodging-reservation",
@@ -1177,7 +1205,8 @@
     "literal": "Tengo una reservación",
     "natural": "Tengo una reservación",
     "culturalNote": "Reserva is used just as widely; both are understood.",
-    "pronunciation": "TEHN-goh OO-nah reh-sehr-vah-see-OHN"
+    "pronunciation": "TEHN-goh OO-nah reh-sehr-vah-see-OHN",
+    "moment": "check-in"
   },
   {
     "id": "lodging-checkout-time",
@@ -1187,7 +1216,8 @@
     "literal": "¿A qué hora es la salida?",
     "natural": "¿A qué hora es la salida?",
     "culturalNote": "The h in hora is completely silent.",
-    "pronunciation": "ah keh OH-rah ehs lah sah-LEE-dah"
+    "pronunciation": "ah keh OH-rah ehs lah sah-LEE-dah",
+    "moment": "check-out"
   },
   {
     "id": "lodging-breakfast-included",
@@ -1196,7 +1226,8 @@
     "sourceText": "Is breakfast included?",
     "literal": "¿El desayuno está incluido?",
     "natural": "¿Incluye el desayuno?",
-    "pronunciation": "een-KLOO-yeh ehl deh-sah-YOO-noh"
+    "pronunciation": "een-KLOO-yeh ehl deh-sah-YOO-noh",
+    "moment": "check-in"
   },
   {
     "id": "lodging-ac-broken",
@@ -1206,7 +1237,8 @@
     "literal": "El aire acondicionado no funciona",
     "natural": "No funciona el aire",
     "culturalNote": "El aire on its own is understood as the air conditioning. The same sentence works for anything else in the room — just swap in la ducha for the shower or la luz for the light.",
-    "pronunciation": "noh foonk-see-OH-nah ehl AH-ee-reh"
+    "pronunciation": "noh foonk-see-OH-nah ehl AH-ee-reh",
+    "moment": "room-problems"
   },
   {
     "id": "lodging-another-towel",
@@ -1215,7 +1247,8 @@
     "sourceText": "Could I have another towel?",
     "literal": "¿Podría darme otra toalla?",
     "natural": "¿Me puede traer otra toalla?",
-    "pronunciation": "meh PWEH-deh trah-EHR OH-trah toh-AH-yah"
+    "pronunciation": "meh PWEH-deh trah-EHR OH-trah toh-AH-yah",
+    "moment": "room-problems"
   },
   {
     "id": "lodging-wifi-password",
@@ -1225,7 +1258,8 @@
     "literal": "¿Cuál es la contraseña del wifi?",
     "natural": "¿Cuál es la clave del wifi?",
     "culturalNote": "Clave is what most people say day to day. Wifi is pronounced WEE-fee, not WY-fy.",
-    "pronunciation": "kwahl ehs lah KLAH-veh dehl WEE-fee"
+    "pronunciation": "kwahl ehs lah KLAH-veh dehl WEE-fee",
+    "moment": "check-in"
   },
   {
     "id": "lodging-leave-bags",
@@ -1235,7 +1269,8 @@
     "literal": "¿Puedo dejar mis maletas aquí?",
     "natural": "¿Puedo dejar mis maletas aquí?",
     "culturalNote": "Useful on the last morning — most places will hold luggage after check-out without charging.",
-    "pronunciation": "PWEH-doh deh-HAR mees mah-LEH-tahs ah-KEE"
+    "pronunciation": "PWEH-doh deh-HAR mees mah-LEH-tahs ah-KEE",
+    "moment": "check-out"
   },
   {
     "id": "emergency-need-help",
@@ -1244,7 +1279,8 @@
     "sourceText": "I need help",
     "literal": "Necesito ayuda",
     "natural": "Necesito ayuda",
-    "pronunciation": "neh-seh-SEE-toh ah-YOO-dah"
+    "pronunciation": "neh-seh-SEE-toh ah-YOO-dah",
+    "moment": "getting-help"
   },
   {
     "id": "emergency-call-ambulance",
@@ -1254,7 +1290,8 @@
     "literal": "Llame una ambulancia",
     "natural": "¡Llame una ambulancia!",
     "culturalNote": "Llame opens with a soft y. The emergency number is not 911 everywhere — look up the local one when you arrive.",
-    "pronunciation": "YAH-meh OO-nah ahm-boo-LAHN-see-ah"
+    "pronunciation": "YAH-meh OO-nah ahm-boo-LAHN-see-ah",
+    "moment": "getting-help"
   },
   {
     "id": "emergency-need-doctor",
@@ -1263,7 +1300,8 @@
     "sourceText": "I need a doctor",
     "literal": "Necesito un médico",
     "natural": "Necesito un médico",
-    "pronunciation": "neh-seh-SEE-toh oon MEH-dee-koh"
+    "pronunciation": "neh-seh-SEE-toh oon MEH-dee-koh",
+    "moment": "medical"
   },
   {
     "id": "emergency-nearest-hospital",
@@ -1273,7 +1311,8 @@
     "literal": "¿Dónde está el hospital más cercano?",
     "natural": "¿Dónde queda el hospital más cercano?",
     "culturalNote": "Hospital starts with the vowel — the h is silent. Cercano is sehr-KAH-noh, never thehr-KAH-noh.",
-    "pronunciation": "DOHN-deh KEH-dah ehl ohs-pee-TAHL mahs sehr-KAH-noh"
+    "pronunciation": "DOHN-deh KEH-dah ehl ohs-pee-TAHL mahs sehr-KAH-noh",
+    "moment": "medical"
   },
   {
     "id": "emergency-lost-passport",
@@ -1282,7 +1321,8 @@
     "sourceText": "I lost my passport",
     "literal": "Perdí mi pasaporte",
     "natural": "Perdí mi pasaporte",
-    "pronunciation": "pehr-DEE mee pah-sah-POR-teh"
+    "pronunciation": "pehr-DEE mee pah-sah-POR-teh",
+    "moment": "loss"
   },
   {
     "id": "emergency-wallet-stolen",
@@ -1292,7 +1332,8 @@
     "literal": "Me robaron la cartera",
     "natural": "Me robaron la cartera",
     "culturalNote": "Billetera is equally common. You will need a police report — denuncia — before any insurer will pay out.",
-    "pronunciation": "meh roh-BAH-rohn lah kar-TEH-rah"
+    "pronunciation": "meh roh-BAH-rohn lah kar-TEH-rah",
+    "moment": "loss"
   },
   {
     "id": "emergency-allergic-penicillin",
@@ -1302,7 +1343,8 @@
     "literal": "Soy alérgico a la penicilina",
     "natural": "Soy alérgico a la penicilina",
     "culturalNote": "Alérgica if you are a woman. Both c sounds in penicilina are plain s sounds.",
-    "pronunciation": "soy ah-LEHR-hee-koh ah lah peh-nee-see-LEE-nah"
+    "pronunciation": "soy ah-LEHR-hee-koh ah lah peh-nee-see-LEE-nah",
+    "moment": "medical"
   },
   {
     "id": "greetings-good-afternoon",
@@ -1311,7 +1353,9 @@
     "sourceText": "Good afternoon / good evening",
     "literal": "Buenas tardes",
     "natural": "Buenas tardes",
-    "pronunciation": ""
+    "pronunciation": "BWEH-nahs TAR-dehs",
+    "moment": "hellos",
+    "review": "draft"
   },
   {
     "id": "greetings-good-night",
@@ -1320,7 +1364,9 @@
     "sourceText": "Good night",
     "literal": "Buenas noches",
     "natural": "Buenas noches",
-    "pronunciation": ""
+    "pronunciation": "BWEH-nahs NOH-chehs",
+    "moment": "hellos",
+    "review": "draft"
   },
   {
     "id": "greetings-goodbye",
@@ -1329,7 +1375,9 @@
     "sourceText": "Goodbye",
     "literal": "Adiós",
     "natural": "Hasta luego",
-    "pronunciation": ""
+    "pronunciation": "AHS-tah LWEH-goh",
+    "moment": "hellos",
+    "review": "draft"
   },
   {
     "id": "greetings-please",
@@ -1338,7 +1386,9 @@
     "sourceText": "Please",
     "literal": "Por favor",
     "natural": "Por favor",
-    "pronunciation": ""
+    "pronunciation": "por fah-VOR",
+    "moment": "courtesy",
+    "review": "draft"
   },
   {
     "id": "greetings-youre-welcome",
@@ -1347,7 +1397,9 @@
     "sourceText": "You're welcome",
     "literal": "No hay de qué",
     "natural": "De nada",
-    "pronunciation": ""
+    "pronunciation": "deh NAH-dah",
+    "moment": "courtesy",
+    "review": "draft"
   },
   {
     "id": "greetings-how-are-you",
@@ -1356,7 +1408,9 @@
     "sourceText": "How are you?",
     "literal": "¿Cómo está usted?",
     "natural": "¿Cómo está?",
-    "pronunciation": ""
+    "pronunciation": "KOH-moh ehs-TAH",
+    "moment": "hellos",
+    "review": "draft"
   },
   {
     "id": "dining-glass-of-water",
@@ -1365,7 +1419,9 @@
     "sourceText": "A glass of water, please",
     "literal": "Un vaso de agua, por favor",
     "natural": "Un vaso de agua, por favor",
-    "pronunciation": ""
+    "pronunciation": "oon VAH-soh deh AH-gwah, por fah-VOR",
+    "moment": "ordering",
+    "review": "draft"
   },
   {
     "id": "dining-no-ice",
@@ -1374,7 +1430,9 @@
     "sourceText": "Water without ice, please",
     "literal": "Agua sin hielo, por favor",
     "natural": "Agua sin hielo, por favor",
-    "pronunciation": ""
+    "pronunciation": "AH-gwah seen YEH-loh, por fah-VOR",
+    "moment": "ordering",
+    "review": "draft"
   },
   {
     "id": "dining-ready-to-order",
@@ -1383,7 +1441,9 @@
     "sourceText": "We're ready to order",
     "literal": "Quisiéramos pedir, por favor",
     "natural": "Ya queremos pedir, por favor",
-    "pronunciation": ""
+    "pronunciation": "yah keh-REH-mohs peh-DEER, por fah-VOR",
+    "moment": "ordering",
+    "review": "draft"
   },
   {
     "id": "dining-recommend",
@@ -1392,7 +1452,9 @@
     "sourceText": "What do you recommend?",
     "literal": "¿Qué me recomienda usted?",
     "natural": "¿Qué me recomienda?",
-    "pronunciation": ""
+    "pronunciation": "keh meh reh-koh-mee-EHN-dah",
+    "moment": "ordering",
+    "review": "draft"
   },
   {
     "id": "dining-no-pork",
@@ -1401,7 +1463,9 @@
     "sourceText": "I don't eat pork",
     "literal": "No consumo carne de cerdo",
     "natural": "No como cerdo",
-    "pronunciation": ""
+    "pronunciation": "noh KOH-moh SEHR-doh",
+    "moment": "dietary",
+    "review": "draft"
   },
   {
     "id": "dining-is-it-spicy",
@@ -1410,7 +1474,9 @@
     "sourceText": "Is it spicy?",
     "literal": "¿Este plato es picante?",
     "natural": "¿Es picante?",
-    "pronunciation": ""
+    "pronunciation": "ehs pee-KAHN-teh",
+    "moment": "ordering",
+    "review": "draft"
   },
   {
     "id": "dining-another-beer",
@@ -1419,7 +1485,9 @@
     "sourceText": "Another beer, please",
     "literal": "¿Podría traerme otra cerveza, por favor?",
     "natural": "Otra cerveza, por favor",
-    "pronunciation": ""
+    "pronunciation": "OH-trah sehr-VEH-sah, por fah-VOR",
+    "moment": "ordering",
+    "review": "draft"
   },
   {
     "id": "dining-delicious",
@@ -1428,7 +1496,9 @@
     "sourceText": "The food is delicious",
     "literal": "La comida está deliciosa",
     "natural": "Está muy rico",
-    "pronunciation": ""
+    "pronunciation": "ehs-TAH mwee REE-koh",
+    "moment": "paying",
+    "review": "draft"
   },
   {
     "id": "dining-to-go",
@@ -1437,7 +1507,9 @@
     "sourceText": "Can I get this to go?",
     "literal": "¿Podría empacarlo para llevar?",
     "natural": "¿Me lo puede preparar para llevar?",
-    "pronunciation": ""
+    "pronunciation": "meh loh PWEH-deh preh-pah-RAR PAH-rah yeh-VAR",
+    "moment": "paying",
+    "review": "draft"
   },
   {
     "id": "transit-bus-stop",
@@ -1446,7 +1518,9 @@
     "sourceText": "Where is the bus stop?",
     "literal": "¿Dónde está la parada de autobús?",
     "natural": "¿Dónde queda la parada?",
-    "pronunciation": ""
+    "pronunciation": "DOHN-deh KEH-dah lah pah-RAH-dah",
+    "moment": "finding",
+    "review": "draft"
   },
   {
     "id": "transit-one-ticket",
@@ -1455,7 +1529,9 @@
     "sourceText": "One ticket, please",
     "literal": "Un boleto, por favor",
     "natural": "Un boleto, por favor",
-    "pronunciation": ""
+    "pronunciation": "oon boh-LEH-toh, por fah-VOR",
+    "moment": "tickets",
+    "review": "draft"
   },
   {
     "id": "transit-round-trip",
@@ -1464,7 +1540,9 @@
     "sourceText": "A round-trip ticket, please",
     "literal": "Un boleto de ida y vuelta, por favor",
     "natural": "Un boleto de ida y vuelta, por favor",
-    "pronunciation": ""
+    "pronunciation": "oon boh-LEH-toh deh EE-dah ee VWEHL-tah, por fah-VOR",
+    "moment": "tickets",
+    "review": "draft"
   },
   {
     "id": "transit-platform",
@@ -1473,7 +1551,9 @@
     "sourceText": "Which platform does it leave from?",
     "literal": "¿De qué andén sale el tren?",
     "natural": "¿De qué andén sale?",
-    "pronunciation": ""
+    "pronunciation": "deh keh ahn-DEHN SAH-leh",
+    "moment": "routes",
+    "review": "draft"
   },
   {
     "id": "transit-departure-time",
@@ -1482,7 +1562,9 @@
     "sourceText": "What time does it leave?",
     "literal": "¿A qué hora sale?",
     "natural": "¿A qué hora sale?",
-    "pronunciation": ""
+    "pronunciation": "ah keh OH-rah SAH-leh",
+    "moment": "routes",
+    "review": "draft"
   },
   {
     "id": "transit-arrival-time",
@@ -1491,7 +1573,9 @@
     "sourceText": "What time does it arrive?",
     "literal": "¿A qué hora llega?",
     "natural": "¿A qué hora llega?",
-    "pronunciation": ""
+    "pronunciation": "ah keh OH-rah YEH-gah",
+    "moment": "routes",
+    "review": "draft"
   },
   {
     "id": "transit-how-long",
@@ -1500,7 +1584,9 @@
     "sourceText": "How long does it take?",
     "literal": "¿Cuánto tiempo se tarda?",
     "natural": "¿Cuánto tarda?",
-    "pronunciation": ""
+    "pronunciation": "KWAN-toh TAR-dah",
+    "moment": "routes",
+    "review": "draft"
   },
   {
     "id": "transit-find-taxi",
@@ -1509,7 +1595,9 @@
     "sourceText": "Where can I get a taxi?",
     "literal": "¿Dónde puedo tomar un taxi?",
     "natural": "¿Dónde hay taxis?",
-    "pronunciation": ""
+    "pronunciation": "DOHN-deh eye TAHK-sees",
+    "moment": "finding",
+    "review": "draft"
   },
   {
     "id": "transit-downtown",
@@ -1518,7 +1606,9 @@
     "sourceText": "Does this go downtown?",
     "literal": "¿Este autobús va al centro?",
     "natural": "¿Este va al centro?",
-    "pronunciation": ""
+    "pronunciation": "EHS-teh vah ahl SEHN-troh",
+    "moment": "routes",
+    "review": "draft"
   },
   {
     "id": "shopping-try-on",
@@ -1527,7 +1617,9 @@
     "sourceText": "Can I try this on?",
     "literal": "¿Podría probarme esto?",
     "natural": "¿Me lo puedo probar?",
-    "pronunciation": ""
+    "pronunciation": "meh loh PWEH-doh proh-BAR",
+    "moment": "browsing",
+    "review": "draft"
   },
   {
     "id": "shopping-too-expensive",
@@ -1536,7 +1628,9 @@
     "sourceText": "That's too expensive",
     "literal": "Es demasiado costoso",
     "natural": "Está muy caro",
-    "pronunciation": ""
+    "pronunciation": "ehs-TAH mwee KAH-roh",
+    "moment": "prices",
+    "review": "draft"
   },
   {
     "id": "shopping-bag",
@@ -1545,7 +1639,9 @@
     "sourceText": "Could I have a bag?",
     "literal": "¿Podría darme una bolsa?",
     "natural": "¿Me da una bolsa?",
-    "pronunciation": ""
+    "pronunciation": "meh dah OO-nah BOHL-sah",
+    "moment": "paying",
+    "review": "draft"
   },
   {
     "id": "shopping-receipt",
@@ -1554,7 +1650,9 @@
     "sourceText": "Could I have a receipt?",
     "literal": "¿Podría darme el recibo, por favor?",
     "natural": "¿Me da el recibo, por favor?",
-    "pronunciation": ""
+    "pronunciation": "meh dah ehl reh-SEE-boh, por fah-VOR",
+    "moment": "paying",
+    "review": "draft"
   },
   {
     "id": "shopping-closing-time",
@@ -1563,7 +1661,9 @@
     "sourceText": "What time do you close?",
     "literal": "¿A qué hora cierra la tienda?",
     "natural": "¿A qué hora cierran?",
-    "pronunciation": ""
+    "pronunciation": "ah keh OH-rah see-EH-rrahn",
+    "moment": "browsing",
+    "review": "draft"
   },
   {
     "id": "lodging-rooms-available",
@@ -1572,7 +1672,9 @@
     "sourceText": "Do you have any rooms available?",
     "literal": "¿Tienen habitaciones disponibles?",
     "natural": "¿Tienen habitaciones disponibles?",
-    "pronunciation": ""
+    "pronunciation": "tee-EH-nehn ah-bee-tah-see-OH-nehs dees-poh-NEE-blehs",
+    "moment": "check-in",
+    "review": "draft"
   },
   {
     "id": "lodging-two-nights",
@@ -1581,7 +1683,9 @@
     "sourceText": "A room for two nights, please",
     "literal": "Quisiera una habitación para dos noches",
     "natural": "Una habitación para dos noches, por favor",
-    "pronunciation": ""
+    "pronunciation": "OO-nah ah-bee-tah-see-OHN PAH-rah dohs NOH-chehs, por fah-VOR",
+    "moment": "check-in",
+    "review": "draft"
   },
   {
     "id": "lodging-call-taxi",
@@ -1590,7 +1694,9 @@
     "sourceText": "Could you call me a taxi?",
     "literal": "¿Podría llamar un taxi, por favor?",
     "natural": "¿Me puede llamar un taxi?",
-    "pronunciation": ""
+    "pronunciation": "meh PWEH-deh yah-MAR oon TAHK-see",
+    "moment": "check-out",
+    "review": "draft"
   },
   {
     "id": "lodging-key-not-working",
@@ -1599,7 +1705,9 @@
     "sourceText": "My room key doesn't work",
     "literal": "La llave de mi habitación no funciona",
     "natural": "La llave de mi cuarto no funciona",
-    "pronunciation": ""
+    "pronunciation": "lah YAH-veh deh mee KWAR-toh noh foonk-see-OH-nah",
+    "moment": "room-problems",
+    "review": "draft"
   },
   {
     "id": "lodging-no-hot-water",
@@ -1608,7 +1716,9 @@
     "sourceText": "There's no hot water",
     "literal": "No hay agua caliente",
     "natural": "No hay agua caliente",
-    "pronunciation": ""
+    "pronunciation": "noh eye AH-gwah kah-lee-EHN-teh",
+    "moment": "room-problems",
+    "review": "draft"
   },
   {
     "id": "emergency-call-police",
@@ -1617,7 +1727,9 @@
     "sourceText": "Call the police",
     "literal": "Llame a la policía",
     "natural": "Llame a la policía",
-    "pronunciation": ""
+    "pronunciation": "YAH-meh ah lah poh-lee-SEE-ah",
+    "moment": "getting-help",
+    "review": "draft"
   },
   {
     "id": "emergency-accident",
@@ -1626,7 +1738,9 @@
     "sourceText": "There's been an accident",
     "literal": "Ha ocurrido un accidente",
     "natural": "Hubo un accidente",
-    "pronunciation": ""
+    "pronunciation": "OO-boh oon ahk-see-DEHN-teh",
+    "moment": "getting-help",
+    "review": "draft"
   },
   {
     "id": "emergency-feel-sick",
@@ -1635,7 +1749,9 @@
     "sourceText": "I don't feel well",
     "literal": "No me siento bien",
     "natural": "No me siento bien",
-    "pronunciation": ""
+    "pronunciation": "noh meh see-EHN-toh bee-EHN",
+    "moment": "medical",
+    "review": "draft"
   },
   {
     "id": "emergency-pharmacy",
@@ -1644,7 +1760,9 @@
     "sourceText": "Where is the nearest pharmacy?",
     "literal": "¿Dónde queda la farmacia más cercana?",
     "natural": "¿Dónde hay una farmacia cerca?",
-    "pronunciation": ""
+    "pronunciation": "DOHN-deh eye OO-nah far-MAH-see-ah SEHR-kah",
+    "moment": "medical",
+    "review": "draft"
   },
   {
     "id": "emergency-diabetes",
@@ -1653,7 +1771,9 @@
     "sourceText": "I have diabetes",
     "literal": "Tengo diabetes",
     "natural": "Tengo diabetes",
-    "pronunciation": ""
+    "pronunciation": "TEHN-goh dee-ah-BEH-tehs",
+    "moment": "medical",
+    "review": "draft"
   },
   {
     "id": "emergency-leave-me-alone",
@@ -1662,7 +1782,9 @@
     "sourceText": "Leave me alone",
     "literal": "Por favor, déjeme en paz",
     "natural": "Déjeme en paz",
-    "pronunciation": ""
+    "pronunciation": "DEH-heh-meh ehn pahs",
+    "moment": "getting-help",
+    "review": "draft"
   },
   {
     "id": "emergency-english-speaker",
@@ -1671,7 +1793,9 @@
     "sourceText": "I need someone who speaks English",
     "literal": "Necesito a una persona que hable inglés",
     "natural": "Necesito a alguien que hable inglés",
-    "pronunciation": ""
+    "pronunciation": "neh-seh-SEE-toh ah AHL-gyehn keh AH-bleh een-GLEHS",
+    "moment": "getting-help",
+    "review": "draft"
   },
   {
     "id": "emergency-embassy",
@@ -1680,7 +1804,9 @@
     "sourceText": "I need to contact my embassy",
     "literal": "Necesito comunicarme con mi embajada",
     "natural": "Necesito comunicarme con mi embajada",
-    "pronunciation": ""
+    "pronunciation": "neh-seh-SEE-toh koh-moo-nee-KAR-meh kohn mee ehm-bah-HAH-dah",
+    "moment": "loss",
+    "review": "draft"
   },
   {
     "id": "general-bathroom",
@@ -1748,74 +1874,90 @@
   {
     "id": "general-far",
     "locale": "es-419",
-    "category": "general",
+    "category": "transit",
     "sourceText": "Is it far from here?",
     "literal": "¿Está lejos de aquí?",
     "natural": "¿Queda lejos?",
-    "pronunciation": ""
+    "pronunciation": "KEH-dah LEH-hohs",
+    "moment": "finding",
+    "review": "draft"
   },
   {
     "id": "general-atm",
     "locale": "es-419",
-    "category": "general",
+    "category": "shopping",
     "sourceText": "Where is the ATM?",
     "literal": "¿Dónde está el cajero automático?",
     "natural": "¿Dónde hay un cajero?",
-    "pronunciation": ""
+    "pronunciation": "DOHN-deh eye oon kah-HEH-roh",
+    "moment": "cash",
+    "review": "draft"
   },
   {
     "id": "general-wifi",
     "locale": "es-419",
-    "category": "general",
+    "category": "lodging",
     "sourceText": "Is there Wi-Fi?",
     "literal": "¿Tienen conexión Wi-Fi?",
     "natural": "¿Hay Wi-Fi?",
-    "pronunciation": ""
+    "pronunciation": "eye WEE-fee",
+    "moment": "check-in",
+    "review": "draft"
   },
   {
     "id": "general-time",
     "locale": "es-419",
-    "category": "general",
+    "category": "transit",
     "sourceText": "What time is it?",
     "literal": "¿Qué hora es?",
     "natural": "¿Qué hora es?",
-    "pronunciation": ""
+    "pronunciation": "keh OH-rah ehs",
+    "moment": "routes",
+    "review": "draft"
   },
   {
     "id": "general-sim-card",
     "locale": "es-419",
-    "category": "general",
+    "category": "shopping",
     "sourceText": "Where can I buy a SIM card?",
     "literal": "¿Dónde puedo comprar una tarjeta SIM?",
     "natural": "¿Dónde puedo comprar un chip?",
-    "pronunciation": ""
+    "pronunciation": "DOHN-deh PWEH-doh kohm-PRAR oon cheep",
+    "moment": "browsing",
+    "review": "draft"
   },
   {
     "id": "general-photo",
     "locale": "es-419",
-    "category": "general",
+    "category": "greetings",
     "sourceText": "Could you take a photo of us?",
     "literal": "¿Podría tomarnos una fotografía?",
     "natural": "¿Nos puede tomar una foto?",
-    "pronunciation": ""
+    "pronunciation": "nohs PWEH-deh toh-MAR OO-nah FOH-toh",
+    "moment": "courtesy",
+    "review": "draft"
   },
   {
     "id": "general-exchange-money",
     "locale": "es-419",
-    "category": "general",
+    "category": "shopping",
     "sourceText": "Where can I exchange money?",
     "literal": "¿Dónde puedo cambiar dinero?",
     "natural": "¿Dónde puedo cambiar dinero?",
-    "pronunciation": ""
+    "pronunciation": "DOHN-deh PWEH-doh kahm-bee-AR dee-NEH-roh",
+    "moment": "cash",
+    "review": "draft"
   },
   {
     "id": "general-dollars",
     "locale": "es-419",
-    "category": "general",
+    "category": "shopping",
     "sourceText": "Do you accept dollars?",
     "literal": "¿Aceptan dólares estadounidenses?",
     "natural": "¿Aceptan dólares?",
-    "pronunciation": ""
+    "pronunciation": "ah-SEHP-tahn DOH-lah-rehs",
+    "moment": "cash",
+    "review": "draft"
   },
   {
     "id": "general-can-you-help",

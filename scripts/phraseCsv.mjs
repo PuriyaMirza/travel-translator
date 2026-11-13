@@ -11,6 +11,8 @@ const COLUMNS = [
   "literal",
   "pronunciation",
   "cultural_note",
+  "moment",
+  "review",
 ];
 
 /** Minimal RFC 4180 parser: quoted fields, doubled quotes, CRLF or LF. */
@@ -72,6 +74,10 @@ export function readPhraseCsvs(dir = "data/phrases") {
         natural: r.natural,
         culturalNote: r.cultural_note,
         pronunciation: r.pronunciation,
+        // Sub-group within the category (SPEC.md §14). Empty = ungrouped.
+        moment: r.moment,
+        // "draft" until a fluent speaker has read the row; empty means "ok".
+        review: r.review === "draft" ? "draft" : "ok",
         sortOrder: index,
       });
     });

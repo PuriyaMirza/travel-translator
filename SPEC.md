@@ -666,7 +666,7 @@ A **moment** is a sub-group within a category ("Ordering", "Paying"). In code it
 - Moment slugs are lowercase English and permanent, with labels in `src/lib/labels.ts` (section 2, rule 3). They are unique within a category, not globally, so data keys on `category + moment`. The ordered list per category lives in `src/lib/moments.ts`.
 - `phrases.moment` is nullable. A phrase with none falls into an unlabelled group at the end, so locales without moments keep working.
 - The category page stays one scrolling page. Under the banner, a sticky row of chips jumps to each group; each group is led by an eyebrow heading. Nothing is hidden behind a tap.
-- Every es-419 preset has a pronunciation guide before moments ship, so all 100 phrases show, not the 50 that had guides.
+- Every es-419 preset has a pronunciation guide before moments ship, so all 100 phrases show, not the 50 that had guides. Eight `general` phrases that were not essentials had no page to appear on; they keep their ids and move to the category a traveller would look in (for example "Where is the ATM?" to shopping).
 
 ### Likely replies
 
@@ -702,7 +702,8 @@ Spanish written for M8 ships before a fluent speaker has read it, and is correct
 
 - Every authored row (phrase, reply, slot option) carries `review`: `draft` until a fluent speaker has read it, then `ok`.
 - A phrase that is **high-stakes** and has any `draft` text shows a small alert icon (lucide `CircleAlert`) beside it. Activating it opens a short popover: "This text is still a draft. A fluent speaker hasn't checked it yet." High-stakes means the `emergency` category, the `dietary` moment, and any template about allergies or medical needs; the test lives in one function in `src/lib/review.ts`.
-- Each phase that authors Spanish also writes `docs/review/<phase>.md`: a table of English, Spanish, pronunciation and an empty reviewer-notes column, for the owner to go through with a fluent speaker. Corrections come back as CSV edits that flip `review` to `ok`.
+- `docs/review/spanish-review.md` lists everything still `draft`: English, Spanish, pronunciation and an empty reviewer-notes column, for the owner to go through with a fluent speaker. It is generated from the CSVs by `scripts/build-review-doc.mjs` and regenerated in every phase that authors Spanish, so it is always the current list. Corrections come back as CSV edits that clear `review`.
+- A phrase saved to the vault keeps its words but not its flag, so the vault matches saved copies back to draft presets by text and marks those too.
 
 Model-generated translations are not marked. They are generated on demand and were never presented as reviewed.
 

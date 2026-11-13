@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useState } from "react";
+import { draftTextKey } from "@/lib/review";
 import { BookmarkPlus } from "lucide-react";
 import { CATEGORIES, type Category } from "@/lib/categories";
 import { categoryLabel } from "@/lib/labels";
@@ -19,7 +20,7 @@ import { PhraseCardSkeleton } from "./PhraseCardSkeleton";
  * The vault list (SPEC.md §6, §13): category and trip filters (they combine) plus the three list states —
  * loading skeletons, an empty state that invites action, and an error card.
  */
-export function VaultList() {
+export function VaultList({ draftNoticeKeys = [] }: { /** Text keys of presets still marked as draft (SPEC.md §14). */ draftNoticeKeys?: string[] }) {
   const { state, reload } = useSavedPhrases();
   const { data: session, isPending } = authClient.useSession();
   const tripPacks = useTripPacks();
@@ -135,7 +136,7 @@ export function VaultList() {
               };
               return (
                 <li key={saved.id}>
-                  <PhraseCard phrase={phrase} />
+                  <PhraseCard phrase={phrase} draftNotice={draftNoticeKeys.includes(draftTextKey(phrase))} />
                 </li>
               );
             })}

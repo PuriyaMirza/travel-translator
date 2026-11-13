@@ -21,11 +21,11 @@ const statements = [...byLocale].map(([locale, rows]) => {
       (p) =>
         `  (${[p.id, p.locale, p.category, p.sourceText, p.literal, p.natural, p.culturalNote, p.pronunciation]
           .map(q)
-          .join(", ")}, ${p.sortOrder})`,
+          .join(", ")}, ${p.sortOrder}, ${p.moment ? q(p.moment) : "null"}, ${q(p.review)})`,
     )
     .join(",\n");
   return `-- ${locale}: ${rows.length} phrases
-insert into phrases (id, locale, category, source_text, literal, natural_text, cultural_note, pronunciation, sort_order)
+insert into phrases (id, locale, category, source_text, literal, natural_text, cultural_note, pronunciation, sort_order, moment, review)
 values
 ${values}
 on conflict (id, locale) do update set
@@ -35,7 +35,9 @@ on conflict (id, locale) do update set
   natural_text = excluded.natural_text,
   cultural_note = excluded.cultural_note,
   pronunciation = excluded.pronunciation,
-  sort_order = excluded.sort_order;`;
+  sort_order = excluded.sort_order,
+  moment = excluded.moment,
+  review = excluded.review;`;
 });
 
 mkdirSync("db/seed", { recursive: true });
