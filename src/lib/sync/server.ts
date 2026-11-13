@@ -135,36 +135,47 @@ const activeColumnCache = new Map<string, Promise<ActiveColumn[]>>();
 /**
  * The columns to read and write for a table: the fixed ones, plus each
  * optional column the database actually has. Checked once per server
- * instance and cached; a failed check is not cached, so it is retried.
+ * instance and cached.
+ *
+ * The check must never be able to break sync. If it fails for any reason,
+ * this answers with the fixed columns only — exactly what sync did before
+ * optional columns existed — and does not cache, so the next request retries.
  */
-function activeColumns(config: TableConfig): Promise<ActiveColumn[]> {
-  const cached = activeColumnCache.get(config.table);
-  if (cached) return cached;
-
+async function activeColumns(config: TableConfig): Promise<ActiveColumn[]> {
   const fixed: ActiveColumn[] = Object.entries(config.columns).map(([field, column]) => ({ field, column }));
   const optional = Object.entries(config.optionalColumns ?? {});
-  const lookup: Promise<ActiveColumn[]> =
-    optional.length === 0
-      ? Promise.resolve(fixed)
-      : getSql()
-          .query(
-            `select column_name from information_schema.columns
-             where table_schema = current_schema() and table_name = $1 and column_name = any($2)`,
-            [config.table, optional.map(([, o]) => o.column)],
-          )
-          .then((rows) => {
-            const present = new Set(rows.map((r) => r.column_name as string));
-            return [
-              ...fixed,
-              ...optional
-                .filter(([, o]) => present.has(o.column))
-                .map(([field, o]) => ({ field, column: o.column, cast: o.cast, fallback: o.fallback })),
-            ];
-          });
+  if (optional.length === 0) return fixed;
 
-  activeColumnCache.set(config.table, lookup);
-  lookup.catch(() => activeColumnCache.delete(config.table));
-  return lookup;
+  let lookup = activeColumnCache.get(config.table);
+  if (!lookup) {
+    // One placeholder per name; the names are constants from the config above.
+    const names = optional.map(([, o]) => o.column);
+    const placeholders = names.map((_, i) => "$" + (i + 2)).join(", ");
+    lookup = getSql()
+      .query(
+        `select column_name from information_schema.columns
+         where table_schema = current_schema() and table_name = $1 and column_name in (${placeholders})`,
+        [config.table, ...names],
+      )
+      .then((rows) => {
+        const present = new Set(rows.map((r) => r.column_name as string));
+        return [
+          ...fixed,
+          ...optional
+            .filter(([, o]) => present.has(o.column))
+            .map(([field, o]) => ({ field, column: o.column, cast: o.cast, fallback: o.fallback })),
+        ];
+      });
+    activeColumnCache.set(config.table, lookup);
+  }
+
+  try {
+    return await lookup;
+  } catch (error) {
+    activeColumnCache.delete(config.table);
+    console.error(`Optional-column check failed for ${config.table}; syncing fixed columns only:`, error);
+    return fixed;
+  }
 }
 
 /** The dedupe key computed in JS, matching `dedupe.expression` in SQL. */

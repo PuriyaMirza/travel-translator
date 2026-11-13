@@ -554,7 +554,7 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
 - **Incomplete:**
   - **Migrations 003 and 004 are not applied to Neon.** Until 004 is, a saved phrase's replies stay on the device that saved it; other devices get the phrase without them. Nothing errors.
   - **The reply prompt has not run against the live model**, for the reason logged in phase 2 (no key here; the preview key is rejected). The UI was tested with a mocked `/api/translate` response. Trip-pack latency with replies is therefore unmeasured, and the plan's "take replies out of trip packs if it hurts" check has not happened.
-  - The optional-column SQL in `sync/server.ts` was type-checked and read through, but not run against a database, with or without the column.
+  - The optional-column SQL in `sync/server.ts` was type-checked and read through, but not run against a database, with or without the column. To bound that risk, a failed column check logs and falls back to the fixed columns, which is exactly the SQL sync ran before this phase.
   - The eight pinned essentials have no replies: their list has no room for them.
   - Replies avoid currencies and place names, so price replies are generic ("That one costs a hundred").
   - An older cached client that pushes an edit to a saved phrase will overwrite that phrase's server-side replies with an empty list once 004 is applied.
