@@ -1,40 +1,23 @@
 import Link from "next/link";
 import { ArrowRight, Languages } from "lucide-react";
 import { brand } from "@/lib/brand";
-import { dailyPhrase } from "@/lib/dailyPhrase";
 import { ESSENTIAL_PHRASES } from "@/lib/essentials";
 import { localeLabel } from "@/lib/labels";
 import { CategoryGrid } from "@/components/CategoryGrid";
-import { DailyPhraseCard } from "@/components/DailyPhraseCard";
 import { EssentialPhrases } from "@/components/EssentialPhrases";
 import { Eyebrow } from "@/components/Eyebrow";
 import { OnboardingGate } from "@/components/OnboardingGate";
-import { TripRow } from "@/components/TripRow";
-
-/**
- * Regenerate hourly so the phrase of the day rolls over without a redeploy.
- * The page stays static between regenerations, which is what keeps it usable
- * on a bad connection.
- */
-export const revalidate = 3600;
-
-/** MM.DD.YYYY in UTC — the same day `dailyPhrase()` picks by. */
-function formatDailyDate(now: Date): string {
-  const pad = (n: number) => String(n).padStart(2, "0");
-  return `${pad(now.getUTCMonth() + 1)}.${pad(now.getUTCDate())}.${now.getUTCFullYear()}`;
-}
+import { YourTripCard } from "@/components/YourTripCard";
 
 /**
  * Home (Figma: Language App › "Stamp blues palette · A Light editorial · Home").
- * Order: eyebrow, title, translate entry, essentials, daily phrase, situations.
- * The essentials list is not in the Figma frame; it sits above the daily phrase
- * because it is what someone mid-conversation needs first. The trip row (from
- * onboarding) sits under the translate entry and renders nothing until a
- * destination is set.
+ * Order: eyebrow, title, translate entry, essentials, your trip, situations.
+ * The essentials list is not in the Figma frame; it sits above the feature
+ * card because it is what someone mid-conversation needs first. The mint
+ * feature card is "Your trip" (SPEC.md §14), which replaced the daily phrase.
+ * Nothing on this page depends on the date or the network, so it is static.
  */
 export default function Home() {
-  const now = new Date();
-
   return (
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-[18px] px-5 pt-[22px] pb-8">
       <OnboardingGate />
@@ -51,11 +34,9 @@ export default function Home() {
         <ArrowRight aria-hidden className="size-[18px] shrink-0" />
       </Link>
 
-      <TripRow locale={brand.defaultLocale} />
-
       <EssentialPhrases phrases={ESSENTIAL_PHRASES} />
 
-      <DailyPhraseCard phrase={dailyPhrase(now)} date={formatDailyDate(now)} />
+      <YourTripCard locale={brand.defaultLocale} />
 
       <section aria-labelledby="situations" className="space-y-[18px]">
         <Eyebrow as="h2" id="situations">

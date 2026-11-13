@@ -1,7 +1,8 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { brand } from "@/lib/brand";
+import { DEFAULT_TRAVELLER, type Traveller } from "@/lib/traveller";
 import type { SpeakerGender, UserSettings } from "@/lib/types";
 import { localDb, notifyLocalChange, onLocalChange } from "./db";
 
@@ -63,4 +64,24 @@ export function useLocalSettings(): UserSettings | null {
   }, []);
 
   return settings;
+}
+
+/**
+ * The traveller as the model calls need it (SPEC.md §14): speaker gender plus
+ * the onboarding answers. Neutral with no answers until the first read.
+ */
+export function useTraveller(): Traveller {
+  const settings = useLocalSettings();
+  return useMemo(
+    () =>
+      settings
+        ? {
+            speakerGender: settings.speakerGender,
+            destination: settings.destination,
+            travelMonth: settings.travelMonth,
+            spanishComfort: settings.spanishComfort,
+          }
+        : DEFAULT_TRAVELLER,
+    [settings],
+  );
 }

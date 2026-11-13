@@ -8,7 +8,7 @@ import {
   TRIP_TITLE_MAX,
   TripPackRequestError,
 } from "@/lib/tripPack";
-import { SPEAKER_GENDERS, type SpeakerGender } from "@/lib/types";
+import { parseTraveller } from "@/lib/traveller";
 
 /**
  * POST /api/trip-pack — SPEC.md §13. The first route that knows who is
@@ -52,11 +52,11 @@ export async function POST(request: NextRequest) {
     return invalid("That language isn't available yet.");
   }
 
-  // Absent means neutral; present but not one of the three slugs is a client bug.
-  const speakerGender = body.speakerGender === undefined ? "neutral" : body.speakerGender;
-  if (!SPEAKER_GENDERS.includes(speakerGender as SpeakerGender)) {
-    return invalid("Unknown speaker setting. Choose neutral, feminine or masculine.");
-  }
+  // Speaker gender plus the onboarding answers (SPEC.md §14). A bad
+  // speakerGender is rejected; an unknown destination, month or comfort level
+  // is dropped.
+  const parsed = parseTraveller(body, locale);
+  if (!parsed.ok) return invalid(parsed.message);
 
   // After validation, so a rejected request doesn't spend one of the 3.
   if (isRateLimited(auth.userId, "tripPack")) {
@@ -67,7 +67,7 @@ export async function POST(request: NextRequest) {
   }
 
   try {
-    const phrases = await generateTripPack(title, description, locale, speakerGender as SpeakerGender);
+    const phrases = await generateTripPack(title, description, locale, parsed.traveller);
     return NextResponse.json({ phrases });
   } catch (error) {
     if (error instanceof TripPackRequestError) {

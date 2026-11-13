@@ -6,7 +6,7 @@ import { useState } from "react";
 import { Loader2 } from "lucide-react";
 import { brand } from "@/lib/brand";
 import { SHOW_CARD_KIND_LABELS, SHOW_CARD_STARTERS } from "@/lib/labels";
-import { useSpeakerGender } from "@/lib/local/settings";
+import { useTraveller } from "@/lib/local/settings";
 import { createShowCard, listShowCards, renameShowCard, updateShowCard } from "@/lib/local/showCards";
 import { OFFLINE_CREATE_MESSAGE, OFFLINE_EDIT_MESSAGE } from "@/lib/messages";
 import { translateCard } from "@/lib/showCardTranslate";
@@ -38,7 +38,7 @@ const normalize = (text: string) => text.trim().toLowerCase();
 export function ShowCardForm({ kind, card }: { kind: ShowCardKind; card?: ShowCard }) {
   const router = useRouter();
   const offline = useIsOffline();
-  const { speakerGender } = useSpeakerGender();
+  const traveller = useTraveller();
   const [title, setTitle] = useState(card?.title ?? "");
   const [text, setText] = useState(card?.sourceText ?? SHOW_CARD_STARTERS.en[kind]);
   const [saving, setSaving] = useState(false);
@@ -73,7 +73,7 @@ export function ShowCardForm({ kind, card }: { kind: ShowCardKind; card?: ShowCa
     }
 
     setSaving(true);
-    const result = await translateCard(kind, cleanText, speakerGender, card?.locale ?? brand.defaultLocale);
+    const result = await translateCard(kind, cleanText, traveller, card?.locale ?? brand.defaultLocale);
     if (!result.ok) {
       setSaving(false);
       return setFailure(result.message);

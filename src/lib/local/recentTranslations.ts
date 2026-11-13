@@ -1,6 +1,7 @@
 "use client";
 
 import { useMemo, useSyncExternalStore } from "react";
+import type { Traveller } from "@/lib/traveller";
 import type { Phrase, SpeakerGender } from "@/lib/types";
 
 /*
@@ -31,9 +32,17 @@ export interface RecentTranslation {
  * SPEC.md §13 keys on text + locale only; gender is in the key here because
  * the translation differs by it (SPEC.md §12), and serving a masculine
  * result to a feminine speaker offline would be wrong.
+ *
+ * Destination and Spanish level are in it for the same reason (SPEC.md §14):
+ * an answer written for Mexico must not be served for Argentina. With neither
+ * set, the key is the one used before M8, so older entries still match.
  */
-export function recentKey(sourceText: string, locale: string, speakerGender: SpeakerGender) {
-  return `${locale}|${speakerGender}|${sourceText.trim().toLowerCase()}`;
+export function recentKey(sourceText: string, locale: string, traveller: Traveller) {
+  const hints =
+    traveller.destination || traveller.spanishComfort
+      ? `${traveller.destination ?? ""}/${traveller.spanishComfort ?? ""}|`
+      : "";
+  return `${locale}|${traveller.speakerGender}|${hints}${sourceText.trim().toLowerCase()}`;
 }
 
 function readRaw(): string | null {
@@ -65,28 +74,28 @@ export function listRecentTranslations(): RecentTranslation[] {
   return parse(readRaw());
 }
 
-/** The cached result for exactly this text, locale and gender, if any. */
+/** The cached result for exactly this text, locale and traveller, if any. */
 export function findRecentTranslation(
   sourceText: string,
   locale: string,
-  speakerGender: SpeakerGender,
+  traveller: Traveller,
 ): Phrase | undefined {
-  const key = recentKey(sourceText, locale, speakerGender);
+  const key = recentKey(sourceText, locale, traveller);
   return listRecentTranslations().find((e) => e.key === key)?.phrase;
 }
 
 /** Store a successful result at the front; a repeat replaces the older entry. */
 export function storeRecentTranslation(
   sourceText: string,
-  speakerGender: SpeakerGender,
+  traveller: Traveller,
   phrase: Phrase,
 ) {
-  const key = recentKey(sourceText, phrase.locale, speakerGender);
+  const key = recentKey(sourceText, phrase.locale, traveller);
   const entry: RecentTranslation = {
     key,
     sourceText: sourceText.trim(),
     locale: phrase.locale,
-    speakerGender,
+    speakerGender: traveller.speakerGender,
     phrase,
     savedAt: new Date().toISOString(),
   };

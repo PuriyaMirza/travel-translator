@@ -655,9 +655,9 @@ The mint feature card on Home. Rendered from IndexedDB, so it works offline and 
 | Has show cards | Up to three, as large tap targets that open show mode directly |
 | Has a trip pack | The latest pack's title and first three phrases, with a link to the vault filtered to that trip |
 | Has a destination, no pack | An invitation to build a pack for that trip → `/trip`, prefilled |
-| Nothing yet | An invitation to make a first show card, with the five kind tiles |
+| Nothing yet | An invitation to make a first show card, with the five kinds as compact chips |
 
-The first two stack when both apply. The heading carries the destination and month where the date used to sit. The separate trip row on Home folds into this card. While IndexedDB loads the card holds a fixed height.
+The card always has two blocks, cards then trip phrases, each showing its content or its invitation. The heading carries the destination and month where the date used to sit. `/vault?trip=<id>` opens the vault with that trip selected. The separate trip row on Home folds into this card. While IndexedDB loads the card holds a fixed height.
 
 ### Moments
 

@@ -4,8 +4,17 @@ import { z } from "zod/v4";
 import { isCategory } from "./categories";
 import { localeName } from "./locale";
 import { PRESET_PHRASES } from "./phrases";
-import { client, EFFORT, MODEL, sharedPromptRules, TranslationSchema } from "./translate";
-import type { Phrase, SpeakerGender } from "./types";
+import { destinationName } from "./destinations";
+import {
+  client,
+  EFFORT,
+  MODEL,
+  sharedPromptRules,
+  TranslationSchema,
+  travellerRules,
+} from "./translate";
+import { travelMonthName, type Traveller } from "./traveller";
+import type { Phrase } from "./types";
 
 /**
  * The trip-pack backend (SPEC.md §13). Server-only, like `translate.ts`, whose
@@ -35,7 +44,7 @@ const REQUEST_OPTIONS = { timeout: 240_000, maxRetries: 0 };
 // enforced in `normalizeTripPack` instead.
 const TripPackSchema = z.object({ phrases: z.array(TranslationSchema) });
 
-function buildTripPackPrompt(locale: string, speakerGender: SpeakerGender): string {
+function buildTripPackPrompt(locale: string, traveller: Traveller): string {
   const presets = PRESET_PHRASES.map((p) => `- ${p.sourceText}`).join("\n");
 
   return `You are an expert linguist specializing in ${localeName(locale)} as spoken in
@@ -53,13 +62,13 @@ Rules:
 4. ${sharedPromptRules.pronunciation}
 5. ${sharedPromptRules.culturalNote}
 6. ${sharedPromptRules.category}
-7. ${sharedPromptRules.speakerGender(speakerGender)}
+7. ${sharedPromptRules.speakerGender(traveller.speakerGender)}
 8. Be specific to the described trip, not a generic phrasebook. A vegetarian
    gets "Does this have meat broth in it?", not "Where is the bathroom?"
 9. Do not repeat the phrases the app already ships. These are already covered:
 ${presets}
 10. Spread phrases across categories only as far as the trip warrants. Do not
-   pad a category to balance the set.
+   pad a category to balance the set.${travellerRules(locale, traveller, 11)}
 
 Example, for a trip described as "vegetarian, two weeks in Mexico City":
 
@@ -133,11 +142,30 @@ export function normalizeTripPack(
   return phrases.slice(0, TRIP_PACK_SIZE);
 }
 
+/**
+ * The user turn. The destination and month from onboarding (SPEC.md §14) go
+ * in as facts about the trip, ahead of the traveller's own words; both are
+ * resolved from validated values, never copied from the request.
+ */
+export function tripPackUserMessage(
+  title: string,
+  description: string,
+  locale: string,
+  traveller: Traveller,
+): string {
+  const lines = [`Trip: ${title}`];
+  const country = traveller.destination && destinationName(locale, traveller.destination);
+  if (country) lines.push(`Destination: ${country}`);
+  const month = traveller.travelMonth && travelMonthName(traveller.travelMonth);
+  if (month) lines.push(`Travelling: ${month}`);
+  return `${lines.join("\n")}\n\n${description}`;
+}
+
 export async function generateTripPack(
   title: string,
   description: string,
   locale: string,
-  speakerGender: SpeakerGender,
+  traveller: Traveller,
 ): Promise<Phrase[]> {
   let response;
   try {
@@ -145,8 +173,8 @@ export async function generateTripPack(
       {
         model: MODEL,
         max_tokens: MAX_TOKENS,
-        system: buildTripPackPrompt(locale, speakerGender),
-        messages: [{ role: "user", content: `Trip: ${title}\n\n${description}` }],
+        system: buildTripPackPrompt(locale, traveller),
+        messages: [{ role: "user", content: tripPackUserMessage(title, description, locale, traveller) }],
         output_config: {
           format: zodOutputFormat(TripPackSchema),
           effort: EFFORT,

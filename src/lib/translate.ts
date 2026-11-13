@@ -3,8 +3,10 @@ import { zodOutputFormat } from "@anthropic-ai/sdk/helpers/zod";
 import { z } from "zod/v4";
 import { brand } from "./brand";
 import { isCategory } from "./categories";
+import { destinationName } from "./destinations";
 import { localeName } from "./locale";
-import type { Phrase, SpeakerGender } from "./types";
+import { DEFAULT_TRAVELLER, type Traveller } from "./traveller";
+import type { Phrase, SpanishComfort, SpeakerGender } from "./types";
 
 /**
  * The translation backend (SPEC.md §8). Never imported by a client component —
@@ -101,9 +103,39 @@ export const sharedPromptRules = {
    agreement. If it is neutral, prefer constructions that avoid gendered
    agreement — "Tengo alergia a…" rather than "Soy alérgico a…" — and use
    the masculine form only where no natural neutral phrasing exists.`,
+  // SPEC.md §14. The name comes from destinations.ts, never from the request.
+  destination: (name: string) =>
+    `The traveler is going to ${name}. Keep "literal" neutral. In "natural",
+   where people in ${name} use a different everyday word or phrase from the
+   neutral one, use theirs, and say so in culturalNote in one sentence. Change
+   a word only when the neutral one would sound foreign or be misunderstood
+   there; do not add regional slang for colour.`,
+  comfort: {
+    none: `The traveler speaks no Spanish and will read "natural" aloud from the
+   pronunciation guide. Prefer the shortest phrasing that is still polite, and
+   where two phrasings are equally natural pick the one an English speaker
+   finds easier to pronounce.`,
+    basic: undefined,
+    conversational: `The traveler can hold a conversation in Spanish. "natural" may be
+   fuller and more idiomatic, and culturalNote may mention register.`,
+  } satisfies Record<SpanishComfort, string | undefined>,
 };
 
-function buildSystemPrompt(locale: string, speakerGender: SpeakerGender): string {
+/**
+ * The rules that depend on the traveller's onboarding answers (SPEC.md §14),
+ * numbered from `start`, or an empty string when there are none. Shared by
+ * the translate and trip-pack prompts.
+ */
+export function travellerRules(locale: string, traveller: Traveller, start: number): string {
+  const rules: string[] = [];
+  const name = traveller.destination && destinationName(locale, traveller.destination);
+  if (name) rules.push(sharedPromptRules.destination(name));
+  const comfort = traveller.spanishComfort && sharedPromptRules.comfort[traveller.spanishComfort];
+  if (comfort) rules.push(comfort);
+  return rules.map((rule, i) => `\n${start + i}. ${rule}`).join("");
+}
+
+function buildSystemPrompt(locale: string, traveller: Traveller): string {
   return `You are an expert linguist specializing in ${localeName(locale)} as spoken in
 everyday life. You are the translation backend for a travel phrasebook app.
 
@@ -117,7 +149,7 @@ Rules:
 4. ${sharedPromptRules.pronunciation}
 5. ${sharedPromptRules.culturalNote}
 6. ${sharedPromptRules.category}
-7. ${sharedPromptRules.speakerGender(speakerGender)}
+7. ${sharedPromptRules.speakerGender(traveller.speakerGender)}${travellerRules(locale, traveller, 8)}
 
 Examples:
 
@@ -178,7 +210,7 @@ export function normalizeTranslation(
 
 export async function translate(
   text: string,
-  speakerGender: SpeakerGender = "neutral",
+  traveller: Traveller = DEFAULT_TRAVELLER,
 ): Promise<Phrase> {
   const trimmed = text.trim();
   if (!trimmed) {
@@ -198,7 +230,7 @@ export async function translate(
     response = await client.messages.parse({
       model: MODEL,
       max_tokens: MAX_TOKENS,
-      system: buildSystemPrompt(locale, speakerGender),
+      system: buildSystemPrompt(locale, traveller),
       messages: [{ role: "user", content: trimmed }],
       output_config: {
         format: zodOutputFormat(TranslationSchema),
