@@ -6,7 +6,7 @@
 // Regenerate it whenever the CSVs change. A row leaves this document when its
 // `review` cell in the CSV is cleared.
 import { mkdirSync, writeFileSync } from "node:fs";
-import { readPhraseCsvs, readReplyCsvs } from "./phraseCsv.mjs";
+import { readPhraseCsvs, readReplyCsvs, readSlotCsvs } from "./phraseCsv.mjs";
 
 const LOCALE = "es-419";
 const cell = (text) => String(text ?? "").replace(/\|/g, "\\|").replace(/\r?\n/g, " ");
@@ -15,7 +15,9 @@ const cell = (text) => String(text ?? "").replace(/\|/g, "\\|").replace(/\r?\n/g
 const highStakes = (p) => p.category === "emergency" || (p.category === "dining" && p.moment === "dietary");
 
 const allPhrases = readPhraseCsvs();
-const drafts = allPhrases.filter((p) => p.locale === LOCALE && p.review === "draft");
+const drafts = allPhrases.filter(
+  (p) => p.locale === LOCALE && p.review === "draft" && !p.sourceText.includes("{slot}"),
+);
 const byCategory = Map.groupBy(drafts, (p) => p.category);
 
 let doc = `# Spanish review
@@ -63,6 +65,23 @@ What a local is likely to say back after the traveller says the phrase. The trav
   }
 }
 
+// Fill-in-the-blank options (SPEC.md §14).
+const draftOptions = readSlotCsvs(allPhrases).filter((o) => o.locale === LOCALE && o.review === "draft");
+if (draftOptions.length > 0) {
+  doc += `
+## Fill-in-the-blank phrases (${draftOptions.length} options)
+
+Each of these is one sentence with a blank, and a list of things that can go in it. The app never joins Spanish words itself: every option is written out whole, article and preposition included, so that it reads correctly in its sentence (*al maní*, *a los mariscos*). Please read each option **inside its sentence** and check the agreement.
+`;
+  for (const [phraseId, rows] of Map.groupBy(draftOptions, (o) => o.phraseId)) {
+    const p = phraseById.get(phraseId);
+    doc += `\n### ${cell(p.sourceText.replace("{slot}", "___"))}${highStakes(p) ? " — **High-stakes**" : ""}\n\nSpanish: **${cell(p.natural.replace("{slot}", "___"))}**${p.literal === p.natural ? "" : ` · More formal: ${cell(p.literal.replace("{slot}", "___"))}`} · Pronunciation: ${cell(p.pronunciation.replace("{slot}", "___"))}\n\n| English | Goes in the blank | Full sentence | Pronunciation of the blank | Reviewer notes |\n|---|---|---|---|---|\n`;
+    for (const o of rows) {
+      doc += `| ${cell(o.sourceText)} | ${cell(o.natural)}${o.literal === o.natural ? "" : ` *(formal: ${cell(o.literal)})*`} | ${cell(p.natural.replace("{slot}", o.natural))} | ${cell(o.pronunciation)} | |\n`;
+    }
+  }
+}
+
 mkdirSync("docs/review", { recursive: true });
 writeFileSync("docs/review/spanish-review.md", doc);
-console.log(`docs/review/spanish-review.md: ${drafts.length} draft phrases, ${draftReplies.length} draft replies`);
+console.log(`docs/review/spanish-review.md: ${drafts.length} draft phrases, ${draftReplies.length} draft replies, ${draftOptions.length} draft options`);

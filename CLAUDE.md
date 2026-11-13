@@ -125,11 +125,29 @@ proposal only.
   off these.
 - **Phrases:** `src/lib/phrases.ts` — reads the bundled
   `phrases.snapshot.json` (300 rows, 3 locales) and shows
-  the es-419 rows that have a pronunciation: all 100
-  since M8 (92 in the visible categories, 8 `general`
+  the es-419 rows that have a pronunciation: all 106
+  since M8 (98 in the visible categories, 8 `general`
   essentials). `src/lib/types.ts` `Phrase` requires
   `locale` on every record. Keep the snapshot out of
   client bundles: only server code imports `phrases.ts`.
+- **Phrase data:** three folders, one CSV per locale:
+  `data/phrases` (the phrases), `data/replies` (likely
+  replies), `data/slots` (fill-in-the-blank options).
+  After editing any of them run, in order,
+  `node scripts/export-phrase-snapshot.mjs --from-csv`,
+  `node scripts/build-phrase-seed.mjs` and
+  `node scripts/build-review-doc.mjs`. The scripts fail
+  on a reply or option that names a missing phrase.
+- **Fill-in-the-blank:** a phrase whose four text fields
+  each contain `{slot}` is a template (`src/lib/slot.ts`,
+  `SlotSentence.tsx`). Never assemble Spanish from parts:
+  each option is the whole fragment for its own template,
+  article and preposition included.
+- **Likely replies:** `Phrase.replies`, shown by
+  `LikelyReplies.tsx`. Presets carry authored ones; the
+  model returns them for translations and trip packs.
+  `saved_phrases.replies` is an optional column in
+  `sync/server.ts`, used only if the database has it.
 - **Moments:** `src/lib/moments.ts` — the sub-groups
   within a category ("Ordering", "Paying"), slugs unique
   per category. Never call them "situations": the CSV's

@@ -90,6 +90,65 @@ export function readReplyCsvs(phrases, dir = "data/replies") {
   return replies;
 }
 
+const SLOT_COLUMNS = ["phrase_id", "option_id", "sort_order", "english", "natural", "literal", "pronunciation", "review"];
+const SLOT = "{slot}";
+const slotCount = (text) => text.split(SLOT).length - 1;
+
+/**
+ * Every fill-in-the-blank option across every locale file in data/slots
+ * (SPEC.md §14), one file per locale. A template is a phrase whose English,
+ * natural, literal and pronunciation each contain `{slot}` exactly once.
+ *
+ * Throws on anything that would render a broken sentence: an option for a
+ * phrase that is not a template, a template with fewer than two options, a
+ * template missing the marker in one of its four fields, or an empty cell.
+ */
+export function readSlotCsvs(phrases, dir = "data/slots") {
+  const options = [];
+  for (const file of readdirSync(dir).filter((f) => f.endsWith(".csv")).sort()) {
+    const locale = file.replace(/\.csv$/, "");
+    const [header, ...rows] = parseCsv(readFileSync(join(dir, file), "utf8").replace(/^﻿/, ""));
+    if (header.join() !== SLOT_COLUMNS.join()) {
+      throw new Error(`${file}: expected columns ${SLOT_COLUMNS.join(",")}, got ${header.join(",")}`);
+    }
+    for (const cells of rows) {
+      const r = Object.fromEntries(SLOT_COLUMNS.map((c, i) => [c, cells[i]]));
+      if (!r.option_id || !r.english || !r.natural || !r.literal || !r.pronunciation) {
+        throw new Error(`${file}: empty cell in option "${r.option_id}" of "${r.phrase_id}"`);
+      }
+      options.push({
+        phraseId: r.phrase_id,
+        locale,
+        id: r.option_id,
+        sortOrder: Number(r.sort_order),
+        sourceText: r.english,
+        natural: r.natural,
+        literal: r.literal,
+        pronunciation: r.pronunciation,
+        review: r.review === "draft" ? "draft" : "ok",
+      });
+    }
+  }
+
+  const counts = Map.groupBy(options, (o) => `${o.locale}|${o.phraseId}`);
+  const byKey = new Map(phrases.map((p) => [`${p.locale}|${p.id}`, p]));
+  for (const key of counts.keys()) {
+    if (!byKey.has(key)) throw new Error(`data/slots: options for unknown phrase "${key}"`);
+  }
+  for (const [key, p] of byKey) {
+    const fields = [p.sourceText, p.natural, p.literal, p.pronunciation].map(slotCount);
+    const isTemplate = fields.some((n) => n > 0);
+    const n = counts.get(key)?.length ?? 0;
+    if (!isTemplate && n > 0) throw new Error(`data/slots: "${key}" has options but no ${SLOT} marker`);
+    if (!isTemplate) continue;
+    if (fields.some((c) => c !== 1)) {
+      throw new Error(`"${key}": ${SLOT} must appear exactly once in english, natural, literal and pronunciation`);
+    }
+    if (n < 2) throw new Error(`"${key}" is a template but has ${n} option(s); it needs at least two`);
+  }
+  return options;
+}
+
 /** Every phrase row across every locale file, in file order. */
 export function readPhraseCsvs(dir = "data/phrases") {
   const phrases = [];

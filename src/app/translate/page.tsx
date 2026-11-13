@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import type { Metadata } from "next";
 import { TranslateForm } from "@/components/TranslateForm";
 import { Eyebrow } from "@/components/Eyebrow";
@@ -14,7 +15,10 @@ export default function TranslatePage() {
     <main className="mx-auto flex w-full max-w-3xl flex-1 flex-col gap-[18px] px-5 pt-[22px] pb-8">
       <Eyebrow>Translate</Eyebrow>
       <h1 className="text-display font-display text-ink">Say it your way.</h1>
-      <TranslateForm />
+      {/* TranslateForm reads `?text=` from the URL, which needs a boundary on a static page. */}
+      <Suspense>
+        <TranslateForm />
+      </Suspense>
     </main>
   );
 }

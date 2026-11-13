@@ -690,9 +690,9 @@ interface LikelyReply {
 **The app never assembles Spanish from parts.** Articles and contractions change with the noun (*el baño*, *la estación*, *al baño*), so every option is written out as a complete fragment for its own template, article included, in all four text fields. There is no shared vocabulary list.
 
 - A template is a normal phrase whose `sourceText`, `literal`, `natural` and `pronunciation` each contain one `{slot}` marker. One slot per phrase.
-- Options are authored in `data/phrases/slots.<locale>.csv`, stored in `phrase_slot_options`, bundled in the snapshot.
+- Options are authored in `data/slots/<locale>.csv`, stored in `phrase_slot_options` (migration 005), bundled in the snapshot. The data scripts refuse a template that lacks the marker in any of its four fields or has fewer than two options.
 - The blank renders inside the sentence as a chip showing the current option. It is a native `<select>`, so phones open their own picker. Choosing an option updates the English, the Spanish, the pronunciation and what the speak button says, on the device.
-- The last option is always "Something else…", which opens `/translate` with the English sentence prefilled. That path needs signal.
+- The last option is always "Something else…", which opens `/translate?text=…` with the English sentence prefilled, blank included, for the user to complete. That path needs signal.
 - Saving a filled phrase saves the resolved sentence as an ordinary `SavedPhrase`. Templates never reach the vault or the sync layer.
 - Not in this version: two blanks in one phrase, free-typed blanks, numbers and times.
 

@@ -7,7 +7,7 @@
 // --from-csv is for machines without database access. It produces the same
 // file as long as the seed (scripts/build-phrase-seed.mjs) has been applied.
 import { writeFileSync } from "node:fs";
-import { readPhraseCsvs, readReplyCsvs } from "./phraseCsv.mjs";
+import { readPhraseCsvs, readReplyCsvs, readSlotCsvs } from "./phraseCsv.mjs";
 
 async function fromNeon() {
   const { neon } = await import("@neondatabase/serverless");
@@ -30,9 +30,25 @@ async function repliesFromNeon() {
     from phrase_replies`;
 }
 
+async function slotOptionsFromNeon() {
+  const { neon } = await import("@neondatabase/serverless");
+  const sql = neon(process.env.DATABASE_URL);
+  return sql`
+    select phrase_id as "phraseId", locale, option_id as "id", sort_order as "sortOrder",
+           source_text as "sourceText", natural_text as "natural", literal, pronunciation, review
+    from phrase_slot_options`;
+}
+
 const fromCsv = process.argv.includes("--from-csv");
 const rows = fromCsv ? readPhraseCsvs() : await fromNeon();
 const replyRows = fromCsv ? readReplyCsvs(rows) : await repliesFromNeon();
+
+const slotRows = fromCsv ? readSlotCsvs(rows) : await slotOptionsFromNeon();
+// phrase key -> its fill-in-the-blank options in order (SPEC.md §14).
+const optionsByPhrase = Map.groupBy(
+  slotRows.toSorted((a, b) => a.sortOrder - b.sortOrder),
+  (o) => `${o.locale}|${o.phraseId}`,
+);
 
 // phrase key -> its replies in order (SPEC.md §14 "Likely replies").
 const repliesByPhrase = Map.groupBy(
@@ -44,8 +60,12 @@ const snapshot = rows
   .toSorted((a, b) => a.locale.localeCompare(b.locale) || a.sortOrder - b.sortOrder)
   .map(({ id, locale, category, sourceText, literal, natural, culturalNote, pronunciation, moment, review }) => {
     const replies = repliesByPhrase.get(`${locale}|${id}`) ?? [];
-    // One flag per phrase in the bundle: draft if the row or any reply is.
-    const draft = review === "draft" || replies.some((r) => r.review === "draft");
+    const options = optionsByPhrase.get(`${locale}|${id}`) ?? [];
+    // One flag per phrase in the bundle: draft if the row, a reply or an option is.
+    const draft =
+      review === "draft" ||
+      replies.some((r) => r.review === "draft") ||
+      options.some((o) => o.review === "draft");
     return {
     id,
     locale,
@@ -57,9 +77,22 @@ const snapshot = rows
     pronunciation,
     ...(moment ? { moment } : {}),
     ...(replies.length ? { replies: replies.map(({ text, meaning }) => ({ text, meaning })) } : {}),
+    ...(options.length
+      ? {
+          slot: {
+            options: options.map(({ id, sourceText, natural, literal, pronunciation }) => ({
+              id,
+              sourceText,
+              natural,
+              literal,
+              pronunciation,
+            })),
+          },
+        }
+      : {}),
     ...(draft ? { review: "draft" } : {}),
     };
   });
 
 writeFileSync("src/lib/phrases.snapshot.json", JSON.stringify(snapshot, null, 2) + "\n");
-console.log(`src/lib/phrases.snapshot.json: ${snapshot.length} phrases, ${replyRows.length} replies`);
+console.log(`src/lib/phrases.snapshot.json: ${snapshot.length} phrases, ${replyRows.length} replies, ${slotRows.length} slot options`);

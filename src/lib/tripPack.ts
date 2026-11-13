@@ -4,6 +4,7 @@ import { z } from "zod/v4";
 import { isCategory } from "./categories";
 import { localeName } from "./locale";
 import { PRESET_PHRASES } from "./phrases";
+import { blankSlot } from "./slot";
 import { destinationName } from "./destinations";
 import {
   client,
@@ -51,7 +52,7 @@ const REQUEST_OPTIONS = { timeout: 240_000, maxRetries: 0 };
 const TripPackSchema = z.object({ phrases: z.array(TranslationSchema) });
 
 function buildTripPackPrompt(locale: string, traveller: Traveller): string {
-  const presets = PRESET_PHRASES.map((p) => `- ${p.sourceText}`).join("\n");
+  const presets = PRESET_PHRASES.map((p) => `- ${blankSlot(p.sourceText)}`).join("\n");
 
   return `You are an expert linguist specializing in ${localeName(locale)} as spoken in
 everyday life. You are the phrase-pack backend for a travel phrasebook app.
