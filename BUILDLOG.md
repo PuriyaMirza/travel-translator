@@ -588,3 +588,22 @@ Append-only. Entries are never rewritten or deleted — see CLAUDE.md.
   - Apply migrations 003–005 and the seeds to Neon production?
   - Is the `ANTHROPIC_API_KEY` on Vercel valid? The preview's was rejected on 2026-11-13 (see phase 2).
 - Verified with Playwright (iPhone 13 emulation): 98 cards across the six pages, 9 of them templates, no leftover markers; choosing "shellfish" changes the Spanish and the pronunciation; the overlay shows the filled sentence; saving stores the filled sentence with no template fields; switching option shows it as not yet saved; the vault marks the saved allergy sentence as draft; "Something else…" lands on `/translate` prefilled. lint, typecheck and build pass; the snapshot is in no client chunk.
+
+### [2026-11-13 20:50] Apply migrations 003-005 and phrase seeds to Neon production
+- **Milestone:** M8
+- **Files:** modified `BUILDLOG.md` (this entry only). No code, migration or seed files changed.
+- **Decisions:**
+  - Database: Neon project `travel-translator` (id `wild-queen-99254638`), default branch, default database. Chosen because it was the only project of four whose database held `phrases`, `saved_phrases`, `show_cards`, `trip_packs`, `user_settings` and `schema_migrations`; I only inspected that one.
+  - Ran through the Neon MCP tools, not the repo's Node scripts (no `DATABASE_URL` in this environment). Each migration ran in its own transaction with comments stripped; each locale's seed ran as a single statement (phrases) or delete+insert in one transaction (replies, slot options). The seed SQL was retyped into the tool call from the files, not piped, so a typo is possible. Row counts match the expectations, but I did not diff row contents against the CSVs or seed files.
+  - `saved_phrases.replies` now exists (jsonb, not null, default `'[]'`). The sync layer's optional-column check (`src/lib/sync/server.ts`) will therefore start reading and writing replies on each server instance's next cold start. This has not been observed end to end.
+  - Before: `schema_migrations` held 001_init and 002_onboarding_settings; `phrases` had 100 rows per locale (es-419, fr-FR, de-DE); `phrase_replies` and `phrase_slot_options` did not exist; `phrases` lacked `moment` and `review`; `saved_phrases` had no `replies` column and 3 rows.
+  - After: `schema_migrations` holds 001 to 005; `phrases` es-419 = 106, fr-FR = 100, de-DE = 100; es-419 has 98 rows with a `moment` and 58 with `review = 'draft'`; `phrase_replies` es-419 = 223; `phrase_slot_options` es-419 = 66; `saved_phrases` still 3 rows, 0 with null `replies`.
+- **Deviations:** none from the brief. Seeding `phrases.sql` also upserted the existing fr-FR and de-DE rows (same ids, now with `moment` null and `review` 'ok'), as the seed file specifies.
+- **Incomplete:**
+  - No end-to-end check of the app against the new schema, and no check of the sync layer picking up `saved_phrases.replies`.
+  - Row contents were not compared against the CSVs; only counts were verified.
+  - fr-FR and de-DE have no replies or slot options, as in the repo.
+  - No fluent speaker has reviewed the draft text now in production.
+  - The migration 004/005 foreign keys to `phrases (id, locale)` applied without error, so that key exists, but I did not inspect the constraint definitions.
+- **Open questions:**
+  - Should the app's snapshot be rebuilt from Neon now, or stay on the bundled CSV-derived snapshot?
